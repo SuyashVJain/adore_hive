@@ -91,13 +91,14 @@ export function ProductListing({ config, after }: Props) {
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-3 border-b border-line pb-4">
-          <p aria-live="polite" className="text-sm text-muted">{results.length} lovely {results.length === 1 ? 'find' : 'finds'}</p>
+        {/* Under the header on small screens so Filter, Sort and the count stay in thumb reach while scrolling */}
+        <div className="sticky top-[57px] z-20 -mx-5 flex items-center justify-between gap-3 border-b border-line bg-page px-5 py-2 md:-mx-8 md:px-8 lg:static lg:mx-0 lg:bg-transparent lg:px-0 lg:py-0 lg:pb-4">
+          <p aria-live="polite" className="whitespace-nowrap text-sm text-muted">{results.length}<span className="max-sm:hidden"> lovely</span> {results.length === 1 ? 'find' : 'finds'}</p>
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm hover:bg-blush lg:hidden">
               <SlidersHorizontal className="h-4 w-4" aria-hidden="true" /> Filter{n > 0 ? ` (${n})` : ''}
             </button>
-            <div className="w-52 sm:w-56">
+            <div className="w-40 sm:w-56">
               <Select
                 id="sort-trigger"
                 ariaLabel={`Sort: ${sortOptions.find((o) => o.value === eff.sort)?.label ?? ''}`}
