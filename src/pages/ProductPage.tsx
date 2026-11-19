@@ -61,7 +61,7 @@ function Detail({ product }: { product: Product }) {
 
       <div className="mt-4 grid items-start gap-5 md:gap-8 lg:mt-6 lg:grid-cols-2 lg:gap-16">
         {/* Sticky on desktop so the column never leaves a gap under the thumbnails */}
-        <div className="lg:sticky lg:top-36">
+        <div className="lg:sticky lg:top-24">
           <ProductGallery images={product.gallery} name={product.name} />
         </div>
 

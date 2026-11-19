@@ -193,7 +193,7 @@ export function LetterStudioPage() {
           </div>
 
           <aside aria-label="Letter preview" className="hidden lg:block">
-            <div className="sticky top-36"><Preview d={d} /></div>
+            <div className="sticky top-24"><Preview d={d} /></div>
           </aside>
         </div>
       )}

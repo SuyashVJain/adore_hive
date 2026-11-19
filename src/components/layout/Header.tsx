@@ -64,11 +64,11 @@ export function Header() {
     setTimeout(() => (trigger.current?.nextElementSibling as HTMLElement | null)?.focus(), 0)
   }
   const navCls = (active: boolean) =>
-    `inline-flex min-h-11 items-center px-3 text-sm underline-offset-[10px] transition-colors hover:underline decoration-1 ${active ? 'underline' : ''}`
+    `inline-flex min-h-11 items-center px-2.5 text-[0.8125rem] underline-offset-[10px] transition-colors hover:underline decoration-1 ${active ? 'underline' : ''}`
 
   return (
     <header ref={ref} className="sticky top-0 z-30 border-b border-line bg-page">
-      <div className="container-page grid h-[86px] grid-cols-[1fr_auto_1fr] items-center lg:h-[116px]">
+      <div className="container-page grid h-14 grid-cols-[1fr_auto_1fr] items-center lg:h-16">
         {/* Mobile + tablet: menu button. Desktop: logo */}
         <div className="flex items-center">
           <button type="button" aria-label="Open menu" aria-haspopup="dialog" onClick={() => open('menu')} className={`${iconBtn} -ml-2.5 lg:hidden`}>
@@ -77,8 +77,8 @@ export function Header() {
           <div className="hidden lg:block"><Logo /></div>
         </div>
 
-        <div className="lg:hidden"><Logo className="h-14" /></div>
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex xl:gap-3">
+        <div className="lg:hidden"><Logo className="h-11" /></div>
+        <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex xl:gap-1.5">
           {mainNav.map((n) =>
             'mega' in n ? (
               <button

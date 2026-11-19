@@ -24,7 +24,7 @@ export function Modal({ open, onClose, label, className = '', children }: Props)
               role="dialog"
               aria-modal="true"
               aria-label={label}
-              className={`relative mx-auto my-4 w-[calc(100%-2rem)] max-w-[1060px] rounded-xl bg-page p-5 sm:mb-14 sm:mt-36 sm:p-9 ${className}`}
+              className={`relative mx-auto my-4 w-[calc(100%-2rem)] max-w-[1060px] rounded-xl bg-page p-5 sm:mb-14 sm:mt-24 sm:p-9 ${className}`}
               {...dialog}
             >
               <div className="mb-4 flex items-center justify-between">

@@ -46,7 +46,7 @@ export function BagPage() {
             <Button to="/shop" variant="outline" className="mt-6">Continue shopping</Button>
           </div>
 
-          <aside className="space-y-5 lg:sticky lg:top-36 lg:self-start" aria-label="Order summary">
+          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start" aria-label="Order summary">
             <div className="rounded-lg bg-surface p-6">
               <h2 className="font-display text-3xl">Your little lovely things</h2>
               <div className="mt-5 space-y-5">

@@ -6,6 +6,8 @@ export const site = {
   name: 'Adore Hive',
   tagline: 'Buzz with style.',
   announcement: 'Little things, lovely feelings. Discover something made just for you',
+  /** One line on small phones, so the bar stays short */
+  announcementShort: 'Little things, lovely feelings.',
   address: { locality: 'Indore', region: 'Madhya Pradesh', postalCode: '452010', country: 'IN' },
   phoneDisplay: '+91 76971 07355',
   phoneHref: `tel:+${phoneDigits}`,

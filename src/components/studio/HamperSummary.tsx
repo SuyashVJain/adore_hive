@@ -50,7 +50,7 @@ function Body({ d, showImage = true }: { d: HamperDraft; showImage?: boolean }) 
 export function HamperSummaryAside({ d }: { d: HamperDraft }) {
   return (
     <aside aria-label="Your hamper summary" className="hidden md:block">
-      <div className="sticky top-36 rounded-xl bg-surface p-5 lg:p-6">
+      <div className="sticky top-24 rounded-xl bg-surface p-5 lg:p-6">
         <h2 className="eyebrow !text-ink mb-4">Your little box of love</h2>
         <Body d={d} />
       </div>
