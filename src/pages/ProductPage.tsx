@@ -10,7 +10,7 @@ import { useConfigurator } from '@/components/product/useConfigurator'
 import { Accordion, Breadcrumbs, ProductCard, QuantityStepper } from '@/components/ui'
 import { AddButton } from '@/components/ui/AddButton'
 import { flyToBag } from '@/lib/fly'
-import { RETURN_DAYS, delivery } from '@/config/shop'
+import { RETURN_DAYS, RETURN_FEE, delivery } from '@/config/shop'
 import { typeLabel } from '@/data/nav'
 import { categories, categoryLabel, getProduct, products, relatedProducts, type Product } from '@/data/products'
 import { formatINR } from '@/lib/format'
@@ -46,6 +46,7 @@ function Detail({ product }: { product: Product }) {
   ]
   const total = formatINR(product.price * c.qty)
   const msgId = 'opt-message'
+  const onSale = product.compareAtPrice !== undefined && product.compareAtPrice > product.price
 
   const addLabel = c.soldOut ? 'Out of stock' : `Add to bag · ${total}`
   // Add, and if it worked, arc the photo to the bag icon
@@ -66,10 +67,10 @@ function Detail({ product }: { product: Product }) {
         </div>
 
         <div>
-          <p className="eyebrow !text-ink">{cat.label} / {product.badge}</p>
+          <p className="eyebrow !text-ink">{cat.label}{product.badge ? ` / ${product.badge}` : ''}</p>
           <h1 className="mt-3 text-[2rem] leading-[1.05] md:text-5xl lg:text-[3.5rem]">{product.name}</h1>
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1">
-            <p className="text-2xl font-medium">{formatINR(product.price)}</p>
+            <p className="text-2xl font-medium">{formatINR(product.price)}{onSale ? <s className="ml-3 text-base font-normal text-muted"><span className="sr-only">Was </span>{formatINR(product.compareAtPrice!)}</s> : null}</p>
             <StockStatus product={product} />
           </div>
           <p className="mt-4 hidden text-base text-muted md:block">{product.description}</p>
@@ -115,7 +116,7 @@ function Detail({ product }: { product: Product }) {
                 { id: 'details', title: 'The lovely details', content: <p>{product.details}</p> },
                 { id: 'care', title: 'Care for your little treasure', content: <p>{cat.care}</p> },
                 { id: 'packaging', title: 'Packaging & delivery', content: <p>{cat.packaging} Delivery usually takes {delivery.minDays} to {delivery.maxDays} days once your order is dispatched.</p> },
-                { id: 'returns', title: 'Returns & exchanges', content: <p>Unused pieces can be returned or exchanged within {RETURN_DAYS} days. Personalized and made-to-order items are final sale. Read our <Link to="/policies/returns" className="underline underline-offset-4 hover:text-ink">Return and Exchange Policy</Link> for the full terms.</p> },
+                { id: 'returns', title: 'Returns', content: <p>Returns are accepted within {RETURN_DAYS} days of delivery, with a {formatINR(RETURN_FEE)} return fee. Items must be unused, unworn and in original condition with tags and packaging. {onSale ? 'This is a sale item, so it is not eligible for return. ' : 'Sale and discounted items are not eligible for return. '}Read our <Link to="/policies/returns" className="underline underline-offset-4 hover:text-ink">Return and Exchange Policy</Link> for the full details.</p> },
               ]}
             />
           </div>

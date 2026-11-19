@@ -23,7 +23,7 @@ function Body({ product }: { product: Product }) {
     <div className="grid gap-6 md:grid-cols-2 md:gap-8">
       <img src={product.gallery[0]} alt={product.name} width={474} height={570} className="aspect-[474/570] w-full rounded-lg object-cover" />
       <div>
-        <p className="eyebrow !text-ink">{categoryLabel(product.category)} / {product.badge}</p>
+        <p className="eyebrow !text-ink">{categoryLabel(product.category)}{product.badge ? ` / ${product.badge}` : ''}</p>
         <h2 className="mt-2 text-4xl leading-tight md:text-[2.75rem]">{product.name}</h2>
         <p className="mt-3 text-muted">{product.description}</p>
         <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1">

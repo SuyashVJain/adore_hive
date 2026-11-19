@@ -3,7 +3,7 @@ import { galleryFor, images, type ProductSlug } from './images'
 export type CategorySlug = 'jewellery' | 'hair-accessories' | 'handmade-crochet' | 'customized-gifting'
 export type Colour = 'Blush' | 'Ivory' | 'Gold'
 export const colours: Colour[] = ['Blush', 'Ivory', 'Gold']
-export type Stock = 'in' | 'low' | 'out'
+export type Stock = 'in' | 'out'
 
 export interface ProductOption {
   name: string
@@ -18,14 +18,16 @@ export interface Product {
   description: string
   /** Longer copy for the "lovely details" accordion */
   details: string
-  badge: string
+  /** Optional label on the card. Only set it when it is true. */
+  badge?: string
   /** INR, whole rupees. TODO: mock prices, replace with real pricing. */
   price: number
+  /** Original price when the item is on sale. Sale items are not eligible for returns. */
+  compareAtPrice?: number
   /** Every option is required before adding to bag */
   options: ProductOption[]
   /** TODO: mock stock states */
   stock: Stock
-  stockLeft?: number
   tags: string[]
   /** Sub-category slugs, matching the Shop dropdown items */
   types: string[]
@@ -70,7 +72,7 @@ const seeds: Seed[] = [
   { id: 'blush-satin-bow', name: 'Blush Satin Bow', category: 'hair-accessories', subtitle: 'Blush satin · Ribbon bow', description: 'A soft satin bow that dresses up any ponytail, braid or half-up style.', details: 'A generous ribbon bow in smooth satin with a secure clip. Sits flat against the hair and holds its shape through the day.', badge: 'New', price: 349, options: [{ name: 'Colour', values: ['Blush', 'Ivory'] }], stock: 'in', tags: ['bow', 'satin', 'ribbon'], types: ['hair-bows'], colours: ['Blush'], handmade: false, personalizable: false, added: 11 },
   { id: 'little-daisy-bouquet', name: 'Little Daisy Bouquet', category: 'handmade-crochet', subtitle: 'Crochet daisies · Gift wrapped', description: 'A hand-crocheted bouquet of daisies and tulips that never wilts.', details: 'Crocheted by hand in soft cotton yarn and wrapped in tissue with a ribbon. Each bouquet is slightly different, which is part of its charm.', badge: 'Handmade', price: 699, options: [], stock: 'in', tags: ['crochet', 'flowers', 'bouquet'], types: ['crochet-flowers', 'crochet-bouquets', 'handmade-gifts'], colours: [], handmade: true, personalizable: false, added: 8 },
   { id: 'little-love-hamper', name: 'A Little Love Hamper', category: 'customized-gifting', subtitle: 'Blush keepsake box', description: 'A keepsake box of little treasures, wrapped with a handwritten note.', details: 'A blush keepsake box with earrings, a satin scrunchie, a crochet daisy, a sweet treat and a handwritten note. Pick the occasion and we will wrap it to match.', badge: 'Personalize', price: 2499, options: [{ name: 'Occasion', values: ['Birthday', 'Anniversary', 'Friendship'] }], stock: 'in', tags: ['hamper', 'gift', 'personalized hampers'], types: ['personalized-hampers', 'birthday-hampers', 'special-occasion-gifts'], colours: [], handmade: true, personalizable: true, added: 6 },
-  { id: 'golden-hour-necklace', name: 'Golden Hour Necklace', category: 'jewellery', subtitle: 'Gold-tone pendant', description: 'A sun-warm pendant on a fine chain, made to be layered or worn alone.', details: 'A softly hammered round pendant on a fine chain with an adjustable length. Wear it alone or layer it with other chains.', badge: "Owner's pick", price: 1299, options: [{ name: 'Finish', values: ['Gold tone', 'Rose tone'] }], stock: 'low', stockLeft: 3, tags: ['necklace', 'pendant', 'gold'], types: ['necklaces', 'pendants'], colours: ['Gold'], handmade: false, personalizable: false, added: 7 },
+  { id: 'golden-hour-necklace', name: 'Golden Hour Necklace', category: 'jewellery', subtitle: 'Gold-tone pendant', description: 'A sun-warm pendant on a fine chain, made to be layered or worn alone.', details: 'A softly hammered round pendant on a fine chain with an adjustable length. Wear it alone or layer it with other chains.', price: 1299, options: [{ name: 'Finish', values: ['Gold tone', 'Rose tone'] }], stock: 'in', tags: ['necklace', 'pendant', 'gold'], types: ['necklaces', 'pendants'], colours: ['Gold'], handmade: false, personalizable: false, added: 7 },
   { id: 'pearl-cloud-claw-clip', name: 'Pearl Cloud Claw Clip', category: 'hair-accessories', subtitle: 'Pearl-trimmed claw clip', description: 'A pearl-trimmed claw clip with a gentle grip, for effortless updos.', details: 'A medium claw clip trimmed with pearl-inspired beads. Holds thick or fine hair without pulling.', badge: 'Everyday love', price: 449, options: [], stock: 'in', tags: ['pearl', 'claw clip', 'clip'], types: ['claw-clips', 'cute-everyday-accessories'], colours: ['Ivory'], handmade: false, personalizable: false, added: 12 },
   { id: 'forever-tulip-stem', name: 'Forever Tulip Stem', category: 'handmade-crochet', subtitle: 'Crochet tulip', description: 'A single crochet tulip, made to last forever.', details: 'A single tulip stitched by hand with a wire stem you can bend and arrange. Lovely in a vase, on a desk or tucked into a gift.', badge: 'Made with love', price: 199, options: [], stock: 'out', tags: ['crochet', 'flowers', 'tulip'], types: ['crochet-flowers', 'handmade-gifts'], colours: [], handmade: true, personalizable: false, added: 4 },
   { id: 'words-from-the-heart', name: 'Words From the Heart', category: 'customized-gifting', subtitle: 'Handwritten letter', description: 'Your words, handwritten on deckle-edge paper and sealed with wax.', details: 'Tell us what you would like to say and we will handwrite it on deckle-edge paper, then seal it in an envelope with a wax stamp.', badge: 'Personalize', price: 599, options: [], stock: 'in', tags: ['letter', 'handwritten', 'handwritten letters'], types: ['handwritten-letters'], colours: [], handmade: true, personalizable: true, added: 3 },

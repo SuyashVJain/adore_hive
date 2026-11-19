@@ -68,10 +68,10 @@ export function ProductCard({ product, eager, forceLink }: Props) {
       </div>
 
       <div className="flex flex-1 flex-col px-2 pb-2 pt-3">
-        <Badge>{product.badge}</Badge>
+        {product.badge && <Badge>{product.badge}</Badge>}
         <h3 className="mt-1 font-product text-lg leading-snug underline-offset-4 group-hover:underline">{product.name}</h3>
         <p className="text-sm text-muted">{categoryLabel(product.category)}</p>
-        <p className="mb-4 mt-1 text-base font-medium">{formatINR(product.price)}</p>
+        <p className="mb-4 mt-1 text-base font-medium">{formatINR(product.price)}{product.compareAtPrice && product.compareAtPrice > product.price ? <s className="ml-2 text-sm font-normal text-muted"><span className="sr-only">Was </span>{formatINR(product.compareAtPrice)}</s> : null}</p>
         <div className="mt-auto">
           {soldOut ? (
             <Button to={`/product/${product.id}`} variant="outline" full className="relative z-10 !px-3" aria-label={`Notify me about ${product.name}`}>Notify me</Button>
