@@ -14,6 +14,8 @@ export default {
         hero: '#ede2dc',       // hero wash
         panel: '#fff9f7',      // mega-dropdown panel
         line: '#eadcdc',       // hairlines
+        edge: '#d6c6c6',       // quiet 1px borders on form controls
+        'blush-soft': '#fdf1f0', // hover / keyboard highlight in menus
         'line-strong': '#8a7b7b', // field/outline borders that must meet 3:1
         ink: '#171313',        // text + black button
         muted: '#5f5252',      // sampled #756767, darkened for AA on blush (>=6:1)
@@ -40,14 +42,20 @@ export default {
         '4xl': ['3rem', { lineHeight: '1.1' }],
         '5xl': ['4rem', { lineHeight: '1.05' }],
       },
-      borderRadius: { sm: '4px', DEFAULT: '4px', md: '8px', lg: '16px', xl: '24px' },
+      borderRadius: { sm: '4px', DEFAULT: '4px', md: '8px', panel: '12px', lg: '16px', xl: '24px' },
       maxWidth: { page: '1440px' },
-      boxShadow: { drawer: '0 0 48px rgba(23,19,19,.18)' },
+      boxShadow: {
+        drawer: '0 0 48px rgba(23,19,19,.18)',
+        pop: '0 1px 2px rgba(23,19,19,.06), 0 8px 24px -6px rgba(23,19,19,.12), 0 18px 40px -12px rgba(23,19,19,.10)',
+        thumb: '0 1px 2px rgba(23,19,19,.2)',
+      },
       keyframes: {
         fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
         slideLeft: { from: { transform: 'translateX(100%)' }, to: { transform: 'none' } },
         slideRight: { from: { transform: 'translateX(-100%)' }, to: { transform: 'none' } },
         slideUp: { from: { transform: 'translateY(100%)' }, to: { transform: 'none' } },
+        popIn: { from: { opacity: '0', transform: 'translateY(-4px) scale(.98)' }, to: { opacity: '1', transform: 'none' } },
+        popOut: { from: { opacity: '1', transform: 'none' }, to: { opacity: '0', transform: 'scale(.98)' } },
         rise: { from: { opacity: '0', transform: 'translateY(8px)' }, to: { opacity: '1', transform: 'none' } },
       },
       animation: {
@@ -55,6 +63,8 @@ export default {
         'slide-left': 'slideLeft .28s ease-out',
         'slide-right': 'slideRight .28s ease-out',
         'slide-up': 'slideUp .28s ease-out',
+        'pop-in': 'popIn .14s ease-out',
+        'pop-out': 'popOut .12s ease-in forwards',
         rise: 'rise .22s ease-out',
       },
     },

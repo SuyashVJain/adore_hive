@@ -3,7 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { FilterPanel } from '@/components/listing/FilterPanel'
 import { Breadcrumbs, Button, Chip, Drawer, ProductCard, SectionHeading } from '@/components/ui'
-import { Listbox } from '@/components/ui/Listbox'
+import { Select } from '@/components/ui/Select'
+import { Value as RadixValue } from '@radix-ui/react-select'
 import type { ListingConfig } from '@/data/listings'
 import { popularSearches, shopMenu } from '@/data/nav'
 import { categoryLabel, products } from '@/data/products'
@@ -97,16 +98,14 @@ export function ProductListing({ config, after }: Props) {
               <SlidersHorizontal className="h-4 w-4" aria-hidden="true" /> Filter{n > 0 ? ` (${n})` : ''}
             </button>
             <div className="w-52 sm:w-56">
-              <Listbox
+              <Select
                 id="sort-trigger"
-                listLabel="Sort products"
-                align="right"
-                panelWidth="content"
+                ariaLabel={`Sort: ${sortOptions.find((o) => o.value === eff.sort)?.label ?? ''}`}
                 options={sortOptions.map((o) => ({ value: o.value, label: o.label }))}
                 value={eff.sort}
-                onChange={(v) => set({ ...eff, sort: v as Sort })}
-                renderValue={(sel) => <span className="truncate"><span className="text-muted">Sort: </span><span className="text-ink">{sel?.label}</span></span>}
-                triggerClass="flex h-11 w-full items-center justify-between gap-2 rounded-md border border-line-strong bg-surface px-3 text-left text-sm outline-none transition-colors hover:border-ink focus-visible:border-ink focus-visible:ring-1 focus-visible:ring-ink"
+                onValueChange={(v) => set({ ...eff, sort: v as Sort })}
+                renderValue={<span className="truncate"><span className="text-muted">Sort: </span><RadixValue /></span>}
+                className="text-sm"
               />
             </div>
           </div>

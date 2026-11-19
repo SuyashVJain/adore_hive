@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { ChevronDown, Loader2 } from 'lucide-react'
 import { CheckoutSummary } from '@/components/checkout/CheckoutSummary'
 import { Button, Checkbox, Field, Radio } from '@/components/ui'
-import { SelectField } from '@/components/ui/SelectField'
+import { ComboField } from '@/components/ui/ComboField'
 import { SHIPPING_FEE, delivery } from '@/config/shop'
 import { indianStates } from '@/config/india'
 import { formatINR } from '@/lib/format'
@@ -225,9 +225,9 @@ export function CheckoutPage() {
               <Field label="Country / region" name="country" autoComplete="country-name" value="India" readOnly />
               <Field label="Address" name="address-line1" autoComplete="address-line1" required hint="House, flat, building and street" {...bind('address')} />
               <Field label="Apartment / landmark (optional)" name="address-line2" autoComplete="address-line2" {...bind('apartment')} />
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid items-end gap-4 sm:grid-cols-3">
                 <Field label="City" name="city" autoComplete="address-level2" required {...bind('city')} />
-                <SelectField label="State" name="state" autoComplete="address-level1" required placeholder="Choose state" searchable options={indianStates} {...bind('state')} />
+                <ComboField label="State" name="state" autoComplete="address-level1" required placeholder="Choose state" options={indianStates} {...bind('state')} />
                 <Field label="PIN code" name="postal-code" autoComplete="postal-code" inputMode="numeric" maxLength={6} required {...bind('pin')} />
               </div>
               {user && <Checkbox checked={form.saveAddress} onChange={(e) => set('saveAddress', e.target.checked)}>Save this address to my account</Checkbox>}

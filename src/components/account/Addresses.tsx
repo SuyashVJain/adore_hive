@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { Plus } from 'lucide-react'
 import { Button, Field } from '@/components/ui'
-import { SelectField } from '@/components/ui/SelectField'
+import { ComboField } from '@/components/ui/ComboField'
 import { indianStates } from '@/config/india'
 import { isPin } from '@/lib/validate'
 import { defaultAddress, useAuth, type SavedAddress, type User } from '@/store/auth'
@@ -49,9 +49,9 @@ function AddressForm({ initial, onSave, onCancel }: { initial: Fields; onSave: (
       </div>
       <Field label="Address" autoComplete="address-line1" required hint="House, flat, building and street" {...bind('address')} />
       <Field label="Apartment / landmark (optional)" autoComplete="address-line2" {...bind('apartment')} />
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid items-end gap-4 sm:grid-cols-3">
         <Field label="City" autoComplete="address-level2" required {...bind('city')} />
-        <SelectField label="State" required placeholder="Choose state" searchable options={indianStates} autoComplete="address-level1" {...bind('state')} />
+        <ComboField label="State" required placeholder="Choose state" options={indianStates} autoComplete="address-level1" {...bind('state')} />
         <Field label="PIN code" autoComplete="postal-code" inputMode="numeric" maxLength={6} required {...bind('pin')} />
       </div>
       <div className="flex flex-wrap gap-3">
