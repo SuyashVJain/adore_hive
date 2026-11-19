@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { Heart, Sparkles, Star } from 'lucide-react'
+import { Cake, Gift, Heart, PartyPopper, Sparkles, Star, Users } from 'lucide-react'
 import { Button, ExtLink, ProductCard, SectionHeading } from '@/components/ui'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
 import { site } from '@/config/site'
 import { images } from '@/data/images'
-import { categories, getProduct, homeRows } from '@/data/products'
+import { categories, getProduct, homeRows, occasions } from '@/data/products'
 import { reviews } from '@/data/reviews'
 import { env } from '@/lib/env'
 import { fadeUp, stagger } from '@/lib/motion'
@@ -75,6 +75,31 @@ function Categories() {
           </li>
         ))}
       </ul>
+    </Reveal>
+  )
+}
+
+const occasionIcons = { birthday: Cake, anniversary: Heart, friendship: Users, festive: PartyPopper, 'just-because': Gift } as const
+
+function Occasions() {
+  return (
+    <Reveal as="section" labelledBy="occ-h" className="container-page py-10 md:py-16">
+      <p className="eyebrow !text-ink mb-3">Shop by occasion</p>
+      <h2 id="occ-h" className="text-[2rem] md:text-5xl">Gifts for every little reason.</h2>
+      <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4">
+        {occasions.map((o) => {
+          const Icon = occasionIcons[o.slug]
+          return (
+            <li key={o.slug} className="last:col-span-2 md:last:col-span-1">
+              <Link to={`/shop?occasion=${o.slug}`} className="group flex min-h-[7.5rem] flex-col items-start justify-between rounded-lg bg-blush p-4 transition-colors hover:bg-[#f4d6d4] md:min-h-[9rem]">
+                <Icon className="h-6 w-6 text-ink/80" strokeWidth={1.5} aria-hidden="true" />
+                <span className="font-display text-2xl leading-tight group-hover:underline underline-offset-4 md:text-[1.75rem]">{o.label}</span>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="mt-6 text-sm text-muted">Not sure yet? <Link to="/gift-finder" className="text-ink underline underline-offset-4 hover:no-underline">Let us help you choose</Link>.</p>
     </Reveal>
   )
 }
@@ -198,6 +223,7 @@ export function Home() {
       <Hero />
       <TrustStrip />
       <Categories />
+      <Occasions />
       <Row title="Best Sellers" subtitle="The little things you keep coming back to." ids={homeRows.bestSellers} to="/shop" />
       <Row title="New Arrivals" subtitle="Fresh finds for a little everyday magic." ids={homeRows.newArrivals} to="/shop?sort=newest" />
       <Row title="Handmade With Love" subtitle="A little time, a little craft, a lot of heart." ids={homeRows.handmade} to="/shop?finish=handmade" />

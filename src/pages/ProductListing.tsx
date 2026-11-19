@@ -7,7 +7,7 @@ import { Select } from '@/components/ui/Select'
 import { Value as RadixValue } from '@radix-ui/react-select'
 import type { ListingConfig } from '@/data/listings'
 import { popularSearches, shopMenu } from '@/data/nav'
-import { categoryLabel, products } from '@/data/products'
+import { categoryLabel, occasionLabel, products, recipientLabel } from '@/data/products'
 import { activeCount, applyFilters, emptyFilters, parseFilters, PRICE_HI, PRICE_LO, serializeFilters, sortOptions, type Filters, type Sort } from '@/lib/listing'
 import { formatINR } from '@/lib/format'
 import { useSeo } from '@/lib/useDocumentTitle'
@@ -25,6 +25,8 @@ function activeChips(f: Filters, set: (f: Filters) => void, typeLabel?: string, 
   if (f.type) chips.push({ key: 'type', label: typeLabel ?? f.type, remove: () => set({ ...f, type: undefined }) })
   f.collections.forEach((c) => chips.push({ key: `c-${c}`, label: categoryLabel(c), remove: () => set({ ...f, collections: f.collections.filter((x) => x !== c) }) }))
   f.colours.forEach((c) => chips.push({ key: `col-${c}`, label: c, remove: () => set({ ...f, colours: f.colours.filter((x) => x !== c) }) }))
+  f.occasions.forEach((o) => chips.push({ key: `o-${o}`, label: occasionLabel(o), remove: () => set({ ...f, occasions: f.occasions.filter((x) => x !== o) }) }))
+  if (f.recipient) chips.push({ key: 'for', label: `For ${recipientLabel(f.recipient).toLowerCase()}`, remove: () => set({ ...f, recipient: undefined }) })
   f.finish.forEach((x) => chips.push({ key: `f-${x}`, label: x === 'handmade' ? 'Handmade' : 'Personalizable', remove: () => set({ ...f, finish: f.finish.filter((y) => y !== x) }) }))
   if ((f.min !== undefined && f.min > PRICE_LO) || (f.max !== undefined && f.max < PRICE_HI))
     chips.push({ key: 'price', label: `${formatINR(f.min ?? PRICE_LO)} – ${formatINR(f.max ?? PRICE_HI)}`, remove: () => set({ ...f, min: undefined, max: undefined }) })
@@ -59,6 +61,7 @@ export function ProductListing({ config, after }: Props) {
   const [sp, setSp] = useSearchParams()
   const [sheet, setSheet] = useState(false)
   const filters = parseFilters(sp)
+  const fromFinder = sp.get('finder') === '1'
   const set = (f: Filters) => setSp(serializeFilters(f))
 
   const base = config.slug ? products.filter((p) => p.category === config.slug) : products
@@ -79,6 +82,10 @@ export function ProductListing({ config, after }: Props) {
         <div className="py-8 md:py-12">
           <SectionHeading as="h1" align="center" eyebrow={config.eyebrow} title={config.title} subtitle={config.subtitle} />
         </div>
+
+        {fromFinder && (
+          <p className="mb-6 text-center text-sm text-muted">Picked with the gift finder. <Link to="/gift-finder" className="text-ink underline underline-offset-4 hover:no-underline">Start again</Link></p>
+        )}
 
         {config.banner && (
           <img src={config.banner} alt="" width={1280} height={300} className="mb-8 aspect-[16/9] w-full rounded-xl object-cover sm:aspect-[16/6] lg:aspect-[1280/300]" />

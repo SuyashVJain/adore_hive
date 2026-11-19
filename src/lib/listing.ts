@@ -1,4 +1,4 @@
-import { categories, colours, products, searchProducts, type CategorySlug, type Colour, type Product } from '@/data/products'
+import { categories, colours, occasions, products, recipients, searchProducts, type CategorySlug, type Colour, type Occasion, type Product, type Recipient } from '@/data/products'
 
 export type Sort = 'featured' | 'price-asc' | 'price-desc' | 'newest'
 export type Finish = 'handmade' | 'personalizable'
@@ -8,6 +8,8 @@ export interface Filters {
   collections: CategorySlug[]
   colours: Colour[]
   finish: Finish[]
+  occasions: Occasion[]
+  recipient?: Recipient
   min?: number
   max?: number
   sort: Sort
@@ -33,6 +35,8 @@ export function parseFilters(sp: URLSearchParams): Filters {
     type: sp.get('type') || undefined,
     collections: list(sp.get('collection')).filter((c): c is CategorySlug => categories.some((x) => x.slug === c)),
     colours: list(sp.get('colour')).filter((c): c is Colour => (colours as string[]).includes(c)),
+    occasions: list(sp.get('occasion')).filter((o): o is Occasion => occasions.some((x) => x.slug === o)),
+    recipient: recipients.find((r) => r.slug === sp.get('for'))?.slug,
     finish: list(sp.get('finish')).filter((f): f is Finish => f === 'handmade' || f === 'personalizable'),
     min: num(sp.get('min')),
     max: num(sp.get('max')),
@@ -48,20 +52,22 @@ export function serializeFilters(f: Filters): URLSearchParams {
   if (f.collections.length) sp.set('collection', f.collections.join(','))
   if (f.colours.length) sp.set('colour', f.colours.join(','))
   if (f.finish.length) sp.set('finish', f.finish.join(','))
+  if (f.occasions.length) sp.set('occasion', f.occasions.join(','))
+  if (f.recipient) sp.set('for', f.recipient)
   if (f.min !== undefined && f.min > PRICE_LO) sp.set('min', String(f.min))
   if (f.max !== undefined && f.max < PRICE_HI) sp.set('max', String(f.max))
   if (f.sort !== 'featured') sp.set('sort', f.sort)
   return sp
 }
 
-export const emptyFilters = (sort: Sort = 'featured', q?: string): Filters => ({ collections: [], colours: [], finish: [], sort, q })
+export const emptyFilters = (sort: Sort = 'featured', q?: string): Filters => ({ collections: [], colours: [], finish: [], occasions: [], sort, q })
 
 const hasMin = (f: Filters) => f.min !== undefined && f.min > PRICE_LO
 const hasMax = (f: Filters) => f.max !== undefined && f.max < PRICE_HI
 
 /** Number of narrowing filters (sort excluded). */
 export const activeCount = (f: Filters) =>
-  (f.type ? 1 : 0) + f.collections.length + f.colours.length + f.finish.length + (hasMin(f) ? 1 : 0) + (hasMax(f) ? 1 : 0) + (f.q ? 1 : 0)
+  (f.type ? 1 : 0) + f.collections.length + f.colours.length + f.finish.length + f.occasions.length + (f.recipient ? 1 : 0) + (hasMin(f) ? 1 : 0) + (hasMax(f) ? 1 : 0) + (f.q ? 1 : 0)
 
 export function applyFilters(base: Product[], f: Filters): Product[] {
   const hits = f.q ? searchProducts(f.q) : null
@@ -72,6 +78,8 @@ export function applyFilters(base: Product[], f: Filters): Product[] {
       (!f.collections.length || f.collections.includes(p.category)) &&
       (!f.colours.length || p.colours.some((c) => f.colours.includes(c))) &&
       (!f.finish.length || f.finish.every((x) => p[x])) &&
+      (!f.occasions.length || f.occasions.some((o) => p.occasions.includes(o))) &&
+      (!f.recipient || p.recipients.includes(f.recipient)) &&
       (f.min === undefined || p.price >= f.min) &&
       (f.max === undefined || p.price <= f.max),
   )
