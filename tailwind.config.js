@@ -14,7 +14,7 @@ export default {
         hero: '#ede2dc',       // hero wash
         panel: '#fff9f7',      // mega-dropdown panel
         line: '#eadcdc',       // hairlines
-        edge: '#d6c6c6',       // quiet 1px borders on form controls
+        edge: '#998c8c',       // 1px borders on form controls (about 3:1 on the page background)
         'blush-soft': '#fdf1f0', // hover / keyboard highlight in menus
         'line-strong': '#8a7b7b', // field/outline borders that must meet 3:1
         ink: '#171313',        // text + black button
