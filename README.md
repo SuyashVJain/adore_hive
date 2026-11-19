@@ -86,6 +86,25 @@ Copy `.env.example` to `.env.local` (or set the variables in your host). Every f
 
 **Switching indexing on at launch:** set `VITE_INDEXABLE=true` and `SITE_URL=https://your-domain` in the production environment and rebuild (`npm run build`). The build then writes `sitemap.xml` and a `robots.txt` that allows crawling, drops the `noindex` meta tag, and the app reports `index, follow` on public pages (cart, checkout, account and search stay `noindex`). Variables are read at build time, so changing them needs a new deploy.
 
+## Replacing sample products
+
+The catalogue is a single typed source: `src/data/products.ts` (type `Product`). Everything else (listings, search, product pages, hampers, the sitemap) reads from it, so replacing the sample items there is all that is needed. Photos are mapped by slug in `src/data/images.ts`.
+
+For each product you need:
+
+| Field | Notes |
+| --- | --- |
+| `name` | Shown on cards, the product page and in the bag |
+| `price` | Whole rupees |
+| `compareAtPrice` | Optional. The original price when the item is on sale. Shows struck through, and sale items are not eligible for returns |
+| `category` | One of `jewellery`, `hair-accessories`, `handmade-crochet`, `customized-gifting` |
+| `description`, `details` | Short intro and the longer "lovely details" text |
+| photos | A main image plus extras in `src/data/images.ts` (the first is used on cards) |
+| `options` | Required choices such as Finish or Style (`name` and `values`). Leave empty if none |
+| `stock` | `'in'` or `'out'`. Only `'out'` shows "Sold out" |
+
+Also set `types` (subcategory slugs used by the Shop menu and filters), `colours`, `handmade`, `personalizable` and `added` (higher is newer). `badge` is optional and should only be set when it is true. Prices, shipping and returns rules live in `src/config/shop.ts`.
+
 ## Scripts
 
 | Script | What it does |

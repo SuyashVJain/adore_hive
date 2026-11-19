@@ -148,7 +148,8 @@ export function CheckoutPage() {
       return
     }
     setBusy(true)
-    // TODO: real payment. Only the method name is passed; card and UPI details never leave this component.
+    // TODO: payment will use Razorpay (UPI), and orders will be stored in Supabase. Until then the order is kept in this browser
+    // and the mock payment always succeeds. Only the method name is passed on; card and UPI details never leave this component.
     await mockPay(form.payment, totals.total)
     const order: Order = {
       id: newOrderId(),
@@ -269,7 +270,7 @@ export function CheckoutPage() {
                   </div>
                 </>
               )}
-              {form.payment === 'Other' && <p className="rounded-lg bg-blush p-4 text-sm">We’ll share other payment options with you on WhatsApp once you place your order.</p>}
+              {form.payment === 'Other' && <p className="rounded-lg bg-blush p-4 text-sm">Other payment options will be confirmed with you after you place your order.</p>}
               <p className="text-xs text-muted">Your payment details are not stored on this device.</p>
             </div>
           </section>

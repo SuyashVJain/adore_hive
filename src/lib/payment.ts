@@ -1,4 +1,4 @@
-// TODO: payment gateway integration (Razorpay / Cashfree / PayU etc.).
+// TODO: payment gateway integration. Payment will use Razorpay (UPI), and orders will be stored in Supabase.
 // This is a UI-only mock. It never receives, logs or stores card or UPI details:
 // the checkout passes only the chosen method name, and the mock always succeeds.
 
