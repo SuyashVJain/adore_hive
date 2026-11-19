@@ -13,7 +13,7 @@ const slugify = (t: string) => t.toLowerCase().replace(/\s+/g, '-')
 const col = (slug: string, items: string[]) => ({
   label: categories.find((c) => c.slug === slug)!.label,
   to: `/shop/${slug}`,
-  items: items.map((i) => ({ label: i, to: `/shop/${slug}?type=${slugify(i)}` })),
+  items: items.map((i) => ({ label: i, type: slugify(i), to: `/shop/${slug}?type=${slugify(i)}` })),
 })
 
 export const shopMenu = [

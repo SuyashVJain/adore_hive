@@ -20,3 +20,12 @@
   .eyebrow { @apply font-label text-xs font-semibold uppercase tracking-[0.18em] text-eyebrow; }
   .container-page { @apply mx-auto w-full max-w-page px-5 md:px-8 xl:px-20; }
 }
+
+/* Dual-thumb price slider: two stacked range inputs, only the thumbs take pointer events */
+.range-dual input[type='range'] { @apply pointer-events-none absolute inset-0 m-0 h-full w-full appearance-none bg-transparent; }
+.range-dual input[type='range']::-webkit-slider-thumb { @apply pointer-events-auto h-5 w-5 cursor-grab appearance-none rounded-full border-2 border-ink bg-white; }
+.range-dual input[type='range']::-moz-range-thumb { @apply pointer-events-auto h-5 w-5 cursor-grab rounded-full border-2 border-ink bg-white; }
+.range-dual input[type='range']::-webkit-slider-runnable-track { background: transparent; }
+.range-dual input[type='range']::-moz-range-track { background: transparent; }
+.range-dual input[type='range']:focus-visible::-webkit-slider-thumb { outline: 2px solid #171313; outline-offset: 3px; }
+.range-dual input[type='range']:focus-visible::-moz-range-thumb { outline: 2px solid #171313; outline-offset: 3px; }

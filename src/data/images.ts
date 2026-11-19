@@ -12,6 +12,14 @@ export const images = {
     crochet: l('crochet'),
   },
   // keyed by product slug
+  banners: {
+    jewellery: '/images/banner-jewellery.jpg',
+    'hair-accessories': '/images/banner-hair-accessories.jpg',
+    'handmade-crochet': '/images/banner-handmade-crochet.jpg',
+    'customized-gifting': '/images/banner-customized-gifting.jpg',
+  },
+  personal: '/images/life-personal.jpg',
+  instagram: ['/images/life-portrait.jpg', '/images/insta-bouquet.jpg', '/images/insta-gifts.jpg', '/images/life-crochet.jpg'],
   products: {
     'pearl-whisper-earrings': p('pearl-whisper-earrings'),
     'blush-satin-bow': p('blush-satin-bow'),

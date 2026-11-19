@@ -5,30 +5,39 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
   hint?: string
+  /** Render a textarea instead of an input */
+  multiline?: boolean
 }
 
+const box =
+  'peer w-full rounded-md border bg-surface px-3.5 pb-1.5 pt-6 text-base text-ink outline-none transition-colors hover:border-ink focus:border-ink focus:ring-1 focus:ring-ink disabled:cursor-not-allowed disabled:bg-page disabled:opacity-60'
+
 /** Floating-label input. The label rests inside the box and lifts when focused or filled. */
-export function Field({ label, error, hint, className = '', id, required, ...rest }: Props) {
+export function Field({ label, error, hint, className = '', id, required, multiline, ...rest }: Props) {
   const auto = useId()
   const fid = id ?? auto
   const msg = error ? `${fid}-err` : hint ? `${fid}-hint` : undefined
+  const common = {
+    id: fid,
+    placeholder: ' ',
+    required,
+    'aria-invalid': !!error,
+    'aria-describedby': msg,
+    className: `${box} ${multiline ? 'min-h-[132px] resize-y' : 'h-14'} ${error ? 'border-error' : 'border-line-strong'}`,
+  }
   return (
     <div className={className}>
       <div className="relative">
-        <input
-          id={fid}
-          placeholder=" "
-          required={required}
-          aria-invalid={!!error}
-          aria-describedby={msg}
-          className={`peer h-14 w-full rounded-md border bg-surface px-3.5 pb-1.5 pt-5 text-base text-ink outline-none transition-colors hover:border-ink focus:border-ink focus:ring-1 focus:ring-ink disabled:cursor-not-allowed disabled:bg-page disabled:opacity-60 ${
-            error ? 'border-error' : 'border-line-strong'
-          }`}
-          {...rest}
-        />
+        {multiline ? (
+          <textarea {...common} {...(rest as object)} />
+        ) : (
+          <input {...common} {...rest} />
+        )}
         <label
           htmlFor={fid}
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs"
+          className={`pointer-events-none absolute left-3.5 text-sm text-muted transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs ${
+            multiline ? 'top-4' : 'top-1/2 -translate-y-1/2'
+          }`}
         >
           {label}
           {required && <span aria-hidden="true"> *</span>}

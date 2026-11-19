@@ -8,6 +8,9 @@ import { useWishlist } from '@/store/wishlist'
 import { Logo } from './Logo'
 import { ShopMenu } from './ShopMenu'
 
+const hoverCapable = () => window.matchMedia('(min-width: 1024px) and (hover: hover)').matches
+const CLOSE_DELAY = 250
+
 const iconBtn = 'relative grid h-11 w-11 place-items-center rounded-full transition-colors hover:bg-blush active:bg-[#f0cfcf]'
 
 function Count({ n }: { n: number }) {
@@ -28,9 +31,32 @@ export function Header() {
   const panel = useUI((s) => s.panel)
   const open = useUI((s) => s.open)
 
+  const close = useUI((s) => s.close)
+  const trigger = useRef<HTMLButtonElement>(null)
+  const timer = useRef<number>()
+  const suppress = useRef(false) // stops focus-restore after Escape from reopening the menu
+
+  const cancel = () => window.clearTimeout(timer.current)
   const openShop = () => {
+    cancel()
+    if (useUI.getState().panel === 'shop') return
     setTop(ref.current!.getBoundingClientRect().bottom)
     open('shop')
+  }
+  const closeShop = () => {
+    cancel()
+    suppress.current = true
+    window.setTimeout(() => (suppress.current = false), 300)
+    close()
+  }
+  const scheduleClose = () => {
+    cancel()
+    timer.current = window.setTimeout(() => useUI.getState().panel === 'shop' && closeShop(), CLOSE_DELAY)
+  }
+  const tabOut = (dir: 'next' | 'prev') => {
+    if (dir === 'prev') return trigger.current?.focus()
+    closeShop()
+    setTimeout(() => (trigger.current?.nextElementSibling as HTMLElement | null)?.focus(), 0)
   }
   const navCls = (active: boolean) =>
     `inline-flex min-h-11 items-center px-3 text-sm underline-offset-[10px] transition-colors hover:underline decoration-1 ${active ? 'underline' : ''}`
@@ -55,7 +81,21 @@ export function Header() {
                 type="button"
                 aria-expanded={panel === 'shop'}
                 aria-haspopup="true"
+                aria-controls="shop-menu"
+                ref={trigger}
+                data-shop-trigger
                 onClick={openShop}
+                onMouseEnter={() => hoverCapable() && openShop()}
+                onMouseLeave={() => panel === 'shop' && scheduleClose()}
+                onFocus={(e) => !suppress.current && hoverCapable() && e.currentTarget.matches(':focus-visible') && openShop()}
+                onBlur={() => panel === 'shop' && scheduleClose()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Tab' && !e.shiftKey && panel === 'shop') {
+                    e.preventDefault()
+                    cancel()
+                    document.querySelector<HTMLElement>('#shop-menu a[href]')?.focus()
+                  }
+                }}
                 className={`${navCls(pathname.startsWith('/shop'))} gap-1`}
               >
                 {n.label}
@@ -86,7 +126,7 @@ export function Header() {
           </button>
         </div>
       </div>
-      <ShopMenu top={top} />
+      <ShopMenu top={top} onClose={closeShop} onEnter={cancel} onLeave={scheduleClose} onTabOut={tabOut} />
     </header>
   )
 }

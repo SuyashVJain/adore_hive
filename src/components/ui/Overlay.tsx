@@ -7,13 +7,19 @@ const FOCUSABLE =
 interface Props {
   onClose: () => void
   children: ReactNode
+  /** Keep Tab inside the overlay. Off for the hover/focus-opened mega menu. */
+  trap?: boolean
+  /** Move focus into the overlay on open. */
+  autoFocus?: boolean
+  /** Dim only: pointer events pass through to the page (hover-opened mega menu) */
+  passThrough?: boolean
 }
 
 /**
  * Full-viewport layer: dims the whole page (header included), locks scroll, traps focus,
  * closes on Escape and restores focus on unmount. Mount it only while open.
  */
-export function Overlay({ onClose, children }: Props) {
+export function Overlay({ onClose, children, trap = true, autoFocus = true, passThrough }: Props) {
   const root = useRef<HTMLDivElement>(null)
   const close = useRef(onClose)
   close.current = onClose
@@ -25,11 +31,11 @@ export function Overlay({ onClose, children }: Props) {
     document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
     document.body.style.overflow = 'hidden'
     const items = () => Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE))
-    ;(el.querySelector<HTMLElement>('[data-autofocus]') ?? items()[0])?.focus()
+    if (autoFocus) (el.querySelector<HTMLElement>('[data-autofocus]') ?? items()[0])?.focus()
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return close.current()
-      if (e.key !== 'Tab') return
+      if (e.key !== 'Tab' || !trap) return
       const f = items()
       if (!f.length) return
       const first = f[0]
@@ -44,10 +50,11 @@ export function Overlay({ onClose, children }: Props) {
       document.body.style.paddingRight = ''
       prev?.focus?.()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return createPortal(
-    <div ref={root} className="fixed inset-0 z-50">
+    <div ref={root} className={`fixed inset-0 z-50 ${passThrough ? 'pointer-events-none' : ''}`}>
       <div className="absolute inset-0 animate-fade bg-ink/45" aria-hidden="true" onClick={onClose} />
       {children}
     </div>,

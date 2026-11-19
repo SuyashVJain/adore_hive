@@ -1,4 +1,4 @@
-// Single source for brand + contact details. Nothing else in the codebase hardcodes these.
+// Single source for brand + contact details. Exception: the LocalBusiness JSON-LD in index.html repeats the address and phone.
 // NOTE: address and phone are also hardcoded in the LocalBusiness JSON-LD in index.html (it cannot import this file). Update both together.
 const phoneDigits = '917697107355'
 

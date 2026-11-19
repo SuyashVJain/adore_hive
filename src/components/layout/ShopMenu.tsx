@@ -1,3 +1,4 @@
+import { useEffect, useRef, type KeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { images } from '@/data/images'
 import { shopMenu } from '@/data/nav'
@@ -5,23 +6,57 @@ import { useUI } from '@/store/ui'
 import { Button } from '../ui/Button'
 import { Overlay } from '../ui/Overlay'
 
-/** Desktop mega-dropdown. Rendered in a portal under the dimmed header. */
-export function ShopMenu({ top }: { top: number }) {
+interface Props {
+  top: number
+  onClose: () => void
+  onEnter: () => void
+  onLeave: () => void
+  /** Tab past either end of the panel */
+  onTabOut: (dir: 'next' | 'prev') => void
+}
+
+/** Desktop mega-dropdown, opened by hover, focus or click. Dims the page but lets the pointer through. */
+export function ShopMenu({ top, onClose, onEnter, onLeave, onTabOut }: Props) {
   const open = useUI((s) => s.panel === 'shop')
-  const close = useUI((s) => s.close)
+  const panel = useRef<HTMLDivElement>(null)
+
+  // Touch/click outside closes it (the dim layer doesn't catch clicks)
+  useEffect(() => {
+    if (!open) return
+    const down = (e: PointerEvent) => {
+      const t = e.target as Element
+      if (!panel.current?.contains(t) && !t.closest('[data-shop-trigger]')) onClose()
+    }
+    document.addEventListener('pointerdown', down)
+    return () => document.removeEventListener('pointerdown', down)
+  }, [open, onClose])
+
   if (!open) return null
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab') return
+    const links = panel.current!.querySelectorAll<HTMLElement>('a[href]')
+    if (e.shiftKey && document.activeElement === links[0]) { e.preventDefault(); onTabOut('prev') }
+    else if (!e.shiftKey && document.activeElement === links[links.length - 1]) { e.preventDefault(); onTabOut('next') }
+  }
+
   return (
-    <Overlay onClose={close}>
+    <Overlay onClose={onClose} trap={false} autoFocus={false} passThrough>
       <div
+        ref={panel}
+        id="shop-menu"
         role="dialog"
-        aria-modal="true"
         aria-label="Shop"
         style={{ top }}
-        className="absolute left-1/2 hidden w-[calc(100%-4rem)] max-w-[1280px] -translate-x-1/2 animate-rise rounded-b-xl bg-panel p-9 pt-8 lg:block"
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onFocus={onEnter}
+        onKeyDown={onKey}
+        className="pointer-events-auto absolute left-1/2 hidden w-[calc(100%-4rem)] max-w-[1280px] -translate-x-1/2 animate-rise rounded-b-xl bg-panel p-9 pt-8 lg:block"
       >
         <div className="mb-7 flex items-center justify-between">
           <p className="eyebrow !text-ink">Find your little lovely</p>
-          <Link to="/shop" data-autofocus className="inline-flex min-h-11 items-center font-label text-xs font-semibold uppercase tracking-[0.14em] hover:underline underline-offset-4">
+          <Link to="/shop" className="inline-flex min-h-11 items-center font-label text-xs font-semibold uppercase tracking-[0.14em] hover:underline underline-offset-4">
             Shop all
           </Link>
         </div>
@@ -43,7 +78,7 @@ export function ShopMenu({ top }: { top: number }) {
             </div>
           ))}
           <div>
-            <img src={images.lifestyle.hamper} alt="" className="aspect-[3/2] w-full rounded-md object-cover" />
+            <img src={images.lifestyle.hamper} alt="" width={560} height={460} className="aspect-[3/2] w-full rounded-md object-cover" />
             <p className="mt-3 font-display text-3xl leading-tight">Made for their kind of lovely.</p>
             <Button to="/hamper-studio" className="mt-4">Build a hamper</Button>
           </div>

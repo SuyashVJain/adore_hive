@@ -7,9 +7,9 @@ import { Logo } from './Logo'
 
 const link = 'inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-ink hover:underline underline-offset-4'
 
-function Col({ title, children }: { title: string; children: React.ReactNode }) {
+function Col({ title, children, wide }: { title: string; children: React.ReactNode; wide?: boolean }) {
   return (
-    <div>
+    <div className={wide ? 'col-span-2 md:col-span-1' : ''}>
       <h2 className="font-label text-xs font-semibold uppercase tracking-[0.14em] text-ink">{title}</h2>
       <ul className="mt-2">{children}</ul>
     </div>
@@ -20,8 +20,8 @@ export function Footer() {
   return (
     <footer className="bg-blush">
       <div className="container-page border-t border-ink/10 py-12">
-        <div className="grid gap-10 md:grid-cols-[220px_1fr_1fr_1fr]">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-[220px_1fr_1fr_1fr] md:gap-10">
+          <div className="col-span-2 md:col-span-1">
             <Logo className="-ml-3 h-36" />
             <p className="mt-1 font-display text-2xl italic">{site.tagline}</p>
           </div>
@@ -31,7 +31,7 @@ export function Footer() {
           <Col title="Here to help">
             {helpLinks.map((l) => <li key={l.to}><Link to={l.to} className={link}>{l.label}</Link></li>)}
           </Col>
-          <Col title="Say hello">
+          <Col title="Say hello" wide>
             <li><ContactDetails linkClass="text-muted hover:text-ink" /></li>
           </Col>
         </div>

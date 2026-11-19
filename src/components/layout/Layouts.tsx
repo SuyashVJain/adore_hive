@@ -8,6 +8,7 @@ import { Header } from './Header'
 import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
 import { MobileMenu } from './MobileMenu'
 import { NewsletterBlock } from './NewsletterBlock'
+import { Toaster } from '../ui/Toaster'
 import { SearchOverlay } from './SearchOverlay'
 
 function SkipLink() {
@@ -45,6 +46,7 @@ export function MainLayout() {
       <MobileMenu />
       <SearchOverlay />
       <BagDrawer />
+      <Toaster />
     </>
   )
 }
