@@ -9,6 +9,8 @@ export interface ListingConfig {
   banner?: string
   /** Colour only makes sense for jewellery and hair accessories (and the mixed Shop All) */
   showColour: boolean
+  /** Search results page: base is the whole catalogue, driven by ?q= */
+  search?: boolean
 }
 
 export const shopAllListing: ListingConfig = {

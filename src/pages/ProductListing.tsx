@@ -1,10 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { FilterPanel } from '@/components/listing/FilterPanel'
 import { Breadcrumbs, Button, Chip, Drawer, ProductCard, SectionHeading } from '@/components/ui'
 import type { ListingConfig } from '@/data/listings'
-import { shopMenu } from '@/data/nav'
+import { popularSearches, shopMenu } from '@/data/nav'
 import { categoryLabel, products } from '@/data/products'
 import { activeCount, applyFilters, emptyFilters, parseFilters, PRICE_HI, PRICE_LO, serializeFilters, sortOptions, type Filters, type Sort } from '@/lib/listing'
 import { formatINR } from '@/lib/format'
@@ -16,9 +16,9 @@ interface Props {
 }
 
 /** Active-filter chips: what's applied, each removable. */
-function activeChips(f: Filters, set: (f: Filters) => void, typeLabel?: string) {
+function activeChips(f: Filters, set: (f: Filters) => void, typeLabel?: string, hideQuery?: boolean) {
   const chips: { key: string; label: string; remove: () => void }[] = []
-  if (f.q) chips.push({ key: 'q', label: `Search: ${f.q}`, remove: () => set({ ...f, q: undefined }) })
+  if (f.q && !hideQuery) chips.push({ key: 'q', label: `Search: ${f.q}`, remove: () => set({ ...f, q: undefined }) })
   if (f.type) chips.push({ key: 'type', label: typeLabel ?? f.type, remove: () => set({ ...f, type: undefined }) })
   f.collections.forEach((c) => chips.push({ key: `c-${c}`, label: categoryLabel(c), remove: () => set({ ...f, collections: f.collections.filter((x) => x !== c) }) }))
   f.colours.forEach((c) => chips.push({ key: `col-${c}`, label: c, remove: () => set({ ...f, colours: f.colours.filter((x) => x !== c) }) }))
@@ -44,7 +44,7 @@ function SheetBody({ value, onApply, config }: { value: Filters; onApply: (f: Fi
         <FilterPanel value={draft} onChange={setDraft} showCollections={!config.slug} showColour={config.showColour} />
       </div>
       <div className="flex gap-3 border-t border-line bg-page px-5 pb-5 pt-4 sm:px-7">
-        <Button variant="outline" className="flex-1" onClick={() => setDraft({ ...emptyFilters(draft.sort), type: draft.type })}>Clear</Button>
+        <Button variant="outline" className="flex-1" onClick={() => setDraft({ ...emptyFilters(draft.sort, config.search ? draft.q : undefined), type: draft.type })}>Clear</Button>
         <Button className="flex-1" onClick={() => onApply(draft)}>Apply</Button>
       </div>
     </>
@@ -60,12 +60,13 @@ export function ProductListing({ config, after }: Props) {
   const base = config.slug ? products.filter((p) => p.category === config.slug) : products
   // Category pages ignore a stale ?collection=
   const eff: Filters = config.slug ? { ...filters, collections: [] } : filters
-  const results = applyFilters(base, eff)
+  // The search page shows nothing until there is a query
+  const results = config.search && !eff.q ? [] : applyFilters(base, eff)
   const subItems = config.slug ? shopMenu.find((c) => c.to === `/shop/${config.slug}`)?.items ?? [] : []
   const typeLabel = subItems.find((i) => i.type === eff.type)?.label
-  const chips = activeChips(eff, set, typeLabel)
-  const n = activeCount(eff) - (eff.type ? 1 : 0) // chips row counts type separately; button counts sidebar filters
-  const crumbs = [{ label: 'Home', to: '/' }, ...(config.slug ? [{ label: 'Shop', to: '/shop' }, { label: config.title }] : [{ label: 'Shop' }])]
+  const chips = activeChips(eff, set, typeLabel, config.search)
+  const n = activeCount(eff) - (eff.type ? 1 : 0) - (config.search && eff.q ? 1 : 0) // chips row counts type separately; button counts sidebar filters
+  const crumbs = [{ label: 'Home', to: '/' }, ...(config.search ? [{ label: 'Search' }] : config.slug ? [{ label: 'Shop', to: '/shop' }, { label: config.title }] : [{ label: 'Shop' }])]
 
   return (
     <>
@@ -110,7 +111,7 @@ export function ProductListing({ config, after }: Props) {
                 </button>
               </li>
             ))}
-            <li><button type="button" onClick={() => set(emptyFilters(eff.sort))} className="inline-flex min-h-11 items-center px-2 text-sm underline underline-offset-4 hover:no-underline">Clear all</button></li>
+            <li><button type="button" onClick={() => set(emptyFilters(eff.sort, config.search ? eff.q : undefined))} className="inline-flex min-h-11 items-center px-2 text-sm underline underline-offset-4 hover:no-underline">Clear all</button></li>
           </ul>
         )}
 
@@ -118,7 +119,7 @@ export function ProductListing({ config, after }: Props) {
           <aside className="hidden lg:block" aria-label="Filters">
             <p className="eyebrow !text-ink mb-5 border-b border-line pb-4">Refine your little finds</p>
             <FilterPanel value={eff} onChange={set} showCollections={!config.slug} showColour={config.showColour} />
-            <button type="button" onClick={() => set({ ...emptyFilters(eff.sort), type: eff.type })} className="mt-2 inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:no-underline">Clear filters</button>
+            <button type="button" onClick={() => set({ ...emptyFilters(eff.sort, config.search ? eff.q : undefined), type: eff.type })} className="mt-2 inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:no-underline">Clear filters</button>
           </aside>
 
           <div>
@@ -131,11 +132,24 @@ export function ProductListing({ config, after }: Props) {
                 {config.slug && <div className="mt-6 flex justify-center lg:justify-start"><Button to="/shop" variant="outline">Explore all collections</Button></div>}
               </>
             ) : (
+              config.search && n === 0 ? (
+                <div className="rounded-lg bg-surface px-6 py-14 text-center">
+                  <p className="font-display text-3xl">{eff.q ? `Nothing found for “${eff.q}” yet.` : 'What would you love to find?'}</p>
+                  <p className="mt-2 text-muted">{eff.q ? 'Check the spelling, or try one of these little favourites.' : 'Try one of these little favourites, or use the search icon above.'}</p>
+                  <ul className="mt-5 flex flex-wrap justify-center gap-2">
+                    {popularSearches.map((r) => (
+                      <li key={r}><Link to={`/search?q=${encodeURIComponent(r)}`} className="inline-flex min-h-11 items-center rounded-full border border-line-strong bg-surface px-4 text-sm hover:bg-blush">{r}</Link></li>
+                    ))}
+                  </ul>
+                  <Button to="/shop" variant="outline" className="mt-6">Browse everything</Button>
+                </div>
+              ) : (
               <div className="rounded-lg bg-surface px-6 py-14 text-center">
                 <p className="font-display text-3xl">No lovely finds match those filters.</p>
                 <p className="mt-2 text-muted">Try widening your price range or removing a filter.</p>
-                <Button className="mt-6" onClick={() => set(emptyFilters(eff.sort))}>Clear filters</Button>
+                <Button className="mt-6" onClick={() => set(emptyFilters(eff.sort, config.search ? eff.q : undefined))}>Clear filters</Button>
               </div>
+              )
             )}
           </div>
         </div>

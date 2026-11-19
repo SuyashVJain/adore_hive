@@ -1,4 +1,4 @@
-import { categories } from './products'
+import { categories, products } from './products'
 
 export const mainNav = [
   { label: 'Home', to: '/' },
@@ -10,18 +10,26 @@ export const mainNav = [
 ] as const
 
 const slugify = (t: string) => t.toLowerCase().replace(/\s+/g, '-')
-const col = (slug: string, items: string[]) => ({
+const raw = (slug: string, items: string[]) => ({
   label: categories.find((c) => c.slug === slug)!.label,
   to: `/shop/${slug}`,
   items: items.map((i) => ({ label: i, type: slugify(i), to: `/shop/${slug}?type=${slugify(i)}` })),
 })
 
-export const shopMenu = [
-  col('jewellery', ['Earrings', 'Necklaces', 'Bracelets', 'Pendants', 'Anti-tarnish jewellery', 'Traditional jewellery']),
-  col('hair-accessories', ['Claw clips', 'Scrunchies', 'Hair bows', 'Hair pins', 'Cute everyday accessories']),
-  col('handmade-crochet', ['Crochet flowers', 'Crochet bouquets', 'Crochet accessories', 'Handmade gifts', 'Customized crochet creations']),
-  col('customized-gifting', ['Personalized hampers', 'Birthday hampers', 'Anniversary hampers', 'Friendship hampers', 'Handwritten letters', 'Special occasion gifts']),
+const allMenu = [
+  raw('jewellery', ['Earrings', 'Necklaces', 'Bracelets', 'Pendants', 'Anti-tarnish jewellery', 'Traditional jewellery']),
+  raw('hair-accessories', ['Claw clips', 'Scrunchies', 'Hair bows', 'Hair pins', 'Cute everyday accessories']),
+  raw('handmade-crochet', ['Crochet flowers', 'Crochet bouquets', 'Crochet accessories', 'Handmade gifts', 'Customized crochet creations']),
+  raw('customized-gifting', ['Personalized hampers', 'Birthday hampers', 'Anniversary hampers', 'Friendship hampers', 'Handwritten letters', 'Special occasion gifts']),
 ]
+
+/** Only subcategories with at least one product, so no menu link or chip leads to an empty page. */
+export const shopMenu = allMenu.map((c) => ({
+  ...c,
+  items: c.items.filter((i) => products.some((p) => `/shop/${p.category}` === c.to && p.types.includes(i.type))),
+}))
+
+export const typeLabel = (type: string) => allMenu.flatMap((c) => c.items).find((i) => i.type === type)?.label
 
 export const exploreLinks = [
   { label: 'About Us', to: '/about' },

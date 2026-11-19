@@ -27,7 +27,7 @@ export function SearchOverlay() {
     if (!term) return
     addRecent(term)
     close()
-    navigate(`/shop?q=${encodeURIComponent(term)}`)
+    navigate(`/search?q=${encodeURIComponent(term)}`)
   }
 
   return (

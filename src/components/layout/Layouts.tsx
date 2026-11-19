@@ -8,6 +8,7 @@ import { Header } from './Header'
 import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
 import { MobileMenu } from './MobileMenu'
 import { NewsletterBlock } from './NewsletterBlock'
+import { QuickView } from './QuickView'
 import { Toaster } from '../ui/Toaster'
 import { SearchOverlay } from './SearchOverlay'
 
@@ -46,6 +47,7 @@ export function MainLayout() {
       <MobileMenu />
       <SearchOverlay />
       <BagDrawer />
+      <QuickView />
       <Toaster />
     </>
   )

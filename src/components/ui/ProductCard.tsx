@@ -4,18 +4,30 @@ import { categoryLabel, type Product } from '@/data/products'
 import { formatINR } from '@/lib/format'
 import { useBag } from '@/store/bag'
 import { useToast } from '@/store/toast'
+import { useUI } from '@/store/ui'
 import { useWishlist } from '@/store/wishlist'
 import { Badge } from './Badge'
 import { Button } from './Button'
 
-export function ProductCard({ product, eager }: { product: Product; /** Above-the-fold image */ eager?: boolean }) {
+interface Props {
+  product: Product
+  /** Above-the-fold image */
+  eager?: boolean
+  /** Never open the quick view; send products with options to their page (wishlist) */
+  forceLink?: boolean
+}
+
+export function ProductCard({ product, eager, forceLink }: Props) {
   const wished = useWishlist((s) => s.ids.includes(product.id))
   const toggle = useWishlist((s) => s.toggle)
   const add = useBag((s) => s.add)
   const show = useToast((s) => s.show)
+  const openQuick = useUI((s) => s.openQuick)
+  const hasOptions = product.options.length > 0
+  const soldOut = product.stock === 'out'
 
   const quickAdd = () => {
-    add(product.id, product.variants?.[0])
+    add(product.id)
     show('Added to bag')
   }
 
@@ -31,6 +43,7 @@ export function ProductCard({ product, eager }: { product: Product; /** Above-th
           decoding="async"
           className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:motion-safe:scale-[1.04]"
         />
+        {soldOut && <span className="absolute left-2 top-2 z-10 rounded-sm bg-ink px-2 py-1 font-label text-xs font-medium uppercase tracking-[0.12em] text-white">Sold out</span>}
         <button
           type="button"
           aria-pressed={wished}
@@ -53,9 +66,22 @@ export function ProductCard({ product, eager }: { product: Product; /** Above-th
         </h3>
         <p className="text-sm text-muted">{categoryLabel(product.category)}</p>
         <p className="mb-4 mt-1 text-base font-medium">{formatINR(product.price)}</p>
-        <Button variant="outline" full onClick={quickAdd} className="relative z-10 mt-auto !px-3" aria-label={`Quick add ${product.name} to bag`}>
-          Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-        </Button>
+        <div className="mt-auto">
+          {soldOut ? (
+            <Button to={`/product/${product.id}`} variant="outline" full className="relative z-10 !px-3" aria-label={`Notify me about ${product.name}`}>Notify me</Button>
+          ) : hasOptions ? (
+            <>
+              {!forceLink && (
+                <Button variant="outline" full onClick={() => openQuick(product.id)} className="relative z-10 hidden !px-3 lg:inline-flex" aria-label={`Quick view ${product.name}`}>Quick view</Button>
+              )}
+              <Button to={`/product/${product.id}`} variant="outline" full className={`relative z-10 !px-3 ${forceLink ? '' : 'lg:hidden'}`} aria-label={`Choose options for ${product.name}`}>Choose options</Button>
+            </>
+          ) : (
+            <Button variant="outline" full onClick={quickAdd} className="relative z-10 !px-3" aria-label={`Quick add ${product.name} to bag`}>
+              Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+            </Button>
+          )}
+        </div>
       </div>
     </article>
   )

@@ -54,7 +54,7 @@ export function serializeFilters(f: Filters): URLSearchParams {
   return sp
 }
 
-export const emptyFilters = (sort: Sort = 'featured'): Filters => ({ collections: [], colours: [], finish: [], sort })
+export const emptyFilters = (sort: Sort = 'featured', q?: string): Filters => ({ collections: [], colours: [], finish: [], sort, q })
 
 const hasMin = (f: Filters) => f.min !== undefined && f.min > PRICE_LO
 const hasMax = (f: Filters) => f.max !== undefined && f.max < PRICE_HI
