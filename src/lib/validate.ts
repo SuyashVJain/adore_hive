@@ -41,3 +41,11 @@ export function isCardExpiry(v: string, now = new Date()) {
   return year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1)
 }
 export const isCvc = (v: string) => /^\d{3,4}$/.test(v.trim())
+
+/** Email, or a phone / WhatsApp number with 10 to 13 digits (any country prefix). */
+export function isEmailOrPhone(v: string) {
+  const t = v.trim()
+  if (isEmail(t)) return true
+  const digits = t.replace(/\D/g, '')
+  return /^[+\d][\d\s\-()]*$/.test(t) && digits.length >= 10 && digits.length <= 13
+}

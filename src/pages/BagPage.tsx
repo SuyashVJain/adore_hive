@@ -4,11 +4,11 @@ import { OrderSummary, ShippingHint } from '@/components/bag/OrderSummary'
 import { Breadcrumbs, Button, Field, ProductCard, SectionHeading } from '@/components/ui'
 import { products } from '@/data/products'
 import { formatINR } from '@/lib/format'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { useBag, useBagSummary } from '@/store/bag'
 
 export function BagPage() {
-  useDocumentTitle('Your bag')
+  useSeo('Your bag', 'Review the lovely things in your bag.', { noindex: true })
   const { lines, count, ...totals } = useBagSummary()
   const message = (useLocation().state as { message?: string } | null)?.message
   const note = useBag((s) => s.note)
@@ -60,7 +60,7 @@ export function BagPage() {
               <div className="rounded-lg bg-blush p-6">
                 <h2 className="font-display text-3xl">Sending a little love?</h2>
                 <p className="mt-2 text-sm text-muted">Your gift wrap and note are included with your gifted items.</p>
-                <Button to={`/product/${gifted.productId}`} variant="outline" full className="mt-4">Edit your personal touches</Button>
+                <Button to={gifted.product.href} variant="outline" full className="mt-4">Edit your personal touches</Button>
               </div>
             )}
           </aside>

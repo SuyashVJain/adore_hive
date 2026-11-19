@@ -12,6 +12,8 @@ export interface OrderLine {
   qty: number
   unitPrice: number
   gift?: Gift
+  /** Contents of a hamper or letter, one per line */
+  contents?: string[]
 }
 
 export interface OrderAddress {

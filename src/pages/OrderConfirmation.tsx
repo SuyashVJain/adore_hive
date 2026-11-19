@@ -5,7 +5,7 @@ import { delivery, giftWrapById } from '@/config/shop'
 import { site } from '@/config/site'
 import { formatINR } from '@/lib/format'
 import { optionsLabel } from '@/lib/bag'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { OrderSummary } from '@/components/bag/OrderSummary'
 import { useOrders } from '@/store/orders'
 import { StubPage } from './StubPage'
@@ -15,7 +15,7 @@ export const formatDate = (iso: string) => new Date(iso).toLocaleDateString('en-
 export function OrderConfirmation() {
   const id = useParams().id ?? ''
   const order = useOrders((s) => s.orders.find((o) => o.id === id))
-  useDocumentTitle(order ? `Order ${order.id}` : 'Order not found')
+  useSeo(order ? `Order ${order.id}` : 'Order not found', 'Your order confirmation.', { noindex: true })
 
   if (!order) {
     return <StubPage eyebrow="Order not found" title="We couldn’t find that order." subtitle="Check the link, or look under My account if you are signed in." cta={{ label: 'Go to my account', to: '/account' }} />
@@ -49,6 +49,7 @@ export function OrderConfirmation() {
                     <div className="min-w-0 flex-1">
                       <p className="font-product text-lg">{l.name}</p>
                       <p className="text-sm text-muted">Quantity {l.qty}{optionsLabel(l.options) ? ` · ${optionsLabel(l.options)}` : ''}</p>
+                      {l.contents && <ul className="mt-1 space-y-0.5 text-sm text-muted">{l.contents.map((c, j) => <li key={j}>{c}</li>)}</ul>}
                       {wrap && <p className="text-sm text-muted">Gift: {wrap.label}{l.gift?.note ? <> · Note: “{l.gift.note}”</> : null}</p>}
                     </div>
                     <p className="text-sm font-medium">{formatINR(l.qty * (l.unitPrice + (wrap?.fee ?? 0)))}</p>

@@ -1,13 +1,35 @@
 import { FREE_SHIPPING_OVER, SHIPPING_FEE, giftWrapById } from '@/config/shop'
-import type { Product } from '@/data/products'
 
 export interface Gift {
   wrap: string
   note: string
 }
 
+/** A configured item from the hamper or letter studio, stored on the bag line. */
+export interface CustomLine {
+  type: 'hamper' | 'letter'
+  name: string
+  image: string
+  price: number
+  subtitle: string
+  /** What is inside, one entry per line */
+  contents: string[]
+  /** Where to edit it */
+  href: string
+}
+
+/** The bits of a product that bag lines and totals need, whether catalogue item or custom. */
+export interface LineProduct {
+  id: string
+  name: string
+  image: string
+  price: number
+  subtitle: string
+  href: string
+}
+
 export interface LineInput {
-  product: Product
+  product: Pick<LineProduct, 'price'>
   options: Record<string, string>
   qty: number
   gift?: Gift
