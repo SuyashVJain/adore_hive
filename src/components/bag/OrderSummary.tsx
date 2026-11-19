@@ -27,7 +27,10 @@ export function OrderSummary({ totals }: { totals: Totals }) {
     <dl className="space-y-3">
       <div className={row}><dt className="text-muted">Subtotal</dt><dd>{formatINR(subtotal)}</dd></div>
       {totals.giftFees > 0 && <div className={row}><dt className="text-muted">Gift wrap</dt><dd>{formatINR(totals.giftFees)}</dd></div>}
-      <div className={row}><dt className="text-muted">Shipping</dt><dd>{totals.shipping === 0 ? 'Free' : formatINR(totals.shipping)}</dd></div>
+      <div className={row}>
+        <dt className="text-muted">Shipping<span className="block text-xs">Free above {formatINR(FREE_SHIPPING_OVER)}</span></dt>
+        <dd>{totals.shipping === 0 ? 'Free' : formatINR(totals.shipping)}</dd>
+      </div>
       <div className="flex items-baseline justify-between gap-4 border-t border-line pt-4">
         <dt className="eyebrow !text-ink">Total · INR</dt>
         <dd className="text-2xl font-medium">{formatINR(total)}</dd>

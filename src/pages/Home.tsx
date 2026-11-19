@@ -11,8 +11,9 @@ import { reviews } from '@/data/reviews'
 import { env } from '@/lib/env'
 import { fadeUp, stagger } from '@/lib/motion'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { meta } from '@/seo/routes'
 
-const trust = ['Thoughtfully curated', 'Handmade with love', 'Personal touches', 'Beautifully wrapped']
+const trust = ['Secure payments', 'Assured quality', 'Made in India', 'Timely delivery']
 const categoryImage = {
   jewellery: images.products['pearl-whisper-earrings'],
   'hair-accessories': images.products['blush-satin-bow'],
@@ -191,7 +192,7 @@ function Instagram() {
 }
 
 export function Home() {
-  useSeo('Thoughtful accessories, handmade crochet and gifts', 'Discover thoughtfully curated jewellery, hair accessories, handmade crochet and personalized gifts from Adore Hive. A little love in every detail.')
+  useSeo(meta.home.title, meta.home.description)
   return (
     <>
       <Hero />

@@ -105,7 +105,7 @@ export function ProductListing({ config, after }: Props) {
                 value={eff.sort}
                 onValueChange={(v) => set({ ...eff, sort: v as Sort })}
                 renderValue={<span className="truncate"><span className="text-muted">Sort: </span><RadixValue /></span>}
-                className="text-sm"
+                className="text-sm max-lg:!h-11"
               />
             </div>
           </div>

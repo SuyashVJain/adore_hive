@@ -122,7 +122,7 @@ export function DateField({ label, value, onChange, min = todayISO(), error, hin
       </Popover.Root>
 
       {narrow && (
-        <Drawer open={open} onClose={() => setOpen(false)} side="bottom" title="Choose a date" label="Choose a date">
+        <Drawer open={open} onClose={() => setOpen(false)} side="bottom" title="Choose a date" label="Choose a date" autoFocus={false}>
           <div className="flex justify-center px-3 pb-6 pt-2"><Calendar value={value} min={min} onPick={pick} /></div>
         </Drawer>
       )}
