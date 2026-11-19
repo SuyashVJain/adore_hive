@@ -68,7 +68,7 @@ export function HamperStudioPage() {
   }
 
   return (
-    <div className="container-page pb-32 pt-5 md:pb-16 md:pt-6">
+    <div className="container-page pb-48 pt-5 md:pb-16 md:pt-6">
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Customize Your Gift' }]} />
       <header className="py-6 text-center md:py-10">
         <p className="eyebrow mb-3">The Adore personalization studio</p>

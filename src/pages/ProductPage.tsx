@@ -57,7 +57,7 @@ function Detail({ product }: { product: Product }) {
   }
 
   return (
-    <div className="container-page pb-24 pt-5 md:pb-16 md:pt-6">
+    <div className="container-page pb-44 pt-5 md:pb-16 md:pt-6">
       <Breadcrumbs items={crumbs} />
 
       <div className="mt-4 grid items-start gap-5 md:gap-8 lg:mt-6 lg:grid-cols-2 lg:gap-16">
@@ -133,7 +133,7 @@ function Detail({ product }: { product: Product }) {
       </section>
 
       {/* Mobile sticky bar */}
-      <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-4 border-t border-line bg-page px-5 py-3 md:hidden">
+      <div className="fixed inset-x-0 bottom-0 max-md:bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-4 border-t border-line bg-page px-5 py-3 md:hidden">
         <div className="min-w-0 flex-1">
           <p className="text-xl font-medium">{total}</p>
           {c.message && <p className="flex items-center gap-1 text-xs text-muted"><Minus className="h-3 w-3 shrink-0" aria-hidden="true" /> Choose {c.missing.map((m) => m.toLowerCase()).join(' & ')}</p>}

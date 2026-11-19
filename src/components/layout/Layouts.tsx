@@ -7,6 +7,7 @@ import { Footer } from './Footer'
 import { Header } from './Header'
 import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
 import { MobileMenu } from './MobileMenu'
+import { MobileTabBar, TabBarSpacer } from './MobileTabBar'
 import { NewsletterBlock } from './NewsletterBlock'
 import { PageLoading } from './PageLoading'
 import { PageTransition } from './PageTransition'
@@ -50,6 +51,8 @@ export function MainLayout() {
       </main>
       <NewsletterBlock />
       <Footer />
+      <TabBarSpacer />
+      <MobileTabBar />
       <MobileMenu />
       <SearchOverlay />
       <BagDrawer />

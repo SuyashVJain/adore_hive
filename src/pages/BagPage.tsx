@@ -19,7 +19,7 @@ export function BagPage() {
   const gifted = lines.find((l) => l.gift)
 
   return (
-    <div className="container-page pb-24 pt-5 md:pb-16 md:pt-6">
+    <div className="container-page pb-44 pt-5 md:pb-16 md:pt-6">
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Your bag' }]} />
       <div className="py-8 md:py-12">
         <SectionHeading as="h1" align="center" eyebrow="Chosen with a little love" title="Your bag of lovely things." subtitle="A few favourites for you. A little something for someone special." />
@@ -77,7 +77,7 @@ export function BagPage() {
       )}
 
       {lines.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-4 border-t border-line bg-page px-5 py-3 md:hidden">
+        <div className="fixed inset-x-0 bottom-0 max-md:bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-4 border-t border-line bg-page px-5 py-3 md:hidden">
           <div className="min-w-0 flex-1">
             <p className="text-xs text-muted">Total</p>
             <p className="text-xl font-medium">{formatINR(totals.total)}</p>

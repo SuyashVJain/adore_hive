@@ -18,7 +18,7 @@ export function Toaster() {
   }, [toast, hide])
 
   return (
-    <div role="status" aria-live="polite" aria-atomic="true" className="pointer-events-none fixed inset-x-0 bottom-24 z-[70] flex justify-center px-4 md:bottom-4">
+    <div role="status" aria-live="polite" aria-atomic="true" className="pointer-events-none fixed inset-x-0 bottom-[calc(9rem+env(safe-area-inset-bottom))] z-[70] flex justify-center px-4 md:bottom-4">
       <AnimatePresence mode="wait">
         {toast && (
           <m.div key={toast.id} className="pointer-events-auto flex items-center gap-3 rounded-md bg-ink py-1 pl-4 pr-1 text-sm text-white shadow-drawer" {...toastMotion}>

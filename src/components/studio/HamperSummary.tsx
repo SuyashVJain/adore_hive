@@ -63,7 +63,7 @@ export function HamperSummaryBar({ d }: { d: HamperDraft }) {
   const [open, setOpen] = useState(false)
   const t = hamperTotals(d)
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-page md:hidden">
+    <div className="fixed inset-x-0 bottom-0 max-md:bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 border-t border-line bg-page md:hidden">
       <div id="hamper-summary-panel" hidden={!open} className="max-h-[65vh] overflow-y-auto p-5"><Body d={d} showImage={false} /></div>
       <button type="button" aria-expanded={open} aria-controls="hamper-summary-panel" onClick={() => setOpen((o) => !o)} className="flex min-h-16 w-full items-center justify-between gap-3 px-5 py-2 text-left">
         <span>
