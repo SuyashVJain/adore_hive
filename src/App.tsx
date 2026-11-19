@@ -23,6 +23,7 @@ const AccountPage = named(() => import('@/pages/AccountPage'), 'AccountPage')
 const AboutPage = named(() => import('@/pages/AboutPage'), 'AboutPage')
 const Contact = named(() => import('@/pages/ContactPage'), 'Contact')
 const PolicyPage = named(() => import('@/pages/policies/PolicyPage'), 'PolicyPage')
+const GiftFinder = named(() => import('@/pages/GiftFinder'), 'GiftFinder')
 const HamperStudioPage = named(() => import('@/pages/HamperStudio'), 'HamperStudioPage')
 const LetterStudioPage = named(() => import('@/pages/LetterStudio'), 'LetterStudioPage')
 const NotFound = named(() => import('@/pages/pages'), 'NotFound')
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="shop/:category" element={<Category />} />
           <Route path="product/:id" element={<ProductPage />} />
           <Route path="hamper-studio" element={<HamperStudioPage />} />
+          <Route path="gift-finder" element={<GiftFinder />} />
           <Route path="letter-studio" element={<LetterStudioPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="order-confirmation/:id" element={<OrderConfirmation />} />

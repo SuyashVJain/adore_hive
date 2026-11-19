@@ -34,7 +34,7 @@ if (!indexable) {
   const categories = ['jewellery', 'hair-accessories', 'handmade-crochet', 'customized-gifting']
   const paths = [
     '/', '/shop', ...categories.map((c) => `/shop/${c}`), ...products.map((p) => `/product/${p}`),
-    '/about', '/contact', '/hamper-studio', '/letter-studio',
+    '/about', '/contact', '/hamper-studio', '/letter-studio', '/gift-finder',
     '/policies/shipping', '/policies/returns', '/policies/privacy', '/policies/terms',
   ]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths.map((p) => `  <url><loc>${SITE}${p}</loc></url>`).join('\n')}\n</urlset>\n`
