@@ -3,7 +3,13 @@
 export const FREE_SHIPPING_OVER = 999
 export const SHIPPING_FEE = 60
 export const MAX_QTY = 10
-export const RETURN_DAYS = 7
+
+// Returns policy, as confirmed by the owner. The Returns page and the product page both read these.
+export const RETURN_DAYS = 3
+export const RETURN_FEE = 150
+export const RETURN_PICKUP_DAYS = { min: 3, max: 5 }
+export const RETURN_SELF_SHIP_DAYS = 7
+export const REFUND_DAYS = 7
 
 export const giftWraps = [
   { id: 'blush-ribbon', label: 'Blush ribbon wrap', fee: 49 },

@@ -1,32 +1,28 @@
-// TODO: draft wording. Needs review (and legal sign-off) before launch.
+// TODO: draft wording. Needs review before launch.
 import { PolicyLayout } from './PolicyLayout'
 
 export function Privacy() {
   return (
-    <PolicyLayout title="Privacy Policy" intro="What we collect, why we collect it and how we look after it.">
+    <PolicyLayout title="Privacy Policy" intro="What we collect when you shop with us, and what we do with it.">
       <section>
         <h2>What we collect</h2>
         <ul>
-          <li>Details you give us: name, email address, phone number and delivery address when you order, create an account or contact us.</li>
-          <li>Order details, including any gift notes or personalization you add.</li>
-          <li>Basic information about how the site is used, to help us improve it.</li>
+          <li>Your name, email address, phone number and delivery address.</li>
+          <li>Your order details, including any gift note or personalization you add.</li>
+          <li>Anything you write to us through the contact or request forms.</li>
         </ul>
       </section>
       <section>
         <h2>How we use it</h2>
-        <p>To process and deliver your orders, reply to your messages, keep your account working and, if you subscribe, send you our newsletter. We do not sell your personal information.</p>
+        <p>We use this information to process and deliver your orders, to contact you about an order, and to reply to your messages.</p>
       </section>
       <section>
         <h2>Payments</h2>
         <p>Payments are handled by our payment provider. We do not store your card or UPI details.</p>
       </section>
       <section>
-        <h2>Your choices</h2>
-        <p>You can ask us to see, correct or delete the information we hold about you, and you can unsubscribe from our newsletter at any time using the link in any email.</p>
-      </section>
-      <section>
-        <h2>Cookies and local storage</h2>
-        <p>We use your browser’s storage to remember your bag, wishlist and checkout details on this device.</p>
+        <h2>On your device</h2>
+        <p>Your bag, wishlist and checkout details are kept in your browser on this device so they are still there when you come back.</p>
       </section>
     </PolicyLayout>
   )
