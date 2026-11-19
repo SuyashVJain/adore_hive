@@ -15,7 +15,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex min-h-[46px] whitespace-nowrap items-center justify-center gap-2 rounded px-6 py-2 font-label text-xs font-semibold uppercase tracking-[0.14em] transition-colors select-none disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed aria-disabled:opacity-45'
+  'inline-flex min-h-[46px] whitespace-nowrap items-center justify-center gap-2 rounded px-6 py-2 font-label text-xs font-semibold uppercase tracking-[0.14em] transition-[background-color,transform] duration-150 select-none active:scale-[0.98] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed aria-disabled:opacity-45'
 const variants: Record<Variant, string> = {
   primary: 'bg-ink text-white hover:bg-[#3a3030] active:bg-black disabled:hover:bg-ink',
   outline: 'border border-ink bg-surface text-ink hover:bg-blush active:bg-[#f0cfcf] disabled:hover:bg-surface',

@@ -7,7 +7,8 @@ import { useWishlist } from '@/store/wishlist'
 import { OptionPicker } from '../product/OptionPicker'
 import { StockStatus } from '../product/StockStatus'
 import { useConfigurator } from '../product/useConfigurator'
-import { Button } from '../ui/Button'
+import { AddButton } from '../ui/AddButton'
+import { flyToBag } from '@/lib/fly'
 import { Modal } from '../ui/Modal'
 import { QuantityStepper } from '../ui/QuantityStepper'
 
@@ -42,9 +43,21 @@ function Body({ product }: { product: Product }) {
             {wished ? 'Saved to wishlist' : 'Save to wishlist'}
           </button>
         </div>
-        <Button full disabled={!c.canAdd} aria-describedby={c.message ? 'qv-message' : undefined} className="mt-4" onClick={() => c.add() && close()}>
-          {c.soldOut ? 'Out of stock' : `Add to bag · ${total}`}
-        </Button>
+        <AddButton
+          full
+          disabled={!c.canAdd}
+          aria-describedby={c.message ? 'qv-message' : undefined}
+          className="mt-4"
+          idleLabel={c.soldOut ? 'Out of stock' : `Add to bag · ${total}`}
+          onAdd={() => {
+            const ok = c.add()
+            if (ok) {
+              flyToBag(document.querySelector('[role=dialog] img'), product.image)
+              setTimeout(close, 500) // let the arc start from the open modal, then close it
+            }
+            return ok
+          }}
+        />
         <Link to={`/product/${product.id}`} onClick={close} className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm underline-offset-4 hover:underline">
           View full product details <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>

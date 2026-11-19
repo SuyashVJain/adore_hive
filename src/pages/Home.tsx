@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
+import { m } from 'framer-motion'
 import { Heart, Sparkles, Star } from 'lucide-react'
 import { Button, ExtLink, ProductCard, SectionHeading } from '@/components/ui'
 import { Img } from '@/components/ui/Img'
+import { Reveal } from '@/components/ui/Reveal'
 import { site } from '@/config/site'
 import { images } from '@/data/images'
 import { categories, getProduct, homeRows } from '@/data/products'
 import { reviews } from '@/data/reviews'
+import { fadeUp, stagger } from '@/lib/motion'
 import { useSeo } from '@/lib/useDocumentTitle'
 
 const trust = ['Thoughtfully curated', 'Handmade with love', 'Personal touches', 'Beautifully wrapped']
@@ -22,16 +25,16 @@ function Hero() {
       <img src={images.hero} alt="" width={772} height={610} {...{ fetchpriority: 'high' }} className="absolute inset-0 h-full w-full object-cover lg:left-[40.6%] lg:w-[59.4%]" />
       <div className="container-page relative py-8 md:py-16 lg:py-[110px]">
         {/* Everything sits inside this panel, at every width */}
-        <div className="max-w-[600px] rounded-xl bg-page p-6 shadow-sm md:p-10">
-          <p className="eyebrow !text-ink">A little adore. A little every day.</p>
-          <h1 id="hero-h" className="mt-4 text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]">A Little Love in Every Detail.</h1>
-          <p className="mt-5 text-base text-muted md:text-lg">Discover thoughtfully curated accessories, handmade treasures and personalized gifts.</p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <m.div className="max-w-[600px] rounded-xl bg-page p-6 shadow-sm md:p-10" variants={stagger()} initial="hidden" animate="show">
+          <m.p variants={fadeUp} className="eyebrow !text-ink">A little adore. A little every day.</m.p>
+          <m.h1 variants={fadeUp} id="hero-h" className="mt-4 text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]">A Little Love in Every Detail.</m.h1>
+          <m.p variants={fadeUp} className="mt-5 text-base text-muted md:text-lg">Discover thoughtfully curated accessories, handmade treasures and personalized gifts.</m.p>
+          <m.div variants={fadeUp} className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Button to="/shop">Shop collection</Button>
             <Button to="/hamper-studio" variant="outline">Create your own hamper</Button>
-          </div>
-          <p className="mt-7 flex items-center gap-2 font-display text-2xl italic">For you. For them. From the heart. <Heart className="h-5 w-5" aria-hidden="true" /></p>
-        </div>
+          </m.div>
+          <m.p variants={fadeUp} className="mt-7 flex items-center gap-2 font-display text-2xl italic">For you. For them. From the heart. <Heart className="h-5 w-5" aria-hidden="true" /></m.p>
+        </m.div>
       </div>
     </section>
   )
@@ -53,7 +56,7 @@ function TrustStrip() {
 
 function Categories() {
   return (
-    <section aria-labelledby="cat-h" className="container-page py-10 md:py-20">
+    <Reveal as="section" labelledBy="cat-h" className="container-page py-10 md:py-20">
       <p className="eyebrow !text-ink mb-3">Find your little lovely</p>
       <h2 id="cat-h" className="text-[2rem] md:text-5xl">Something to adore.</h2>
       <p className="mt-3 text-muted">Everyday favourites. Unexpected little joys.</p>
@@ -70,14 +73,14 @@ function Categories() {
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
   )
 }
 
 function Row({ title, subtitle, ids, to }: { title: string; subtitle: string; ids: readonly string[]; to: string }) {
   const items = ids.flatMap((i) => getProduct(i) ?? [])
   return (
-    <section aria-label={title} className="container-page py-5 md:py-10">
+    <Reveal as="section" label={title} className="container-page py-5 md:py-10">
       <SectionHeading eyebrow="The Adore edit" title={title} subtitle={subtitle} action={{ label: 'View all', to }} />
       {/* Mobile: snap carousel showing ~1.6 cards. Tablet: 3 columns. Desktop: 4. */}
       <ul
@@ -91,13 +94,13 @@ function Row({ title, subtitle, ids, to }: { title: string; subtitle: string; id
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
   )
 }
 
 function Gifting() {
   return (
-    <section aria-labelledby="gift-h" className="bg-blush py-10 md:py-20">
+    <Reveal as="section" labelledBy="gift-h" className="bg-blush py-10 md:py-20">
       <div className="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <Img src={images.lifestyle.hamper} alt="" width={560} height={460} loading="lazy" className="aspect-[16/10] w-full rounded-t-[3rem] md:aspect-[560/460] rounded-b-[5rem] object-cover lg:rounded-b-[8rem]" />
         <div>
@@ -120,13 +123,13 @@ function Gifting() {
           </ul>
         </div>
       </div>
-    </section>
+    </Reveal>
   )
 }
 
 function Story() {
   return (
-    <section aria-labelledby="story-h" className="container-page grid items-center gap-10 py-10 md:py-20 lg:grid-cols-2 lg:gap-16">
+    <Reveal as="section" labelledBy="story-h" className="container-page grid items-center gap-10 py-10 md:py-20 lg:grid-cols-2 lg:gap-16">
       <div>
         <p className="eyebrow !text-ink mb-3">The heart behind the hive</p>
         <h2 id="story-h" className="text-[2rem] md:text-5xl">More Than Accessories, It’s a Feeling.</h2>
@@ -135,13 +138,13 @@ function Story() {
         <Button to="/about" variant="outline" className="mt-7">Explore our story</Button>
       </div>
       <Img src={images.lifestyle.wrapping} alt="" width={608} height={470} loading="lazy" className="aspect-[16/10] w-full rounded-xl object-cover md:aspect-[608/470]" />
-    </section>
+    </Reveal>
   )
 }
 
 function Reviews() {
   return (
-    <section aria-labelledby="rev-h" className="bg-panel py-10 md:py-20">
+    <Reveal as="section" labelledBy="rev-h" className="bg-panel py-10 md:py-20">
       <div className="container-page">
         <p className="eyebrow !text-ink mb-3">Your words, our little joy</p>
         <h2 id="rev-h" className="text-[2rem] md:text-5xl">A Little Love From Our Customers.</h2>
@@ -161,13 +164,13 @@ function Reviews() {
           ))}
         </ul>
       </div>
-    </section>
+    </Reveal>
   )
 }
 
 function Instagram() {
   return (
-    <section aria-labelledby="ig-h" className="container-page py-10 md:py-20">
+    <Reveal as="section" labelledBy="ig-h" className="container-page py-10 md:py-20">
       <p className="eyebrow !text-ink mb-3">The little moments, too</p>
       <h2 id="ig-h" className="text-[2rem] md:text-5xl">Find Your Daily Dose of Adore.</h2>
       <p className="mt-3 text-muted">Styling notes, handmade moments and lovely things in the making.</p>
@@ -182,7 +185,7 @@ function Instagram() {
       </ul>
       <Button href={site.instagramUrl} variant="outline" className="mt-8">Follow us on Instagram</Button>
       <p className="mt-3 text-sm text-muted"><ExtLink href={site.instagramUrl}>{site.instagramHandle}</ExtLink></p>
-    </section>
+    </Reveal>
   )
 }
 

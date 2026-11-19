@@ -23,6 +23,7 @@ export function ProductGallery({ images, name }: Props) {
       <div className="relative md:hidden" role="region" aria-roledescription="carousel" aria-label={`${name} photos`}>
         <ul
           ref={track}
+          data-fly-source
           tabIndex={0}
           aria-label="Swipe to see more photos"
           onScroll={(e) => setI(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}
@@ -47,7 +48,7 @@ export function ProductGallery({ images, name }: Props) {
 
       {/* Desktop / tablet */}
       <div className="hidden md:block">
-        <Img src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full rounded-xl object-cover" />
+        <Img data-fly-source src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full rounded-xl object-cover" />
         <ul className="mt-3 grid grid-cols-3 gap-3" aria-label="Photo thumbnails">
           {images.map((src, n) => (
             <li key={src}>

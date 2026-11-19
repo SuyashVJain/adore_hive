@@ -4,10 +4,12 @@ import { HAMPER_NOTE_PRICE } from '@/config/shop'
 import { hamperImage } from '@/data/hamper'
 import { formatINR } from '@/lib/format'
 import { boxOf, hamperTotals, letterContents, ribbonOf } from '@/lib/hamper'
+import { useCountTo } from '@/lib/useCountTo'
 import type { HamperDraft } from '@/store/hamper'
 
 function Body({ d, showImage = true }: { d: HamperDraft; showImage?: boolean }) {
   const t = hamperTotals(d)
+  const total = useCountTo(t.total)
   const row = 'flex items-baseline justify-between gap-4 text-sm'
   return (
     <div>
@@ -36,7 +38,7 @@ function Body({ d, showImage = true }: { d: HamperDraft; showImage?: boolean }) 
         {d.letter && <div className={row}><dt className="text-muted">Handwritten letter</dt><dd>{formatINR(t.letter)}</dd></div>}
         <div className="flex items-baseline justify-between gap-4 border-t border-line pt-3">
           <dt className="eyebrow !text-ink">Your hamper · INR</dt>
-          <dd className="text-2xl font-medium">{formatINR(t.total)}</dd>
+          <dd className="text-2xl font-medium">{formatINR(total)}</dd>
         </div>
       </dl>
       <p className="mt-3 text-xs text-muted">Final details and availability are confirmed with you before we begin.</p>

@@ -1,7 +1,9 @@
 import { useEffect, useRef, type KeyboardEvent } from 'react'
+import { AnimatePresence, m } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { images } from '@/data/images'
 import { shopMenu } from '@/data/nav'
+import { overlayFade } from '@/lib/motion'
 import { useUI } from '@/store/ui'
 import { Button } from '../ui/Button'
 import { Overlay } from '../ui/Overlay'
@@ -31,8 +33,6 @@ export function ShopMenu({ top, onClose, onEnter, onLeave, onTabOut }: Props) {
     return () => document.removeEventListener('pointerdown', down)
   }, [open, onClose])
 
-  if (!open) return null
-
   const onKey = (e: KeyboardEvent) => {
     if (e.key !== 'Tab') return
     const links = panel.current!.querySelectorAll<HTMLElement>('a[href]')
@@ -41,8 +41,11 @@ export function ShopMenu({ top, onClose, onEnter, onLeave, onTabOut }: Props) {
   }
 
   return (
-    <Overlay onClose={onClose} trap={false} autoFocus={false} passThrough>
-      <div
+    <AnimatePresence>
+      {open && (
+    <Overlay key="shop" onClose={onClose} trap={false} autoFocus={false} passThrough>
+      <m.div
+        {...overlayFade}
         ref={panel}
         id="shop-menu"
         role="dialog"
@@ -52,7 +55,7 @@ export function ShopMenu({ top, onClose, onEnter, onLeave, onTabOut }: Props) {
         onMouseLeave={onLeave}
         onFocus={onEnter}
         onKeyDown={onKey}
-        className="pointer-events-auto absolute left-1/2 hidden w-[calc(100%-4rem)] max-w-[1280px] -translate-x-1/2 animate-rise rounded-b-xl bg-panel p-9 pt-8 lg:block"
+        className="pointer-events-auto absolute left-1/2 hidden w-[calc(100%-4rem)] max-w-[1280px] -translate-x-1/2 rounded-b-xl bg-panel p-9 pt-8 lg:block"
       >
         <div className="mb-7 flex items-center justify-between">
           <p className="eyebrow !text-ink">Find your little lovely</p>
@@ -83,7 +86,9 @@ export function ShopMenu({ top, onClose, onEnter, onLeave, onTabOut }: Props) {
             <Button to="/hamper-studio" className="mt-4">Build a hamper</Button>
           </div>
         </div>
-      </div>
+      </m.div>
     </Overlay>
+      )}
+    </AnimatePresence>
   )
 }

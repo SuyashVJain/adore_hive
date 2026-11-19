@@ -1,6 +1,7 @@
 import { FREE_SHIPPING_OVER } from '@/config/shop'
 import { formatINR } from '@/lib/format'
 import type { computeTotals } from '@/lib/bag'
+import { useCountTo } from '@/lib/useCountTo'
 
 type Totals = ReturnType<typeof computeTotals>
 
@@ -19,15 +20,17 @@ export function ShippingHint({ totals }: { totals: Totals }) {
 
 /** Subtotal / gift wrap / shipping / total. Same maths everywhere via computeTotals. */
 export function OrderSummary({ totals }: { totals: Totals }) {
+  const subtotal = useCountTo(totals.subtotal)
+  const total = useCountTo(totals.total)
   const row = 'flex items-baseline justify-between gap-4 text-sm'
   return (
     <dl className="space-y-3">
-      <div className={row}><dt className="text-muted">Subtotal</dt><dd>{formatINR(totals.subtotal)}</dd></div>
+      <div className={row}><dt className="text-muted">Subtotal</dt><dd>{formatINR(subtotal)}</dd></div>
       {totals.giftFees > 0 && <div className={row}><dt className="text-muted">Gift wrap</dt><dd>{formatINR(totals.giftFees)}</dd></div>}
       <div className={row}><dt className="text-muted">Shipping</dt><dd>{totals.shipping === 0 ? 'Free' : formatINR(totals.shipping)}</dd></div>
       <div className="flex items-baseline justify-between gap-4 border-t border-line pt-4">
         <dt className="eyebrow !text-ink">Total · INR</dt>
-        <dd className="text-2xl font-medium">{formatINR(totals.total)}</dd>
+        <dd className="text-2xl font-medium">{formatINR(total)}</dd>
       </div>
     </dl>
   )

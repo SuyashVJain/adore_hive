@@ -9,6 +9,7 @@ import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
 import { MobileMenu } from './MobileMenu'
 import { NewsletterBlock } from './NewsletterBlock'
 import { PageLoading } from './PageLoading'
+import { PageTransition } from './PageTransition'
 import { QuickView } from './QuickView'
 import { Toaster } from '../ui/Toaster'
 import { SearchOverlay } from './SearchOverlay'
@@ -41,9 +42,11 @@ export function MainLayout() {
       <AnnouncementBar />
       <Header />
       <main id="main" tabIndex={-1} className="outline-none">
-        <Suspense fallback={<PageLoading />}>
-          <Outlet />
-        </Suspense>
+        <PageTransition>
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
+        </PageTransition>
       </main>
       <NewsletterBlock />
       <Footer />
@@ -64,9 +67,11 @@ export function CheckoutLayout() {
       <SkipLink />
       <MinimalCheckoutHeader />
       <main id="main" tabIndex={-1} className="outline-none">
-        <Suspense fallback={<PageLoading />}>
-          <Outlet />
-        </Suspense>
+        <PageTransition>
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
+        </PageTransition>
       </main>
       <MinimalCheckoutFooter />
     </>

@@ -1,5 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
+import { m } from 'framer-motion'
+import { overlayFade } from '@/lib/motion'
 
 const FOCUSABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -13,13 +15,15 @@ interface Props {
   autoFocus?: boolean
   /** Dim only: pointer events pass through to the page (hover-opened mega menu) */
   passThrough?: boolean
+  /** Scrim colour classes (the lightbox wants it darker) */
+  scrimClass?: string
 }
 
 /**
  * Full-viewport layer: dims the whole page (header included), locks scroll, traps focus,
- * closes on Escape and restores focus on unmount. Mount it only while open.
+ * closes on Escape and restores focus on unmount. Mount it inside <AnimatePresence> so it can animate out.
  */
-export function Overlay({ onClose, children, trap = true, autoFocus = true, passThrough }: Props) {
+export function Overlay({ onClose, children, trap = true, autoFocus = true, passThrough, scrimClass = 'bg-ink/45' }: Props) {
   const root = useRef<HTMLDivElement>(null)
   const close = useRef(onClose)
   close.current = onClose
@@ -55,7 +59,7 @@ export function Overlay({ onClose, children, trap = true, autoFocus = true, pass
 
   return createPortal(
     <div ref={root} className={`fixed inset-0 z-50 ${passThrough ? 'pointer-events-none' : ''}`}>
-      <div className="absolute inset-0 animate-fade bg-ink/45" aria-hidden="true" onClick={onClose} />
+      <m.div className={`absolute inset-0 ${scrimClass}`} aria-hidden="true" onClick={onClose} {...overlayFade} />
       {children}
     </div>,
     document.body,

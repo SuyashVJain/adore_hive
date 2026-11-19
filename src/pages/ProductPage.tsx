@@ -7,7 +7,9 @@ import { OptionPicker } from '@/components/product/OptionPicker'
 import { ProductGallery } from '@/components/product/ProductGallery'
 import { StockStatus } from '@/components/product/StockStatus'
 import { useConfigurator } from '@/components/product/useConfigurator'
-import { Accordion, Breadcrumbs, Button, ProductCard, QuantityStepper } from '@/components/ui'
+import { Accordion, Breadcrumbs, ProductCard, QuantityStepper } from '@/components/ui'
+import { AddButton } from '@/components/ui/AddButton'
+import { flyToBag } from '@/lib/fly'
 import { RETURN_DAYS, delivery } from '@/config/shop'
 import { typeLabel } from '@/data/nav'
 import { categories, categoryLabel, getProduct, products, relatedProducts, type Product } from '@/data/products'
@@ -46,11 +48,12 @@ function Detail({ product }: { product: Product }) {
   const msgId = 'opt-message'
 
   const addLabel = c.soldOut ? 'Out of stock' : `Add to bag · ${total}`
-  const AddButton = ({ className = '' }: { className?: string }) => (
-    <Button full disabled={!c.canAdd} onClick={c.add} aria-describedby={c.message ? msgId : undefined} className={className}>
-      {addLabel}
-    </Button>
-  )
+  // Add, and if it worked, arc the photo to the bag icon
+  const onAdd = () => {
+    const ok = c.add()
+    if (ok) flyToBag([...document.querySelectorAll('[data-fly-source]')].find((e) => e.getBoundingClientRect().width > 0), product.image)
+    return ok
+  }
 
   return (
     <div className="container-page pb-24 pt-5 md:pb-16 md:pt-6">
@@ -98,7 +101,7 @@ function Detail({ product }: { product: Product }) {
           <p className="mt-4 text-sm text-muted md:hidden">{product.description}</p>
 
           <div className="mt-5 space-y-3">
-            <AddButton className="max-md:hidden" />
+            <AddButton full onAdd={onAdd} disabled={!c.canAdd} idleLabel={addLabel} aria-describedby={c.message ? msgId : undefined} className="max-md:hidden" />
             {c.soldOut ? <NotifyForm name={product.name} /> : <GiftPanel value={c.gift} onChange={c.setGift} />}
           </div>
 
@@ -134,7 +137,7 @@ function Detail({ product }: { product: Product }) {
           <p className="text-xl font-medium">{total}</p>
           {c.message && <p className="flex items-center gap-1 text-xs text-muted"><Minus className="h-3 w-3 shrink-0" aria-hidden="true" /> Choose {c.missing.map((m) => m.toLowerCase()).join(' & ')}</p>}
         </div>
-        <Button disabled={!c.canAdd} onClick={c.add} className="shrink-0">{c.soldOut ? 'Out of stock' : 'Add to bag'}</Button>
+        <AddButton onAdd={onAdd} disabled={!c.canAdd} idleLabel={c.soldOut ? 'Out of stock' : 'Add to bag'} className="shrink-0" />
       </div>
       <span className="sr-only">{categoryLabel(product.category)}</span>
     </div>

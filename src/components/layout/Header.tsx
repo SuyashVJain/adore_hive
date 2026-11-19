@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { m } from 'framer-motion'
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User } from 'lucide-react'
 import { mainNav } from '@/data/nav'
 import { useBagSummary } from '@/store/bag'
@@ -14,11 +15,15 @@ const CLOSE_DELAY = 250
 const iconBtn = 'relative grid h-11 w-11 place-items-center rounded-full transition-colors hover:bg-blush active:bg-[#f0cfcf]'
 
 function Count({ n }: { n: number }) {
-  if (!n) return null
+  const seen = useRef(n)
+  if (!n) { seen.current = n; return null }
+  // Bump only when the number changes after first render
+  const bump = seen.current !== n && seen.current !== undefined
+  seen.current = n
   return (
-    <span aria-hidden="true" className="absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-xs leading-none text-white">
+    <m.span key={n} aria-hidden="true" initial={bump ? { scale: 1.45 } : false} animate={{ scale: 1 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-xs leading-none text-white">
       {n}
-    </span>
+    </m.span>
   )
 }
 
@@ -120,7 +125,7 @@ export function Header() {
           <Link to="/account" aria-label="My account" className={`${iconBtn} hidden lg:grid`}>
             <User className="h-[22px] w-[22px]" aria-hidden="true" />
           </Link>
-          <button type="button" aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`} aria-haspopup="dialog" onClick={() => open('bag')} className={`${iconBtn} -mr-2.5 lg:mr-0`}>
+          <button type="button" aria-label={`Open bag, ${count} ${count === 1 ? 'item' : 'items'}`} aria-haspopup="dialog" data-bag-target onClick={() => open('bag')} className={`${iconBtn} -mr-2.5 lg:mr-0`}>
             <ShoppingBag className="h-[22px] w-[22px]" aria-hidden="true" />
             <Count n={count} />
           </button>

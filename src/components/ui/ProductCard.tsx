@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Plus } from 'lucide-react'
 import { categoryLabel, type Product } from '@/data/products'
@@ -8,7 +9,9 @@ import { useUI } from '@/store/ui'
 import { useWishlist } from '@/store/wishlist'
 import { Badge } from './Badge'
 import { Img } from './Img'
+import { AddButton } from './AddButton'
 import { Button } from './Button'
+import { flyToBag } from '@/lib/fly'
 
 interface Props {
   product: Product
@@ -27,13 +30,16 @@ export function ProductCard({ product, eager, forceLink }: Props) {
   const hasOptions = product.options.length > 0
   const soldOut = product.stock === 'out'
 
+  const card = useRef<HTMLElement>(null)
   const quickAdd = () => {
     add(product.id)
     show('Added to bag')
+    flyToBag(card.current?.querySelector('img'), product.image)
+    return true
   }
 
   return (
-    <article className="group relative flex h-full flex-col rounded-lg bg-surface p-2 transition-shadow focus-within:shadow-md hover:shadow-md">
+    <article ref={card} className="group relative flex h-full flex-col rounded-lg bg-surface p-2 transition-[box-shadow,transform] duration-300 focus-within:shadow-md hover:shadow-md motion-safe:hover:-translate-y-0.5">
       <div className="relative aspect-[222/246] overflow-hidden rounded-md bg-blush">
         <Img
           src={product.image}
@@ -78,9 +84,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
               <Button to={`/product/${product.id}`} variant="outline" full className={`relative z-10 !px-3 ${forceLink ? '' : 'lg:hidden'}`} aria-label={`Choose options for ${product.name}`}>Choose options</Button>
             </>
           ) : (
-            <Button variant="outline" full onClick={quickAdd} className="relative z-10 !px-3" aria-label={`Quick add ${product.name} to bag`}>
-              Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-            </Button>
+            <AddButton variant="outline" full onAdd={quickAdd} className="relative z-10 !px-3" aria-label={`Quick add ${product.name} to bag`} idleLabel={<>Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" /></>} />
           )}
         </div>
       </div>
