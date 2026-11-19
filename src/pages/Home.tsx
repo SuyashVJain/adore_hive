@@ -8,6 +8,7 @@ import { site } from '@/config/site'
 import { images } from '@/data/images'
 import { categories, getProduct, homeRows } from '@/data/products'
 import { reviews } from '@/data/reviews'
+import { env } from '@/lib/env'
 import { fadeUp, stagger } from '@/lib/motion'
 import { useSeo } from '@/lib/useDocumentTitle'
 
@@ -202,7 +203,7 @@ export function Home() {
       <div className="h-4 md:h-12" />
       <Gifting />
       <Story />
-      <Reviews />
+      {env.showSampleReviews && <Reviews />}
       <Instagram />
     </>
   )

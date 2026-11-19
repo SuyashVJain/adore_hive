@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { site } from '@/config/site'
+import { env } from './env'
 
 const DEFAULT_DESC = `${site.name}: thoughtfully curated accessories, handmade crochet and personalized gifts. ${site.tagline}`
 
@@ -31,21 +32,22 @@ interface Options {
 }
 
 /** Per-route title, description, canonical URL, Open Graph tags and robots hint. */
-export function useSeo(title: string, description: string = DEFAULT_DESC, { noindex, image = '/logo.png' }: Options = {}) {
+export function useSeo(title: string, description: string = DEFAULT_DESC, { noindex, image = '/og-image.png' }: Options = {}) {
   useEffect(() => {
-    const origin = (import.meta.env.VITE_SITE_URL as string | undefined) ?? window.location.origin
+    const origin = env.siteUrl || window.location.origin
     const full = `${title} | ${site.name}`
     const url = origin + window.location.pathname
     const img = image.startsWith('http') ? image : origin + image
     const prev = document.title
     document.title = full
     setMeta('name', 'description', description)
-    setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow')
+    setMeta('name', 'robots', noindex || !env.indexable ? 'noindex, nofollow' : 'index, follow')
     setMeta('property', 'og:title', full)
     setMeta('property', 'og:description', description)
     setMeta('property', 'og:url', url)
     setMeta('property', 'og:image', img)
-    setMeta('name', 'twitter:card', 'summary')
+    setMeta('name', 'twitter:card', 'summary_large_image')
+    setMeta('name', 'twitter:image', img)
     setCanonical(url)
     return () => { document.title = prev }
   }, [title, description, noindex, image])

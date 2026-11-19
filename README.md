@@ -74,14 +74,24 @@ npm run dev        # http://localhost:5173
 
 Requires Node 18 or newer. The scripts that drive a browser (`a11y`, `screenshots`, `lighthouse`) need Edge or Chrome installed; set `CHROME_PATH` if it is not found automatically.
 
-Set `SITE_URL` (for example `https://www.example.com`) when building so the sitemap, robots file and canonical links use your domain. Optionally set `VITE_SITE_URL` for canonical and Open Graph URLs.
+## Configuration
+
+Copy `.env.example` to `.env.local` (or set the variables in your host). Every flag defaults to off, so a fresh deploy is private and shows no sample content.
+
+| Variable | Default | What it does |
+| --- | --- | --- |
+| `VITE_SHOW_SAMPLE_REVIEWS` | `false` | Show the sample customer reviews (home page and product pages). When off, the sections are not rendered at all. Keep it off until you have real, approved reviews. |
+| `VITE_INDEXABLE` | `false` | Allow search engines to index the site. When off, every page carries `noindex, nofollow`, `robots.txt` disallows everything and no `sitemap.xml` is produced. |
+| `SITE_URL` | `https://adorehive.in` | Public origin for canonical links, social images and the sitemap. |
+
+**Switching indexing on at launch:** set `VITE_INDEXABLE=true` and `SITE_URL=https://your-domain` in the production environment and rebuild (`npm run build`). The build then writes `sitemap.xml` and a `robots.txt` that allows crawling, drops the `noindex` meta tag, and the app reports `index, follow` on public pages (cart, checkout, account and search stay `noindex`). Variables are read at build time, so changing them needs a new deploy.
 
 ## Scripts
 
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Start the Vite dev server |
-| `npm run build` | Generate the sitemap, type-check (`tsc --noEmit`) and build to `dist/` |
+| `npm run build` | Write `robots.txt` (and `sitemap.xml` when indexing is on), type-check (`tsc --noEmit`) and build to `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run a11y` | Load every route and key overlay at 390, 834 and 1440 px and report axe violations (needs the dev server running) |
 | `npm run screenshots` | Regenerate `docs/screenshots/` |

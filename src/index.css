@@ -36,3 +36,15 @@
 
 /* Keyboard focus for horizontally scrolling lists: drawn inside so it is not clipped at the viewport edge */
 .carousel:focus-visible { outline: 3px solid #171313; outline-offset: -3px; border-radius: 12px; }
+
+/* Session loading screen. The markup lives in index.html; this stylesheet is render-blocking, so it is ready before first paint. */
+#splash { display: none }
+html.splash #splash { display: flex; position: fixed; inset: 0; z-index: 100; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: #f8e2e1; transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1) }
+#splash img { opacity: 0; animation: splash-in .6s .1s cubic-bezier(.22,1,.36,1) forwards }
+#splash .track { position: relative; width: 120px; height: 2px; border-radius: 2px; background: rgba(23,19,19,.12) }
+#splash .track i { position: absolute; inset: 0; border-radius: 2px; background: #171313; transform-origin: left; transform: scaleX(0); animation: splash-bar 1.7s cubic-bezier(.3,.7,.4,1) forwards }
+#splash .bee { position: absolute; left: -12px; top: -26px; width: 24px; height: 24px; animation: splash-bee 1.7s cubic-bezier(.3,.7,.4,1) forwards }
+#splash.done { opacity: 0; transform: translateY(-14px); pointer-events: none }
+@keyframes splash-in { to { opacity: 1 } }
+@keyframes splash-bar { to { transform: scaleX(.96) } }
+@keyframes splash-bee { to { transform: translateX(115px) } }

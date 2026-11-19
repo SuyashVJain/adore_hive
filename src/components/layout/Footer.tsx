@@ -36,7 +36,10 @@ export function Footer() {
           </Col>
         </div>
         <p className="mt-10 border-t border-ink/10 pt-6 text-center text-xs text-muted">
-          Made with <Heart className="inline h-3 w-3 align-[-1px]" aria-label="love" /> by {site.name}.
+          <span className="sr-only">Made with love by {site.name}.</span>
+          <span aria-hidden="true">
+            Made with <Heart className="inline h-3 w-3 align-[-1px]" /> by {site.name}.
+          </span>
         </p>
       </div>
     </footer>

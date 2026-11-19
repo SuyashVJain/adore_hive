@@ -3,3 +3,7 @@ dist
 *.zip
 *.local
 .lighthouse
+.env
+.env.local
+public/sitemap.xml
+public/robots.txt
