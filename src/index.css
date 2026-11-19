@@ -21,14 +21,25 @@
   .container-page { @apply mx-auto w-full max-w-page px-5 md:px-8 xl:px-20; }
 }
 
-/* Dual-thumb price slider: two stacked range inputs, only the thumbs take pointer events */
+/* Dual-thumb price slider: two stacked range inputs, only the thumbs take pointer events.
+   Each thumb is a 44px touch target (transparent border) drawing a 24px circle: white fill, 2px ink ring, soft shadow. */
 .range-dual input[type='range'] { @apply pointer-events-none absolute inset-0 m-0 h-full w-full appearance-none bg-transparent; }
-.range-dual input[type='range']::-webkit-slider-thumb { @apply pointer-events-auto h-5 w-5 cursor-grab appearance-none rounded-full border-2 border-ink bg-white; }
-.range-dual input[type='range']::-moz-range-thumb { @apply pointer-events-auto h-5 w-5 cursor-grab rounded-full border-2 border-ink bg-white; }
+.range-dual input[type='range']::-webkit-slider-thumb { @apply pointer-events-auto cursor-grab appearance-none rounded-full; box-sizing: border-box; width: 44px; height: 44px; border: 10px solid transparent; background: #fff; background-clip: padding-box; box-shadow: inset 0 0 0 2px #171313; filter: drop-shadow(0 2px 3px rgba(23,19,19,.28)); transition: transform .15s ease-out; }
+.range-dual input[type='range']::-moz-range-thumb { @apply pointer-events-auto cursor-grab rounded-full; box-sizing: border-box; width: 44px; height: 44px; border: 10px solid transparent; background: #fff; background-clip: padding-box; box-shadow: inset 0 0 0 2px #171313; transition: transform .15s ease-out; }
 .range-dual input[type='range']::-webkit-slider-runnable-track { background: transparent; }
 .range-dual input[type='range']::-moz-range-track { background: transparent; }
-.range-dual input[type='range']:focus-visible::-webkit-slider-thumb { outline: 2px solid #171313; outline-offset: 3px; }
-.range-dual input[type='range']:focus-visible::-moz-range-thumb { outline: 2px solid #171313; outline-offset: 3px; }
+@media (hover: hover) {
+  .range-dual input[type='range']:hover::-webkit-slider-thumb { transform: scale(1.12); }
+  .range-dual input[type='range']:hover::-moz-range-thumb { transform: scale(1.12); }
+}
+.range-dual input[type='range']:active::-webkit-slider-thumb { transform: scale(1.18); cursor: grabbing; }
+.range-dual input[type='range']:active::-moz-range-thumb { transform: scale(1.18); cursor: grabbing; }
+.range-dual input[type='range']:focus-visible::-webkit-slider-thumb { outline: 2px solid #171313; outline-offset: -8px; }
+.range-dual input[type='range']:focus-visible::-moz-range-thumb { outline: 2px solid #171313; outline-offset: -8px; }
+@media (prefers-reduced-motion: reduce) {
+  .range-dual input[type='range']::-webkit-slider-thumb, .range-dual input[type='range']::-moz-range-thumb { transition: none; }
+  .range-dual input[type='range']:hover::-webkit-slider-thumb, .range-dual input[type='range']:active::-webkit-slider-thumb { transform: none; }
+}
 
 /* Image placeholder shimmer (reduced-motion users get a flat tint, see the global rule above) */
 .skeleton { background: linear-gradient(100deg, #f8e2e1 30%, #fdf1f0 50%, #f8e2e1 70%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }

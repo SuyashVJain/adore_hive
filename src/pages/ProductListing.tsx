@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { FilterPanel } from '@/components/listing/FilterPanel'
 import { Breadcrumbs, Button, Chip, Drawer, ProductCard, SectionHeading } from '@/components/ui'
+import { Listbox } from '@/components/ui/Listbox'
 import type { ListingConfig } from '@/data/listings'
 import { popularSearches, shopMenu } from '@/data/nav'
 import { categoryLabel, products } from '@/data/products'
@@ -95,12 +96,19 @@ export function ProductListing({ config, after }: Props) {
             <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm hover:bg-blush lg:hidden">
               <SlidersHorizontal className="h-4 w-4" aria-hidden="true" /> Filter{n > 0 ? ` (${n})` : ''}
             </button>
-            <label className="flex items-center gap-2 text-sm">
-              <span className="text-muted">Sort:</span>
-              <select value={eff.sort} onChange={(e) => set({ ...eff, sort: e.target.value as Sort })} className="min-h-11 rounded-md border border-transparent bg-transparent py-1 pr-1 text-sm hover:border-line-strong">
-                {sortOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
-            </label>
+            <div className="w-52 sm:w-56">
+              <Listbox
+                id="sort-trigger"
+                listLabel="Sort products"
+                align="right"
+                panelWidth="content"
+                options={sortOptions.map((o) => ({ value: o.value, label: o.label }))}
+                value={eff.sort}
+                onChange={(v) => set({ ...eff, sort: v as Sort })}
+                renderValue={(sel) => <span className="truncate"><span className="text-muted">Sort: </span><span className="text-ink">{sel?.label}</span></span>}
+                triggerClass="flex h-11 w-full items-center justify-between gap-2 rounded-md border border-line-strong bg-surface px-3 text-left text-sm outline-none transition-colors hover:border-ink focus-visible:border-ink focus-visible:ring-1 focus-visible:ring-ink"
+              />
+            </div>
           </div>
         </div>
 

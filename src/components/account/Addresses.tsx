@@ -51,7 +51,7 @@ function AddressForm({ initial, onSave, onCancel }: { initial: Fields; onSave: (
       <Field label="Apartment / landmark (optional)" autoComplete="address-line2" {...bind('apartment')} />
       <div className="grid gap-4 sm:grid-cols-3">
         <Field label="City" autoComplete="address-level2" required {...bind('city')} />
-        <SelectField label="State" required placeholder="Choose state" options={indianStates} autoComplete="address-level1" {...bind('state')} />
+        <SelectField label="State" required placeholder="Choose state" searchable options={indianStates} autoComplete="address-level1" {...bind('state')} />
         <Field label="PIN code" autoComplete="postal-code" inputMode="numeric" maxLength={6} required {...bind('pin')} />
       </div>
       <div className="flex flex-wrap gap-3">
