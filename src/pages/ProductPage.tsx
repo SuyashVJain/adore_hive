@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Heart, Info, Minus } from 'lucide-react'
 import { DeliveryCheck } from '@/components/product/DeliveryCheck'
@@ -15,6 +16,7 @@ import { typeLabel } from '@/data/nav'
 import { categories, categoryLabel, getProduct, products, relatedProducts, type Product } from '@/data/products'
 import { formatINR } from '@/lib/format'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { useRecent } from '@/store/recent'
 import { useWishlist } from '@/store/wishlist'
 import { StubPage } from './StubPage'
 
@@ -34,6 +36,10 @@ export function ProductPage() {
 function Detail({ product }: { product: Product }) {
   useSeo(product.name, product.description, { image: product.image })
   const c = useConfigurator(product)
+  const recentIds = useRecent((s) => s.ids)
+  useEffect(() => { useRecent.getState().add(product.id) }, [product.id])
+  // last four others, newest first; the row is not rendered when there is nothing to show
+  const recent = recentIds.filter((id) => id !== product.id).slice(0, 4).flatMap((id) => getProduct(id) ?? [])
   const wished = useWishlist((s) => s.ids.includes(product.id))
   const toggleWish = useWishlist((s) => s.toggle)
   const cat = categories.find((x) => x.slug === product.category)!
@@ -131,6 +137,15 @@ function Detail({ product }: { product: Product }) {
           ))}
         </ul>
       </section>
+
+      {recent.length > 0 && (
+        <section aria-labelledby="recent-h" className="mt-14 md:mt-20">
+          <h2 id="recent-h" className="text-[2rem] md:text-5xl">Recently viewed.</h2>
+          <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+            {recent.map((p) => <li key={p.id}><ProductCard product={p} /></li>)}
+          </ul>
+        </section>
+      )}
 
       {/* Mobile sticky bar */}
       <div className="fixed inset-x-0 bottom-0 max-md:bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-4 border-t border-line bg-page px-5 py-3 md:hidden">
