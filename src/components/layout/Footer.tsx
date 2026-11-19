@@ -22,7 +22,7 @@ export function Footer() {
       <div className="container-page border-t border-ink/10 py-12">
         <div className="grid gap-10 md:grid-cols-[220px_1fr_1fr_1fr]">
           <div>
-            <Logo className="-ml-2 h-24" />
+            <Logo className="-ml-3 h-36" />
             <p className="mt-1 font-display text-2xl italic">{site.tagline}</p>
           </div>
           <Col title="Explore Adore">
