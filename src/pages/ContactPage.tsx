@@ -4,7 +4,7 @@ import { Breadcrumbs, Button, Field } from '@/components/ui'
 import { ContactDetails } from '@/components/ui/ContactDetails'
 import { SelectField } from '@/components/ui/SelectField'
 import { site } from '@/config/site'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { isEmail, isPhone } from '@/lib/validate'
 
 const topics = ['Personalized gifting', 'A product question', 'An order I placed', 'Something else']
@@ -12,7 +12,7 @@ const topics = ['Personalized gifting', 'A product question', 'An order I placed
 type Key = 'name' | 'email' | 'phone' | 'message'
 
 export function Contact() {
-  useDocumentTitle('Contact us')
+  useSeo('Contact us', 'Get in touch with Adore Hive about a gifting idea, a product question or an order.')
   const form = useRef<HTMLFormElement>(null)
   const [v, setV] = useState({ name: '', email: '', phone: '', topic: topics[0], order: '', message: '' })
   const [errors, setErrors] = useState<Partial<Record<Key, string>>>({})
@@ -45,7 +45,7 @@ export function Contact() {
 
       <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
         <div>
-          <img src="/images/about-hero.jpg" alt="" width={580} height={360} loading="lazy" className="aspect-[16/10] w-full rounded-xl object-cover" />
+          <img src="/images/about-hero.webp" alt="" width={580} height={360} loading="lazy" className="aspect-[16/10] w-full rounded-xl object-cover" />
           <h2 className="mt-6 font-display text-4xl">Talk to the hive.</h2>
           <p className="mt-3 text-muted">Tell us a little about what you’re looking for. For a personalized gift, share the occasion, preferred products and the little details that make it personal.</p>
           <div className="mt-5 border-t border-line pt-4">

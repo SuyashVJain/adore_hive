@@ -23,18 +23,22 @@ if (!executablePath) {
   process.exit(2)
 }
 
-const routes = [
+const routes0 = [
   '/', '/about', '/our-story', '/shop', '/shop/jewellery', '/shop/hair-accessories', '/shop/handmade-crochet', '/shop/customized-gifting',
   '/product/pearl-whisper-earrings', '/product/forever-tulip-stem', '/product/does-not-exist', '/search?q=pearl', '/search?q=zzzz', '/search',
   '/wishlist', '/bag', '/checkout', '/order-confirmation/AH-TEST1', '/order-confirmation/nope', '/account', '/contact',
   '/hamper-studio', '/letter-studio', '/policies/shipping', '/policies/returns', '/policies/privacy', '/policies/terms', '/not-a-page',
 ]
 
+// ONLY=/about,/ narrows the sweep; NO_STATES=1 skips the overlay states
+const only = process.env.ONLY?.split(',')
+const routes = only ? routes0.filter((r) => only.includes(r)) : routes0
+
 // Seed a bag, wishlist and order so the stateful pages have something to show
 const seed = () => {
   localStorage.setItem('adore-bag', JSON.stringify({ state: { items: [{ key: 'k1', productId: 'pearl-cloud-claw-clip', options: {}, qty: 1 }, { key: 'k2', productId: 'blush-satin-bow', options: { Colour: 'Blush' }, qty: 2, gift: { wrap: 'blush-ribbon', note: 'Happy birthday' } }], note: '' }, version: 2 }))
   localStorage.setItem('adore-wishlist', JSON.stringify({ state: { ids: ['blush-satin-bow', 'rosewater-scrunchie'] }, version: 0 }))
-  localStorage.setItem('adore-orders', JSON.stringify({ state: { orders: [{ id: 'AH-TEST1', createdAt: '2026-11-01T10:00:00.000Z', status: 'Awaiting confirmation', email: 'test@example.com', phone: '9876543210', address: { firstName: 'Asha', lastName: 'Rao', address: '12 Park Street', apartment: '', city: 'Indore', state: 'Madhya Pradesh', pin: '452010', country: 'India' }, delivery: 'standard', payment: 'UPI', note: '', lines: [{ productId: 'pearl-cloud-claw-clip', name: 'Pearl Cloud Claw Clip', image: '/images/p-pearl-cloud-claw-clip.jpg', options: {}, qty: 1, unitPrice: 449 }], totals: { subtotal: 449, giftFees: 0, shipping: 60, total: 509 } }] }, version: 0 }))
+  localStorage.setItem('adore-orders', JSON.stringify({ state: { orders: [{ id: 'AH-TEST1', createdAt: '2026-11-01T10:00:00.000Z', status: 'Awaiting confirmation', email: 'test@example.com', phone: '9876543210', address: { firstName: 'Asha', lastName: 'Rao', address: '12 Park Street', apartment: '', city: 'Indore', state: 'Madhya Pradesh', pin: '452010', country: 'India' }, delivery: 'standard', payment: 'UPI', note: '', lines: [{ productId: 'pearl-cloud-claw-clip', name: 'Pearl Cloud Claw Clip', image: '/images/p-pearl-cloud-claw-clip.webp', options: {}, qty: 1, unitPrice: 449 }], totals: { subtotal: 449, giftFees: 0, shipping: 60, total: 509 } }] }, version: 0 }))
 }
 
 const states = [
@@ -74,7 +78,7 @@ for (const [name, w, h] of [['mobile', 390, 844], ['tablet', 834, 1100], ['deskt
     await page.waitForLoadState('networkidle')
     await audit(page, `${name} ${r}`)
   }
-  for (const [label, act] of states) {
+  for (const [label, act] of process.env.NO_STATES ? [] : states) {
     await page.goto(`${BASE}/`)
     await page.waitForLoadState('networkidle')
     await act(page, w)

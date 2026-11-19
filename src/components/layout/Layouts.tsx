@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useUI } from '@/store/ui'
 import { AnnouncementBar } from './AnnouncementBar'
@@ -8,6 +8,7 @@ import { Header } from './Header'
 import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
 import { MobileMenu } from './MobileMenu'
 import { NewsletterBlock } from './NewsletterBlock'
+import { PageLoading } from './PageLoading'
 import { QuickView } from './QuickView'
 import { Toaster } from '../ui/Toaster'
 import { SearchOverlay } from './SearchOverlay'
@@ -40,7 +41,9 @@ export function MainLayout() {
       <AnnouncementBar />
       <Header />
       <main id="main" tabIndex={-1} className="outline-none">
-        <Outlet />
+        <Suspense fallback={<PageLoading />}>
+          <Outlet />
+        </Suspense>
       </main>
       <NewsletterBlock />
       <Footer />
@@ -61,7 +64,9 @@ export function CheckoutLayout() {
       <SkipLink />
       <MinimalCheckoutHeader />
       <main id="main" tabIndex={-1} className="outline-none">
-        <Outlet />
+        <Suspense fallback={<PageLoading />}>
+          <Outlet />
+        </Suspense>
       </main>
       <MinimalCheckoutFooter />
     </>

@@ -12,12 +12,12 @@ import { RETURN_DAYS, delivery } from '@/config/shop'
 import { typeLabel } from '@/data/nav'
 import { categories, categoryLabel, getProduct, products, relatedProducts, type Product } from '@/data/products'
 import { formatINR } from '@/lib/format'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { useWishlist } from '@/store/wishlist'
 import { StubPage } from './StubPage'
 
 function NotFoundProduct() {
-  useDocumentTitle('Product not found')
+  useSeo('Product not found', undefined, { noindex: true })
   return (
     <StubPage eyebrow="Page not found" title="We couldn’t find that little treasure." subtitle="It may have sold out or moved. Here are a few things we think you’ll love." cta={{ label: 'Shop all', to: '/shop' }} products={products.slice(0, 4)} />
   )
@@ -30,7 +30,7 @@ export function ProductPage() {
 }
 
 function Detail({ product }: { product: Product }) {
-  useDocumentTitle(product.name)
+  useSeo(product.name, product.description, { image: product.image })
   const c = useConfigurator(product)
   const wished = useWishlist((s) => s.ids.includes(product.id))
   const toggleWish = useWishlist((s) => s.toggle)

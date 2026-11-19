@@ -1,11 +1,11 @@
 import { useSearchParams } from 'react-router-dom'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import type { ListingConfig } from '@/data/listings'
 import { ProductListing } from './ProductListing'
 
 export function SearchPage() {
   const q = useSearchParams()[0].get('q')?.trim() ?? ''
-  useDocumentTitle(q ? `Search: ${q}` : 'Search')
+  useSeo(q ? `Search: ${q}` : 'Search', 'Search results.', { noindex: true })
   const config: ListingConfig = {
     search: true,
     showColour: true,

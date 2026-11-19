@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { Heart } from 'lucide-react'
 import { Breadcrumbs, Button, ProductCard } from '@/components/ui'
 import { getProduct } from '@/data/products'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { useBag } from '@/store/bag'
 import { useToast } from '@/store/toast'
 import { useWishlist } from '@/store/wishlist'
 
 export function WishlistPage() {
-  useDocumentTitle('Your wishlist')
+  useSeo('Your wishlist', 'The little things you have saved.', { noindex: true })
   const ids = useWishlist((s) => s.ids)
   const remove = useWishlist((s) => s.remove)
   const [status, setStatus] = useState('')

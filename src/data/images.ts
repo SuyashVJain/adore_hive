@@ -1,10 +1,10 @@
 // Temporary placeholder photography. Swap the paths here (or point at a CDN) when real photography arrives.
-const p = (n: string) => `/images/p-${n}.jpg`
-const l = (n: string) => `/images/life-${n}.jpg`
+const p = (n: string) => `/images/p-${n}.webp`
+const l = (n: string) => `/images/life-${n}.webp`
 
 export const images = {
-  logo: '/logo.png',
-  hero: '/images/hero.jpg',
+  logo: '/logo.webp',
+  hero: '/images/hero.webp',
   lifestyle: {
     hamper: l('hamper'),
     wrapping: l('wrapping'),
@@ -13,13 +13,13 @@ export const images = {
   },
   // keyed by product slug
   banners: {
-    jewellery: '/images/banner-jewellery.jpg',
-    'hair-accessories': '/images/banner-hair-accessories.jpg',
-    'handmade-crochet': '/images/banner-handmade-crochet.jpg',
-    'customized-gifting': '/images/banner-customized-gifting.jpg',
+    jewellery: '/images/banner-jewellery.webp',
+    'hair-accessories': '/images/banner-hair-accessories.webp',
+    'handmade-crochet': '/images/banner-handmade-crochet.webp',
+    'customized-gifting': '/images/banner-customized-gifting.webp',
   },
-  personal: '/images/life-personal.jpg',
-  instagram: ['/images/life-portrait.jpg', '/images/insta-bouquet.jpg', '/images/insta-gifts.jpg', '/images/life-crochet.jpg'],
+  personal: '/images/life-personal.webp',
+  instagram: ['/images/life-portrait.webp', '/images/insta-bouquet.webp', '/images/insta-gifts.webp', '/images/life-crochet.webp'],
   products: {
     'pearl-whisper-earrings': p('pearl-whisper-earrings'),
     'blush-satin-bow': p('blush-satin-bow'),
@@ -52,6 +52,6 @@ const group: Record<ProductSlug, keyof typeof extras> = {
   'little-love-hamper': 'gifting', 'words-from-the-heart': 'gifting', 'just-because-gift-box': 'gifting',
 }
 /** Higher-resolution main images where we have them */
-const large: Partial<Record<ProductSlug, string>> = { 'pearl-whisper-earrings': '/images/p-pearl-whisper-earrings-lg.jpg' }
+const large: Partial<Record<ProductSlug, string>> = { 'pearl-whisper-earrings': '/images/p-pearl-whisper-earrings-lg.webp' }
 
 export const galleryFor = (slug: ProductSlug): string[] => [large[slug] ?? images.products[slug], ...extras[group[slug]]]

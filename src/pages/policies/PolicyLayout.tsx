@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 import { Breadcrumbs } from '@/components/ui'
 import { site } from '@/config/site'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 
 export function PolicyLayout({ title, intro, children }: { title: string; intro: string; children: ReactNode }) {
-  useDocumentTitle(title)
+  useSeo(title, intro)
   return (
     <div className="container-page pb-16 pt-5 md:pt-6">
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: title }]} />

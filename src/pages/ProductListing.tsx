@@ -8,6 +8,7 @@ import { popularSearches, shopMenu } from '@/data/nav'
 import { categoryLabel, products } from '@/data/products'
 import { activeCount, applyFilters, emptyFilters, parseFilters, PRICE_HI, PRICE_LO, serializeFilters, sortOptions, type Filters, type Sort } from '@/lib/listing'
 import { formatINR } from '@/lib/format'
+import { useSeo } from '@/lib/useDocumentTitle'
 
 interface Props {
   config: ListingConfig
@@ -52,6 +53,7 @@ function SheetBody({ value, onApply, config }: { value: Filters; onApply: (f: Fi
 }
 
 export function ProductListing({ config, after }: Props) {
+  useSeo(config.search ? config.title : config.title, config.search ? 'Search results.' : config.subtitle, { noindex: !!config.search })
   const [sp, setSp] = useSearchParams()
   const [sheet, setSheet] = useState(false)
   const filters = parseFilters(sp)

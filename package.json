@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/sitemap.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "a11y": "node scripts/a11y.mjs"
+    "a11y": "node scripts/a11y.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "lighthouse": "sh scripts/lighthouse.sh && node scripts/lighthouse-checkout.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.75.0",
