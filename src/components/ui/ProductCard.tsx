@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Plus } from 'lucide-react'
 import { categoryLabel, type Product } from '@/data/products'
@@ -31,6 +31,10 @@ export function ProductCard({ product, eager, forceLink }: Props) {
   const soldOut = product.stock === 'out'
 
   const card = useRef<HTMLElement>(null)
+  // Second photo for hover devices. It is only requested on the first mouse hover, so the grid costs no extra bandwidth up front.
+  const second = product.gallery[1] && product.gallery[1] !== product.image ? product.gallery[1] : undefined
+  const [armed, setArmed] = useState(false)
+  const [ready, setReady] = useState(false)
   const quickAdd = () => {
     add(product.id)
     show('Added to bag')
@@ -41,7 +45,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
   return (
     // The article is the hover target and never moves. Only the inner card lifts (transform) and its shadow fades in (opacity),
     // so the pointer can never end up outside the element that triggered the hover.
-    <article ref={card} className="group relative h-full">
+    <article ref={card} className="group relative h-full" onPointerEnter={(e) => second && e.pointerType === 'mouse' && setArmed(true)}>
       <div className="relative isolate flex h-full flex-col rounded-lg bg-surface p-2 transition-transform duration-300 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-lg before:opacity-0 before:shadow-md before:transition-opacity before:duration-300 before:content-[''] group-focus-within:before:opacity-100 group-hover:before:opacity-100 motion-safe:group-hover:-translate-y-0.5">
       {/* Whole-card link. Its label carries the context, so the heading stays just the product name. */}
       <Link to={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="absolute inset-0 z-[1] rounded-lg" />
@@ -53,8 +57,20 @@ export function ProductCard({ product, eager, forceLink }: Props) {
           height={246}
           loading={eager ? 'eager' : 'lazy'}
           decoding="async"
-          className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:motion-safe:scale-[1.04]"
+          className={`h-full w-full object-cover ${second ? '' : 'motion-safe:transition-transform motion-safe:duration-500 group-hover:motion-safe:scale-[1.04]'}`}
         />
+        {second && armed && (
+          <img
+            src={second}
+            alt=""
+            width={222}
+            height={246}
+            decoding="async"
+            aria-hidden="true"
+            onLoad={() => setReady(true)}
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 motion-reduce:transition-none ${ready ? 'group-hover:opacity-100' : ''}`}
+          />
+        )}
         {soldOut && <span className="absolute left-2 top-2 z-10 rounded-sm bg-ink px-2 py-1 font-label text-xs font-medium uppercase tracking-[0.12em] text-white">Sold out</span>}
         <button
           type="button"
