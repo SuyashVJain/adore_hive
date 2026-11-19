@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { CheckoutLayout, MainLayout } from '@/components/layout/Layouts'
-import { About, Account, Bag, Category, Checkout, Contact, HamperStudio, Home, LetterStudio, NotFound, OurStory, Policy, Product, Shop, Wishlist } from '@/pages/pages'
+import { Contact } from '@/pages/ContactPage'
+import { About, Account, Bag, Category, Checkout, HamperStudio, Home, LetterStudio, NotFound, OurStory, Policy, Product, Shop, Wishlist } from '@/pages/pages'
 
 export default function App() {
   return (

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { site } from '@/config/site'
 import { exploreLinks, helpLinks } from '@/data/nav'
-import { ExtLink } from '../ui/ExtLink'
+import { ContactDetails } from '../ui/ContactDetails'
 import { Logo } from './Logo'
 
 const link = 'inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-ink hover:underline underline-offset-4'
@@ -32,10 +32,7 @@ export function Footer() {
             {helpLinks.map((l) => <li key={l.to}><Link to={l.to} className={link}>{l.label}</Link></li>)}
           </Col>
           <Col title="Say hello">
-            <li><a href={`mailto:${site.email}`} className={link}>{site.email}</a></li>
-            <li><a href={`tel:${site.phone.replace(/\s/g, '')}`} className={link}>{site.phone}</a></li>
-            <li><ExtLink href={site.instagramUrl} className={link}>Instagram</ExtLink></li>
-            <li><ExtLink href={site.whatsappUrl} className={link}>WhatsApp</ExtLink></li>
+            <li><ContactDetails linkClass="text-muted hover:text-ink" /></li>
           </Col>
         </div>
         <p className="mt-10 border-t border-ink/10 pt-6 text-center text-xs text-muted">

@@ -3,7 +3,7 @@ const p = (n: string) => `/images/p-${n}.jpg`
 const l = (n: string) => `/images/life-${n}.jpg`
 
 export const images = {
-  logo: '/images/logo.png',
+  logo: '/logo.png',
   hero: '/images/hero.jpg',
   lifestyle: {
     hamper: l('hamper'),

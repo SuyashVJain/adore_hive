@@ -69,9 +69,6 @@ export const HamperStudio = () => (
 export const LetterStudio = () => (
   <StubPage crumbs={[{ label: 'Customize Your Gift', to: '/hamper-studio' }, { label: 'Handwritten letters' }]} eyebrow="Handwritten letter studio" title="Words From the Heart" subtitle="Turn your words into a handwritten keepsake." cta={{ label: 'Create your own hamper', to: '/hamper-studio' }} />
 )
-export const Contact = () => (
-  <StubPage crumbs={[{ label: 'Contact Us' }]} eyebrow="Contact the hive" title="We’d love to hear from you." subtitle="Questions, custom orders or just a hello: write to us and we’ll get back to you soon." />
-)
 export const Wishlist = () => (
   <StubPage crumbs={[{ label: 'Wishlist' }]} eyebrow="Saved for later" title="Your Wishlist" subtitle="The little things you’ve fallen for." cta={{ label: 'Shop all', to: '/shop' }} />
 )
