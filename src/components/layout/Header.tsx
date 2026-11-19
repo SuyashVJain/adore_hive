@@ -1,13 +1,15 @@
-import { useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User } from 'lucide-react'
 import { mainNav } from '@/data/nav'
 import { useBagSummary } from '@/store/bag'
 import { useUI } from '@/store/ui'
 import { useWishlist } from '@/store/wishlist'
 import { Logo } from './Logo'
-import { ShopMenu } from './ShopMenu'
+
+// The mega menu is desktop-only, so its code loads on first use (prefetched when a wide screen is idle)
+const loadShopMenu = () => import('./ShopMenu').then((m) => ({ default: m.ShopMenu }))
+const ShopMenu = lazy(loadShopMenu)
 
 const hoverCapable = () => window.matchMedia('(min-width: 1024px) and (hover: hover)').matches
 const CLOSE_DELAY = 250
@@ -18,12 +20,12 @@ function Count({ n }: { n: number }) {
   const seen = useRef(n)
   if (!n) { seen.current = n; return null }
   // Bump only when the number changes after first render
-  const bump = seen.current !== n && seen.current !== undefined
+  const bump = seen.current !== n
   seen.current = n
   return (
-    <m.span key={n} aria-hidden="true" initial={bump ? { scale: 1.45 } : false} animate={{ scale: 1 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-xs leading-none text-white">
+    <span key={n} aria-hidden="true" className={`absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ink px-1 text-xs leading-none text-white ${bump ? 'animate-bump' : ''}`}>
       {n}
-    </m.span>
+    </span>
   )
 }
 
@@ -37,6 +39,13 @@ export function Header() {
   const open = useUI((s) => s.open)
 
   const close = useUI((s) => s.close)
+  const [shopSeen, setShopSeen] = useState(false)
+  useEffect(() => { if (panel === 'shop') setShopSeen(true) }, [panel])
+  useEffect(() => {
+    if (!window.matchMedia('(min-width: 1024px)').matches) return
+    const t = setTimeout(() => void loadShopMenu(), 3000)
+    return () => clearTimeout(t)
+  }, [])
   const trigger = useRef<HTMLButtonElement>(null)
   const timer = useRef<number>()
   const suppress = useRef(false) // stops focus-restore after Escape from reopening the menu
@@ -131,7 +140,7 @@ export function Header() {
           </button>
         </div>
       </div>
-      <ShopMenu top={top} onClose={closeShop} onEnter={cancel} onLeave={scheduleClose} onTabOut={tabOut} />
+      <Suspense fallback={null}>{shopSeen && <ShopMenu top={top} onClose={closeShop} onEnter={cancel} onLeave={scheduleClose} onTabOut={tabOut} />}</Suspense>
     </header>
   )
 }

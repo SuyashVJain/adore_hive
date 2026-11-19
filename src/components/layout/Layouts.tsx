@@ -1,19 +1,55 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useUI } from '@/store/ui'
 import { AnnouncementBar } from './AnnouncementBar'
-import { BagDrawer } from './BagDrawer'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { MinimalCheckoutFooter, MinimalCheckoutHeader } from './MinimalCheckout'
-import { MobileMenu } from './MobileMenu'
 import { MobileTabBar, TabBarSpacer } from './MobileTabBar'
 import { NewsletterBlock } from './NewsletterBlock'
 import { PageLoading } from './PageLoading'
 import { PageTransition } from './PageTransition'
-import { QuickView } from './QuickView'
-import { Toaster } from '../ui/Toaster'
-import { SearchOverlay } from './SearchOverlay'
+import { useToast } from '@/store/toast'
+
+// Overlays are only needed once someone opens them, so their code loads on first use (and is prefetched when the browser is idle).
+const loadBag = () => import('./BagDrawer').then((m) => ({ default: m.BagDrawer }))
+const loadMenu = () => import('./MobileMenu').then((m) => ({ default: m.MobileMenu }))
+const loadQuick = () => import('./QuickView').then((m) => ({ default: m.QuickView }))
+const loadSearch = () => import('./SearchOverlay').then((m) => ({ default: m.SearchOverlay }))
+const loadToaster = () => import('../ui/Toaster').then((m) => ({ default: m.Toaster }))
+const Toaster = lazy(loadToaster)
+const BagDrawer = lazy(loadBag)
+const MobileMenu = lazy(loadMenu)
+const QuickView = lazy(loadQuick)
+const SearchOverlay = lazy(loadSearch)
+
+function LazyOverlays() {
+  const panel = useUI((s) => s.panel)
+  const [seen, setSeen] = useState<Record<string, boolean>>({})
+  useEffect(() => {
+    if (panel && !seen[panel]) setSeen((s) => ({ ...s, [panel]: true }))
+  }, [panel, seen])
+  useEffect(() => {
+    const t = setTimeout(() => { void loadBag(); void loadMenu(); void loadSearch() }, 4000)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <Suspense fallback={null}>
+      {seen.menu && <MobileMenu />}
+      {seen.search && <SearchOverlay />}
+      {seen.bag && <BagDrawer />}
+      {seen.quickview && <QuickView />}
+    </Suspense>
+  )
+}
+
+/** The toast code loads when the first toast is shown, then stays mounted so toasts can animate out. */
+function ToastHost() {
+  const has = useToast((s) => s.toast !== null)
+  const [seen, setSeen] = useState(false)
+  useEffect(() => { if (has) setSeen(true) }, [has])
+  return seen ? <Suspense fallback={null}><Toaster /></Suspense> : null
+}
 
 function SkipLink() {
   return (
@@ -53,11 +89,8 @@ export function MainLayout() {
       <Footer />
       <TabBarSpacer />
       <MobileTabBar />
-      <MobileMenu />
-      <SearchOverlay />
-      <BagDrawer />
-      <QuickView />
-      <Toaster />
+      <LazyOverlays />
+      <ToastHost />
     </>
   )
 }
