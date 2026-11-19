@@ -21,14 +21,3 @@ export function textToISO(text: string): string | null {
   if (date.getFullYear() !== y || date.getMonth() !== mo - 1 || date.getDate() !== d) return null
   return toISO(date)
 }
-
-export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-export const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-export const WEEKDAYS_LONG = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-export const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
-export const addMonths = (d: Date, n: number) => {
-  const t = new Date(d.getFullYear(), d.getMonth() + n, 1)
-  const last = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate()
-  return new Date(t.getFullYear(), t.getMonth(), Math.min(d.getDate(), last))
-}

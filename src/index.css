@@ -21,26 +21,6 @@
   .container-page { @apply mx-auto w-full max-w-page px-5 md:px-8 xl:px-20; }
 }
 
-/* Dual-thumb price slider: two stacked range inputs, only the thumbs take pointer events.
-   Each thumb is a 44px touch target (transparent border) drawing a 24px circle: white fill, 2px ink ring, soft shadow. */
-.range-dual input[type='range'] { @apply pointer-events-none absolute inset-0 m-0 h-full w-full appearance-none bg-transparent; }
-.range-dual input[type='range']::-webkit-slider-thumb { @apply pointer-events-auto cursor-grab appearance-none rounded-full; box-sizing: border-box; width: 44px; height: 44px; border: 10px solid transparent; background: #fff; background-clip: padding-box; box-shadow: inset 0 0 0 2px #171313; filter: drop-shadow(0 2px 3px rgba(23,19,19,.28)); transition: transform .15s ease-out; }
-.range-dual input[type='range']::-moz-range-thumb { @apply pointer-events-auto cursor-grab rounded-full; box-sizing: border-box; width: 44px; height: 44px; border: 10px solid transparent; background: #fff; background-clip: padding-box; box-shadow: inset 0 0 0 2px #171313; transition: transform .15s ease-out; }
-.range-dual input[type='range']::-webkit-slider-runnable-track { background: transparent; }
-.range-dual input[type='range']::-moz-range-track { background: transparent; }
-@media (hover: hover) {
-  .range-dual input[type='range']:hover::-webkit-slider-thumb { transform: scale(1.12); }
-  .range-dual input[type='range']:hover::-moz-range-thumb { transform: scale(1.12); }
-}
-.range-dual input[type='range']:active::-webkit-slider-thumb { transform: scale(1.18); cursor: grabbing; }
-.range-dual input[type='range']:active::-moz-range-thumb { transform: scale(1.18); cursor: grabbing; }
-.range-dual input[type='range']:focus-visible::-webkit-slider-thumb { outline: 2px solid #171313; outline-offset: -8px; }
-.range-dual input[type='range']:focus-visible::-moz-range-thumb { outline: 2px solid #171313; outline-offset: -8px; }
-@media (prefers-reduced-motion: reduce) {
-  .range-dual input[type='range']::-webkit-slider-thumb, .range-dual input[type='range']::-moz-range-thumb { transition: none; }
-  .range-dual input[type='range']:hover::-webkit-slider-thumb, .range-dual input[type='range']:active::-webkit-slider-thumb { transform: none; }
-}
-
 /* Image placeholder shimmer (reduced-motion users get a flat tint, see the global rule above) */
 .skeleton { background: linear-gradient(100deg, #f8e2e1 30%, #fdf1f0 50%, #f8e2e1 70%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
@@ -59,3 +39,18 @@ html.splash #splash { display: flex; position: fixed; inset: 0; z-index: 100; fl
 @keyframes splash-in { to { opacity: 1 } }
 @keyframes splash-bar { to { transform: scaleX(.96) } }
 @keyframes splash-bee { to { transform: translateX(115px) } }
+
+/* Calendar (react-day-picker) in the brand style: ink text, blush selected day, thin ring for today, muted past days */
+.ah-cal { --rdp-accent-color: #171313; --rdp-accent-background-color: #f8e2e1; --rdp-day-height: 40px; --rdp-day-width: 40px; --rdp-day_button-height: 38px; --rdp-day_button-width: 38px; --rdp-day_button-border-radius: 9999px; --rdp-selected-border: 0; --rdp-today-color: #171313; --rdp-disabled-opacity: .4; --rdp-nav_button-height: 2rem; --rdp-nav_button-width: 2rem; color: #171313; font-family: Poppins, system-ui, sans-serif; font-size: .875rem; }
+.ah-cal .rdp-caption_label { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.375rem; font-weight: 500; }
+.ah-cal .rdp-weekday { color: #5f5252; font-size: .75rem; font-weight: 400; opacity: 1; }
+.ah-cal .rdp-button_previous, .ah-cal .rdp-button_next { color: #5f5252; border-radius: 9999px; }
+.ah-cal .rdp-button_previous:hover, .ah-cal .rdp-button_next:hover { background: #fdf1f0; color: #171313; }
+.ah-cal .rdp-button_previous svg, .ah-cal .rdp-button_next svg { fill: none; }
+.ah-cal .rdp-day_button { font-weight: 400; }
+.ah-cal .rdp-day:not(.rdp-disabled):not(.rdp-selected) .rdp-day_button:hover { background: #fdf1f0; }
+.ah-cal .rdp-selected { font-weight: 500; font-size: inherit; }
+.ah-cal .rdp-selected .rdp-day_button { background: #f8e2e1; color: #171313; border: 0; }
+.ah-cal .rdp-today:not(.rdp-selected) .rdp-day_button { box-shadow: inset 0 0 0 1px rgba(23, 19, 19, .45); }
+.ah-cal .rdp-day_button:focus-visible { outline: 2px solid #171313; outline-offset: 1px; }
+.ah-cal .rdp-disabled .rdp-day_button { cursor: not-allowed; }
