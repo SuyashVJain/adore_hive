@@ -5,6 +5,7 @@ import { LazyMotion, MotionConfig } from 'framer-motion'
 import App from './App'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import './index.css'
+import './splash'
 
 // Animation features load after first paint. reducedMotion="user" drops transforms for people who ask for less motion.
 const loadFeatures = () => import('./lib/motionFeatures').then((m) => m.default)

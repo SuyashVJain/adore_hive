@@ -25,6 +25,24 @@
         document.head.appendChild(l)
       }
     </script>
+    <script>
+      // Show the loading screen once per browser session, and never for people who prefer reduced motion
+      try {
+        if (!sessionStorage.getItem('ah-splash') && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('splash')
+      } catch (e) {}
+    </script>
+    <style>
+      #splash { display: none }
+      html.splash #splash { display: flex; position: fixed; inset: 0; z-index: 100; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: #f8e2e1; transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1) }
+      #splash img { opacity: 0; animation: splash-in .6s .1s cubic-bezier(.22,1,.36,1) forwards }
+      #splash .track { position: relative; width: 120px; height: 2px; border-radius: 2px; background: rgba(23,19,19,.12) }
+      #splash .track i { position: absolute; inset: 0; border-radius: 2px; background: #171313; transform-origin: left; transform: scaleX(0); animation: splash-bar 1.7s cubic-bezier(.3,.7,.4,1) forwards }
+      #splash .bee { position: absolute; left: -12px; top: -26px; width: 24px; height: 24px; animation: splash-bee 1.7s cubic-bezier(.3,.7,.4,1) forwards }
+      #splash.done { opacity: 0; transform: translateY(-14px); pointer-events: none }
+      @keyframes splash-in { to { opacity: 1 } }
+      @keyframes splash-bar { to { transform: scaleX(.96) } }
+      @keyframes splash-bee { to { transform: translateX(115px) } }
+    </style>
     <title>Adore Hive | Buzz with style</title>
     <script type="application/ld+json">
       {
@@ -39,6 +57,14 @@
     </script>
   </head>
   <body>
+        <div id="splash" role="status" aria-busy="true" aria-label="Loading Adore Hive">
+      <img src="/logo.webp" alt="" width="120" height="107" />
+      <div class="track">
+        <svg class="bee" viewBox="0 0 48 48" fill="none" stroke="#171313" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="18" cy="13" rx="6.5" ry="10" transform="rotate(-25 18 13)" fill="#fff" fill-opacity=".85"/><ellipse cx="29" cy="11" rx="6.5" ry="10" transform="rotate(20 29 11)" fill="#fff" fill-opacity=".85"/><ellipse cx="25" cy="30" rx="13" ry="9.5" fill="#f2c94c"/><path d="M20 21.5v17M26 20.5v19M32 22v16"/><circle cx="11" cy="30" r="5" fill="#171313"/><path d="M8 26c-2-3-4-4-6-4M11 25c-1-4-2-6-4-7"/></svg>
+        <i></i>
+      </div>
+      <span class="sr-only-splash" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Loading</span>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
