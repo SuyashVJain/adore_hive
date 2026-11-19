@@ -48,7 +48,7 @@ function Detail({ product }: { product: Product }) {
   const msgId = 'opt-message'
   const onSale = product.compareAtPrice !== undefined && product.compareAtPrice > product.price
 
-  const addLabel = c.soldOut ? 'Out of stock' : `Add to bag · ${total}`
+  const addLabel = c.soldOut ? 'Sold out' : `Add to bag · ${total}`
   // Add, and if it worked, arc the photo to the bag icon
   const onAdd = () => {
     const ok = c.add()
@@ -138,7 +138,7 @@ function Detail({ product }: { product: Product }) {
           <p className="text-xl font-medium">{total}</p>
           {c.message && <p className="flex items-center gap-1 text-xs text-muted"><Minus className="h-3 w-3 shrink-0" aria-hidden="true" /> Choose {c.missing.map((m) => m.toLowerCase()).join(' & ')}</p>}
         </div>
-        <AddButton onAdd={onAdd} disabled={!c.canAdd} idleLabel={c.soldOut ? 'Out of stock' : 'Add to bag'} className="shrink-0" />
+        <AddButton onAdd={onAdd} disabled={!c.canAdd} idleLabel={c.soldOut ? 'Sold out' : 'Add to bag'} className="shrink-0" />
       </div>
       <span className="sr-only">{categoryLabel(product.category)}</span>
     </div>

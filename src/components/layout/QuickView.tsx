@@ -48,7 +48,7 @@ function Body({ product }: { product: Product }) {
           disabled={!c.canAdd}
           aria-describedby={c.message ? 'qv-message' : undefined}
           className="mt-4"
-          idleLabel={c.soldOut ? 'Out of stock' : `Add to bag · ${total}`}
+          idleLabel={c.soldOut ? 'Sold out' : `Add to bag · ${total}`}
           onAdd={() => {
             const ok = c.add()
             if (ok) {

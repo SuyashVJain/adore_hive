@@ -74,13 +74,13 @@ export function ProductCard({ product, eager, forceLink }: Props) {
         <p className="mb-4 mt-1 text-base font-medium">{formatINR(product.price)}{product.compareAtPrice && product.compareAtPrice > product.price ? <s className="ml-2 text-sm font-normal text-muted"><span className="sr-only">Was </span>{formatINR(product.compareAtPrice)}</s> : null}</p>
         <div className="mt-auto">
           {soldOut ? (
-            <Button to={`/product/${product.id}`} variant="outline" full className="relative z-10 !px-3" aria-label={`Notify me about ${product.name}`}>Notify me</Button>
+            <Button variant="outline" full disabled className="relative z-10 !px-2 max-sm:!tracking-[0.06em]" aria-label={`${product.name} is sold out`}>Sold out</Button>
           ) : hasOptions ? (
             <>
               {!forceLink && (
                 <Button variant="outline" full onClick={() => openQuick(product.id)} className="relative z-10 hidden !px-3 lg:inline-flex" aria-label={`Quick view ${product.name}`}>Quick view</Button>
               )}
-              <Button to={`/product/${product.id}`} variant="outline" full className={`relative z-10 !px-3 ${forceLink ? '' : 'lg:hidden'}`} aria-label={`Choose options for ${product.name}`}>Choose options</Button>
+              <Button to={`/product/${product.id}`} variant="outline" full className={`relative z-10 !px-2 max-sm:!tracking-[0.06em] ${forceLink ? '' : 'lg:hidden'}`} aria-label={`Choose options for ${product.name}`}><span className="sm:hidden">Options</span><span className="max-sm:hidden">Choose options</span></Button>
             </>
           ) : (
             <AddButton variant="outline" full onAdd={quickAdd} className="relative z-10 !px-3" aria-label={`Quick add ${product.name} to bag`} idleLabel={<>Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" /></>} />
