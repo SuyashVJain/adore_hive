@@ -5,6 +5,7 @@ import { HamperSummaryAside, HamperSummaryBar } from '@/components/studio/Hamper
 import { RequestForm } from '@/components/studio/RequestForm'
 import { StepIndicator } from '@/components/studio/StepIndicator'
 import { Breadcrumbs, Button, Checkbox, Chip, Field, QuantityStepper } from '@/components/ui'
+import { DateField } from '@/components/ui/DateField'
 import { SelectField } from '@/components/ui/SelectField'
 import { HAMPER_NOTE_PRICE, NOTE_MAX, hamperBoxes, hamperOccasions, hamperRibbons } from '@/config/shop'
 import { hamperImage, treasureGroups, treasures, type Treasure } from '@/data/hamper'
@@ -138,7 +139,7 @@ function Occasion({ shown }: { shown: Shown }) {
       </div>
       <div className="mt-6 space-y-4">
         <Field id="hs-recipient" label="Recipient name" name="recipient" autoComplete="off" required maxLength={80} value={d.recipient} onChange={(e) => patch({ recipient: e.target.value })} error={shown('recipient')} />
-        <Field id="hs-date" label="Occasion date (optional)" type="date" name="date" min={today} value={d.date} onChange={(e) => patch({ date: e.target.value })} error={shown('date')} hint="If you need it by a particular day, tell us here." />
+        <DateField id="hs-date" label="Occasion date (optional)" name="date" min={today} value={d.date} onChange={(iso) => patch({ date: iso })} error={shown('date')} hint="Type dd-mm-yyyy or use the calendar. If you need it by a particular day, tell us here." />
       </div>
     </div>
   )
