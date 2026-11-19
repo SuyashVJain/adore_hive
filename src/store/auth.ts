@@ -14,7 +14,10 @@ export interface SavedAddress {
   city: string
   state: string
   pin: string
+  isDefault?: boolean
 }
+
+export const defaultAddress = (u: { addresses: SavedAddress[] }) => u.addresses.find((a) => a.isDefault) ?? u.addresses[0]
 
 export interface User {
   email: string
@@ -34,6 +37,9 @@ interface AuthState {
   updateProfile: (patch: { name?: string; phone?: string }) => void
   addAddress: (a: Omit<SavedAddress, 'id'>) => void
   removeAddress: (id: string) => void
+  /** Create (no id) or update (id) an address. The first address becomes the default. */
+  saveAddress: (a: Omit<SavedAddress, 'id' | 'isDefault'> & { id?: string }) => void
+  setDefaultAddress: (id: string) => void
 }
 
 const hex = (b: ArrayBuffer) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('')
@@ -73,13 +79,32 @@ export const useAuth = create<AuthState>()(
           if (!s.current) return s
           const u = s.users[s.current]
           const dup = u.addresses.some((x) => x.address === a.address && x.pin === a.pin && x.firstName === a.firstName)
-          return dup ? s : { users: { ...s.users, [u.email]: { ...u, addresses: [...u.addresses, { ...a, id: crypto.randomUUID() }] } } }
+          return dup ? s : { users: { ...s.users, [u.email]: { ...u, addresses: [...u.addresses, { ...a, id: crypto.randomUUID(), isDefault: u.addresses.length === 0 }] } } }
         }),
       removeAddress: (id) =>
         set((s) => {
           if (!s.current) return s
           const u = s.users[s.current]
-          return { users: { ...s.users, [u.email]: { ...u, addresses: u.addresses.filter((a) => a.id !== id) } } }
+          const rest = u.addresses.filter((a) => a.id !== id)
+          const hadDefault = u.addresses.find((a) => a.id === id)?.isDefault
+          const addresses = hadDefault && rest.length ? rest.map((a, i) => ({ ...a, isDefault: i === 0 })) : rest
+          return { users: { ...s.users, [u.email]: { ...u, addresses } } }
+        }),
+      saveAddress: (a) =>
+        set((s) => {
+          if (!s.current) return s
+          const u = s.users[s.current]
+          const { id, ...fields } = a
+          const addresses = id
+            ? u.addresses.map((x) => (x.id === id ? { ...x, ...fields } : x))
+            : [...u.addresses, { ...fields, id: crypto.randomUUID(), isDefault: u.addresses.length === 0 }]
+          return { users: { ...s.users, [u.email]: { ...u, addresses } } }
+        }),
+      setDefaultAddress: (id) =>
+        set((s) => {
+          if (!s.current) return s
+          const u = s.users[s.current]
+          return { users: { ...s.users, [u.email]: { ...u, addresses: u.addresses.map((a) => ({ ...a, isDefault: a.id === id })) } } }
         }),
     }),
     {

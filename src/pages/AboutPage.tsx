@@ -1,6 +1,6 @@
 import { Heart, Sparkles } from 'lucide-react'
 import { Breadcrumbs, Button } from '@/components/ui'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 
 const beliefs = [
   ['Self-expression', 'A favourite accessory can be a tiny reflection of you. Dress for a feeling, not a rule.'],
@@ -9,7 +9,7 @@ const beliefs = [
 ]
 
 export function AboutPage() {
-  useDocumentTitle('About us and our story')
+  useSeo('About us and our story', 'Adore is the feeling. Hive is the little world around it. Meet the heart behind Adore Hive, a home for jewellery, handmade crochet and thoughtful gifting.')
   return (
     <div className="pb-16 pt-5 md:pt-6">
       <div className="container-page"><Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'About Us' }]} /></div>
@@ -21,7 +21,7 @@ export function AboutPage() {
       </header>
 
       <div className="container-page">
-        <img src="/images/about-hero.jpg" alt="Hands tying a cream ribbon around a blush gift box on a wooden table" width={1280} height={510} className="aspect-[16/10] w-full rounded-xl object-cover md:aspect-[1280/510]" />
+        <img src="/images/about-hero.webp" alt="Hands tying a cream ribbon around a blush gift box on a wooden table" width={1280} height={510} className="aspect-[16/10] w-full rounded-xl object-cover md:aspect-[1280/510]" />
       </div>
 
       {/* Two-column text: heading left, copy right */}
@@ -55,7 +55,7 @@ export function AboutPage() {
 
       {/* Image left, text right */}
       <section aria-labelledby="craft-h" className="container-page grid items-center gap-8 py-12 md:py-20 lg:grid-cols-[1fr_1fr] lg:gap-16">
-        <img src="/images/about-craft.jpg" alt="Hands crocheting a small white daisy with a wooden hook" width={612} height={460} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:aspect-[612/460]" />
+        <img src="/images/about-craft.webp" alt="Hands crocheting a small white daisy with a wooden hook" width={612} height={460} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:aspect-[612/460]" />
         <div>
           <p className="eyebrow !text-ink mb-3">From a little idea to a lovely detail</p>
           <h2 id="craft-h" className="text-[2.25rem] leading-tight md:text-5xl">Creativity, made tangible.</h2>
@@ -68,8 +68,8 @@ export function AboutPage() {
       {/* Layered: image right with an overlapping text card */}
       <section aria-labelledby="wrap-h" className="container-page">
         <div className="relative lg:grid lg:grid-cols-12 lg:items-center">
-          <img src="/images/about-gifts.jpg" alt="A stack of blush gift boxes tied with cream ribbon" width={604} height={452} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:col-span-7 lg:col-start-6 lg:aspect-[604/520]" />
-          <div className="relative -mt-10 mx-4 rounded-xl bg-surface p-6 shadow-sm md:mx-8 md:p-10 lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:mx-0 lg:-mr-12 lg:mt-0">
+          <img src="/images/about-gifts.webp" alt="A stack of blush gift boxes tied with cream ribbon" width={604} height={452} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:col-span-7 lg:col-start-6 lg:aspect-[604/520]" />
+          <div className="relative mt-4 rounded-xl bg-surface p-6 shadow-sm md:p-10 lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:-mr-12 lg:mt-0">
             <p className="eyebrow !text-ink mb-3">The joy of opening something lovely</p>
             <h2 id="wrap-h" className="text-[2rem] leading-tight md:text-5xl">Wrapped with thought. Finished with you.</h2>
             <p className="mt-4 text-muted">Beautiful packaging is part of the feeling. Blush tones, soft ribbons and carefully chosen details set the scene for the personal touches inside.</p>

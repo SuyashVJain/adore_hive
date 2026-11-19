@@ -16,7 +16,7 @@ export function Toaster() {
   }, [toast, hide])
 
   return (
-    <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-24 z-[70] md:bottom-4 flex justify-center px-4">
+    <div role="status" aria-live="polite" aria-atomic="true" className="pointer-events-none fixed inset-x-0 bottom-24 z-[70] md:bottom-4 flex justify-center px-4">
       {toast && (
         <div key={toast.id} className="pointer-events-auto flex animate-rise items-center gap-3 rounded-md bg-ink py-1 pl-4 pr-1 text-sm text-white shadow-drawer">
           <Check className="h-4 w-4 shrink-0" aria-hidden="true" />

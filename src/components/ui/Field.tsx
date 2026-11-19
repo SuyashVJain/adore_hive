@@ -37,7 +37,7 @@ export function Field({ label, error, hint, className = '', id, required, multil
         )}
         <label
           htmlFor={fid}
-          className={`pointer-events-none absolute left-3.5 text-sm text-muted transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs ${
+          className={`pointer-events-none absolute left-3.5 text-sm text-muted transition-all ${rest.type === 'date' ? '!top-2.5 !translate-y-0 !text-xs' : ''} peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs ${
             multiline ? 'top-4' : 'top-1/2 -translate-y-1/2'
           }`}
         >

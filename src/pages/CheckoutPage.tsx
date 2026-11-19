@@ -8,10 +8,10 @@ import { SHIPPING_FEE, delivery } from '@/config/shop'
 import { indianStates } from '@/config/india'
 import { formatINR } from '@/lib/format'
 import { mockPay, type PaymentMethod } from '@/lib/payment'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { isCardExpiry, isCardNumber, isCvc, isEmail, isPhone, isPin, isUpi, normalisePhone } from '@/lib/validate'
 import { useBag, useBagSummary } from '@/store/bag'
-import { useAuth, useCurrentUser } from '@/store/auth'
+import { defaultAddress, useAuth, useCurrentUser } from '@/store/auth'
 import { newOrderId, useOrders, type Order } from '@/store/orders'
 
 // Address-and-contact draft survives a refresh in sessionStorage. Payment fields are NEVER persisted.
@@ -84,7 +84,7 @@ const section = 'border-t border-line pt-8 first:border-t-0 first:pt-0'
 const h2 = 'font-display text-3xl md:text-4xl'
 
 export function CheckoutPage() {
-  useDocumentTitle('Checkout')
+  useSeo('Checkout', 'Add your details and place your order.', { noindex: true })
   const navigate = useNavigate()
   const { lines, count, ...totals } = useBagSummary()
   const user = useCurrentUser()
@@ -105,7 +105,19 @@ export function CheckoutPage() {
   // Prefill from the signed-in account, without overwriting what was already typed
   useEffect(() => {
     if (!user) return
-    setForm((f) => ({ ...f, email: f.email || user.email, phone: f.phone || user.phone, firstName: f.firstName || user.name.split(' ')[0] || '', lastName: f.lastName || user.name.split(' ').slice(1).join(' ') }))
+    const a = defaultAddress(user)
+    setForm((f) => ({
+      ...f,
+      email: f.email || user.email,
+      phone: f.phone || user.phone,
+      firstName: f.firstName || a?.firstName || user.name.split(' ')[0] || '',
+      lastName: f.lastName || a?.lastName || user.name.split(' ').slice(1).join(' '),
+      address: f.address || a?.address || '',
+      apartment: f.apartment || a?.apartment || '',
+      city: f.city || a?.city || '',
+      state: f.state || a?.state || '',
+      pin: f.pin || a?.pin || '',
+    }))
   }, [user])
 
   useEffect(() => {
@@ -148,7 +160,7 @@ export function CheckoutPage() {
       delivery: form.delivery,
       payment: form.payment,
       note: form.note.trim(),
-      lines: lines.map((l) => ({ productId: l.productId, name: l.product.name, image: l.product.image, options: l.options, qty: l.qty, unitPrice: l.product.price, gift: l.gift })),
+      lines: lines.map((l) => ({ productId: l.productId, name: l.product.name, image: l.product.image, options: l.options, qty: l.qty, unitPrice: l.product.price, gift: l.gift, contents: l.custom?.contents })),
       totals: { subtotal: totals.subtotal, giftFees: totals.giftFees, shipping: totals.shipping, total: totals.total },
     }
     placing.current = true // stops the empty-bag redirect while we clear the bag

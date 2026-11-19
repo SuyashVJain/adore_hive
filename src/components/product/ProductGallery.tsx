@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Img } from '../ui/Img'
 
 interface Props {
   images: string[]
@@ -25,11 +26,11 @@ export function ProductGallery({ images, name }: Props) {
           tabIndex={0}
           aria-label="Swipe to see more photos"
           onScroll={(e) => setI(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}
-          className="flex snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="carousel flex snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {images.map((src, n) => (
             <li key={src} className="w-full shrink-0 snap-center" aria-label={`Photo ${n + 1} of ${images.length}`}>
-              <img src={src} alt={n === 0 ? name : `${name}, photo ${n + 1}`} width={610} height={620} loading={n === 0 ? 'eager' : 'lazy'} className="aspect-[16/10] w-full object-cover" />
+              <Img src={src} alt={n === 0 ? name : `${name}, photo ${n + 1}`} width={610} height={620} loading={n === 0 ? 'eager' : 'lazy'} className="aspect-[16/10] w-full object-cover" />
             </li>
           ))}
         </ul>
@@ -46,12 +47,12 @@ export function ProductGallery({ images, name }: Props) {
 
       {/* Desktop / tablet */}
       <div className="hidden md:block">
-        <img src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full rounded-xl object-cover" />
+        <Img src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full rounded-xl object-cover" />
         <ul className="mt-3 grid grid-cols-3 gap-3" aria-label="Photo thumbnails">
           {images.map((src, n) => (
             <li key={src}>
               <button type="button" onClick={() => setI(n)} aria-label={`Show photo ${n + 1}`} aria-current={i === n} className={`block w-full overflow-hidden rounded-md border-2 transition-colors ${i === n ? 'border-ink' : 'border-transparent hover:border-line-strong'}`}>
-                <img src={src} alt="" width={195} height={135} loading="lazy" className="aspect-[195/135] w-full object-cover" />
+                <Img src={src} alt="" width={195} height={135} loading="lazy" className="aspect-[195/135] w-full object-cover" />
               </button>
             </li>
           ))}

@@ -6,16 +6,17 @@ import { images } from '@/data/images'
 import { getProduct } from '@/data/products'
 import { formatINR } from '@/lib/format'
 import { optionsLabel } from '@/lib/bag'
-import { useDocumentTitle } from '@/lib/useDocumentTitle'
+import { useSeo } from '@/lib/useDocumentTitle'
 import { isEmail, isPhone, passwordProblem } from '@/lib/validate'
 import { useAuth, useCurrentUser, type User } from '@/store/auth'
 import { useOrders } from '@/store/orders'
 import { useWishlist } from '@/store/wishlist'
+import { Addresses } from '@/components/account/Addresses'
 import { formatDate } from './OrderConfirmation'
 
 export function AccountPage() {
   const user = useCurrentUser()
-  useDocumentTitle(user ? 'My account' : 'Sign in')
+  useSeo(user ? 'My account' : 'Sign in', 'Sign in to see your orders, addresses and wishlist.', { noindex: true })
   return (
     <div className="container-page pb-16 pt-5 md:pt-6">
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'My account' }]} />
@@ -246,6 +247,7 @@ function Orders({ user }: { user: User }) {
                 <div className="min-w-0">
                   <p className="font-product text-lg leading-snug">{l.name}</p>
                   <p className="text-sm text-muted">{[optionsLabel(l.options), `Quantity ${l.qty}`].filter(Boolean).join(' · ')}</p>
+                  {l.contents && <ul className="mt-1 space-y-0.5 text-sm text-muted">{l.contents.map((c, j) => <li key={j}>{c}</li>)}</ul>}
                 </div>
               </li>
             ))}
@@ -255,21 +257,6 @@ function Orders({ user }: { user: User }) {
             <Button to={`/order-confirmation/${o.id}`} variant="outline">View order details</Button>
             <Button to="/contact" variant="outline">Contact the hive</Button>
           </div>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-function Addresses({ user }: { user: User }) {
-  const remove = useAuth((s) => s.removeAddress)
-  if (!user.addresses.length) return <Empty title="No saved addresses." text="Tick “Save this address to my account” at checkout and it will be kept here." to="/shop" cta="Shop all" />
-  return (
-    <ul className="grid gap-4 md:grid-cols-2">
-      {user.addresses.map((a) => (
-        <li key={a.id} className="rounded-lg bg-surface p-5">
-          <address className="text-sm not-italic leading-relaxed">{a.firstName} {a.lastName}<br />{a.address}{a.apartment ? `, ${a.apartment}` : ''}<br />{a.city}, {a.state} {a.pin}<br />India</address>
-          <button type="button" onClick={() => remove(a.id)} aria-label={`Remove address for ${a.firstName} ${a.lastName}, ${a.pin}`} className="mt-2 inline-flex min-h-11 items-center text-sm text-muted underline underline-offset-4 hover:text-ink">Remove</button>
         </li>
       ))}
     </ul>

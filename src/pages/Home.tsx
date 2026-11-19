@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Heart, Sparkles, Star } from 'lucide-react'
 import { Button, ExtLink, ProductCard, SectionHeading } from '@/components/ui'
+import { Img } from '@/components/ui/Img'
 import { site } from '@/config/site'
 import { images } from '@/data/images'
 import { categories, getProduct, homeRows } from '@/data/products'
 import { reviews } from '@/data/reviews'
+import { useSeo } from '@/lib/useDocumentTitle'
 
 const trust = ['Thoughtfully curated', 'Handmade with love', 'Personal touches', 'Beautifully wrapped']
 const categoryImage = {
@@ -20,7 +22,7 @@ function Hero() {
       <img src={images.hero} alt="" width={772} height={610} {...{ fetchpriority: 'high' }} className="absolute inset-0 h-full w-full object-cover lg:left-[40.6%] lg:w-[59.4%]" />
       <div className="container-page relative py-8 md:py-16 lg:py-[110px]">
         {/* Everything sits inside this panel, at every width */}
-        <div className="max-w-[600px] rounded-xl bg-page/90 p-6 shadow-sm backdrop-blur-sm md:p-10">
+        <div className="max-w-[600px] rounded-xl bg-page p-6 shadow-sm md:p-10">
           <p className="eyebrow !text-ink">A little adore. A little every day.</p>
           <h1 id="hero-h" className="mt-4 text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]">A Little Love in Every Detail.</h1>
           <p className="mt-5 text-base text-muted md:text-lg">Discover thoughtfully curated accessories, handmade treasures and personalized gifts.</p>
@@ -60,7 +62,7 @@ function Categories() {
           <li key={c.slug}>
             <Link to={`/shop/${c.slug}`} className="group block text-center">
               <span className="block aspect-[3/4] overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-blush">
-                <img src={categoryImage[c.slug]} alt="" width={222} height={246} loading="lazy" className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:motion-safe:scale-105" />
+                <Img src={categoryImage[c.slug]} alt="" width={222} height={246} loading="lazy" className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:motion-safe:scale-105" />
               </span>
               <span className="mt-4 block font-display text-2xl group-hover:underline underline-offset-4 md:text-3xl">{c.label}</span>
               <span className="eyebrow mt-1 block !text-ink">Shop now</span>
@@ -81,7 +83,7 @@ function Row({ title, subtitle, ids, to }: { title: string; subtitle: string; id
       <ul
         tabIndex={0}
         aria-label={`${title}, scrollable list`}
-        className="-mx-5 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
+        className="carousel -mx-5 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((p, i) => (
           <li key={p.id} className={`w-[62%] shrink-0 snap-start sm:w-[44%] md:w-auto ${i === 3 ? 'md:max-lg:hidden' : ''}`}>
@@ -97,7 +99,7 @@ function Gifting() {
   return (
     <section aria-labelledby="gift-h" className="bg-blush py-10 md:py-20">
       <div className="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <img src={images.lifestyle.hamper} alt="" width={560} height={460} loading="lazy" className="aspect-[16/10] w-full rounded-t-[3rem] md:aspect-[560/460] rounded-b-[5rem] object-cover lg:rounded-b-[8rem]" />
+        <Img src={images.lifestyle.hamper} alt="" width={560} height={460} loading="lazy" className="aspect-[16/10] w-full rounded-t-[3rem] md:aspect-[560/460] rounded-b-[5rem] object-cover lg:rounded-b-[8rem]" />
         <div>
           <p className="eyebrow !text-ink mb-3">A gift that could only be from you</p>
           <h2 id="gift-h" className="text-[2rem] md:text-5xl">Made Especially for You</h2>
@@ -132,7 +134,7 @@ function Story() {
         <p className="mt-4 text-muted">We believe self-expression lives in the details: a bow in your hair, a handmade bloom on your desk, a gift chosen just for someone. Thoughtful packaging and personal touches make those small moments feel special.</p>
         <Button to="/about" variant="outline" className="mt-7">Explore our story</Button>
       </div>
-      <img src={images.lifestyle.wrapping} alt="" width={608} height={470} loading="lazy" className="aspect-[16/10] w-full rounded-xl object-cover md:aspect-[608/470]" />
+      <Img src={images.lifestyle.wrapping} alt="" width={608} height={470} loading="lazy" className="aspect-[16/10] w-full rounded-xl object-cover md:aspect-[608/470]" />
     </section>
   )
 }
@@ -143,11 +145,11 @@ function Reviews() {
       <div className="container-page">
         <p className="eyebrow !text-ink mb-3">Your words, our little joy</p>
         <h2 id="rev-h" className="text-[2rem] md:text-5xl">A Little Love From Our Customers.</h2>
-        <ul tabIndex={0} aria-label="Customer reviews, scrollable list" className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
+        <ul tabIndex={0} aria-label="Customer reviews, scrollable list" className="carousel -mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
           {reviews.map((r) => (
             <li key={r.id} className="w-[84%] shrink-0 snap-start sm:w-[60%] md:w-auto">
               <figure className="h-full rounded-lg bg-surface p-6">
-                <img src={r.avatar} alt="" width={64} height={64} loading="lazy" className="h-16 w-16 rounded-full object-cover" />
+                <Img src={r.avatar} alt="" width={64} height={64} loading="lazy" className="h-16 w-16 rounded-full object-cover" />
                 <p className="mt-4 flex gap-0.5" role="img" aria-label="5 out of 5 stars">
                   {[0, 1, 2, 3, 4].map((i) => <Star key={i} className="h-4 w-4 fill-ink" aria-hidden="true" />)}
                 </p>
@@ -169,11 +171,11 @@ function Instagram() {
       <p className="eyebrow !text-ink mb-3">The little moments, too</p>
       <h2 id="ig-h" className="text-[2rem] md:text-5xl">Find Your Daily Dose of Adore.</h2>
       <p className="mt-3 text-muted">Styling notes, handmade moments and lovely things in the making.</p>
-      <ul tabIndex={0} aria-label="Instagram photos, scrollable list" className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
+      <ul tabIndex={0} aria-label="Instagram photos, scrollable list" className="carousel -mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
         {images.instagram.map((src, i) => (
           <li key={src} className="w-[58%] shrink-0 snap-start sm:w-[36%] md:w-auto">
             <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label={`Adore Hive on Instagram, photo ${i + 1} (opens in a new tab)`} className="block overflow-hidden rounded-lg">
-              <img src={src} alt="" width={311} height={280} loading="lazy" className="aspect-[311/280] w-full object-cover motion-safe:transition-transform motion-safe:duration-500 hover:motion-safe:scale-105" />
+              <Img src={src} alt="" width={311} height={280} loading="lazy" className="aspect-[311/280] w-full object-cover motion-safe:transition-transform motion-safe:duration-500 hover:motion-safe:scale-105" />
             </a>
           </li>
         ))}
@@ -185,6 +187,7 @@ function Instagram() {
 }
 
 export function Home() {
+  useSeo('Thoughtful accessories, handmade crochet and gifts', 'Discover thoughtfully curated jewellery, hair accessories, handmade crochet and personalized gifts from Adore Hive. A little love in every detail.')
   return (
     <>
       <Hero />

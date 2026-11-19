@@ -7,6 +7,7 @@ import { useToast } from '@/store/toast'
 import { useUI } from '@/store/ui'
 import { useWishlist } from '@/store/wishlist'
 import { Badge } from './Badge'
+import { Img } from './Img'
 import { Button } from './Button'
 
 interface Props {
@@ -34,7 +35,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
   return (
     <article className="group relative flex h-full flex-col rounded-lg bg-surface p-2 transition-shadow focus-within:shadow-md hover:shadow-md">
       <div className="relative aspect-[222/246] overflow-hidden rounded-md bg-blush">
-        <img
+        <Img
           src={product.image}
           alt=""
           width={222}

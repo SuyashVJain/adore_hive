@@ -23,6 +23,7 @@ export default {
         display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         product: ['"Playfair Display"', 'Georgia', 'serif'],
         sans: ['Poppins', 'system-ui', 'sans-serif'],
+        script: ['Caveat', 'Segoe Script', 'cursive'], // handwriting-style letter preview
         label: ['Montserrat', 'Poppins', 'system-ui', 'sans-serif'], // uppercase labels and buttons
       },
       fontSize: {
