@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import { m, useReducedMotion } from 'framer-motion'
 import { Heart, Pause, Play } from 'lucide-react'
 import { FREE_SHIPPING_OVER } from '@/config/shop'
 import { formatINR } from '@/lib/format'
-import { dur, tween } from '@/lib/motion'
 
 const messages = [
   'Little things, lovely feelings',
@@ -11,6 +9,18 @@ const messages = [
   'Personalised gifts made with love',
 ]
 const EVERY = 5000
+
+/** True when the visitor asks for reduced motion. */
+function useReducedMotion() {
+  const [reduce, setReduce] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const f = () => setReduce(mq.matches)
+    mq.addEventListener('change', f)
+    return () => mq.removeEventListener('change', f)
+  }, [])
+  return reduce
+}
 
 /**
  * Three short messages that fade every five seconds. They sit stacked in one grid cell, so the bar never changes height.
@@ -43,9 +53,9 @@ export function AnnouncementBar() {
       <span className="sr-only" aria-live="polite" aria-atomic="true">{messages[i]}</span>
       <div className="grid" aria-hidden="true">
         {messages.map((t, n) => (
-          <m.span key={t} className="col-start-1 row-start-1" initial={false} animate={{ opacity: n === i ? 1 : 0 }} transition={tween(dur.slow)}>
+          <span key={t} className={`col-start-1 row-start-1 transition-opacity duration-500 ease-out motion-reduce:transition-none ${n === i ? 'opacity-100' : 'opacity-0'}`}>
             {t} {n === 0 && <Heart className="inline h-3 w-3 align-[-1px]" />}
-          </m.span>
+          </span>
         ))}
       </div>
       {!reduce && (
