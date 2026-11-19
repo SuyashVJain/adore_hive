@@ -1,5 +1,8 @@
 import { useRef, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import { ZoomIn } from 'lucide-react'
 import { Img } from '../ui/Img'
+import { Lightbox } from './Lightbox'
 
 interface Props {
   images: string[]
@@ -9,6 +12,7 @@ interface Props {
 /** Desktop: main image + thumbnails. Mobile: swipeable scroll-snap track with dots. */
 export function ProductGallery({ images, name }: Props) {
   const [i, setI] = useState(0)
+  const [viewer, setViewer] = useState<number | null>(null)
   const track = useRef<HTMLUListElement>(null)
 
   const go = (n: number) => {
@@ -31,7 +35,9 @@ export function ProductGallery({ images, name }: Props) {
         >
           {images.map((src, n) => (
             <li key={src} className="w-full shrink-0 snap-center" aria-label={`Photo ${n + 1} of ${images.length}`}>
-              <Img src={src} alt={n === 0 ? name : `${name}, photo ${n + 1}`} width={610} height={620} loading={n === 0 ? 'eager' : 'lazy'} className="aspect-[16/10] w-full object-cover" />
+              <button type="button" onClick={() => setViewer(n)} aria-label={`Open photo ${n + 1} full screen`} className="block w-full cursor-zoom-in outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink">
+                <Img src={src} alt={n === 0 ? name : `${name}, photo ${n + 1}`} width={610} height={620} loading={n === 0 ? 'eager' : 'lazy'} className="aspect-[16/10] w-full object-cover" />
+              </button>
             </li>
           ))}
         </ul>
@@ -48,7 +54,10 @@ export function ProductGallery({ images, name }: Props) {
 
       {/* Desktop / tablet */}
       <div className="hidden md:block">
-        <Img data-fly-source src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full rounded-xl object-cover" />
+        <button type="button" onClick={() => setViewer(i)} aria-label="Open photo full screen, with zoom" className="group relative block w-full cursor-zoom-in overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2">
+          <Img data-fly-source src={images[i] ?? images[0]} alt={name} width={610} height={620} className="aspect-[610/620] w-full object-cover" />
+          <span aria-hidden="true" className="absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-ink opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"><ZoomIn className="h-5 w-5" /></span>
+        </button>
         <ul className="mt-3 grid grid-cols-3 gap-3" aria-label="Photo thumbnails">
           {images.map((src, n) => (
             <li key={src}>
@@ -59,6 +68,9 @@ export function ProductGallery({ images, name }: Props) {
           ))}
         </ul>
       </div>
+      <AnimatePresence>
+        {viewer !== null && <Lightbox key="lb" images={images} name={name} index={viewer} onIndex={setViewer} onClose={() => { setI(viewer); setViewer(null) }} />}
+      </AnimatePresence>
     </div>
   )
 }
