@@ -1,3 +1,4 @@
+import { BeeMark, Honeycomb } from '../art/Art'
 import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { site } from '@/config/site'
@@ -18,8 +19,9 @@ function Col({ title, children, wide }: { title: string; children: React.ReactNo
 
 export function Footer() {
   return (
-    <footer className="bg-blush">
-      <div className="container-page border-t border-ink/10 py-12">
+    <footer className="relative overflow-hidden bg-blush">
+      <Honeycomb className="h-40" />
+      <div className="container-page relative border-t border-ink/10 py-12">
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-[220px_1fr_1fr_1fr] md:gap-10">
           <div className="col-span-2 md:col-span-1">
             <Logo className="-ml-3 h-36" />
@@ -38,7 +40,7 @@ export function Footer() {
         <p className="mt-10 border-t border-ink/10 pt-6 text-center text-xs text-muted">
           <span className="sr-only">Made with love by {site.name}.</span>
           <span aria-hidden="true">
-            Made with <Heart className="inline h-3 w-3 align-[-1px]" /> by {site.name}.
+            Made with <Heart className="inline h-3 w-3 align-[-1px]" /> by {site.name}. <BeeMark className="ml-1 inline h-5 w-5 align-[-5px]" />
           </span>
         </p>
       </div>

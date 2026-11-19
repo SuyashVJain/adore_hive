@@ -1,3 +1,4 @@
+import { Honeycomb } from '../art/Art'
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
@@ -17,8 +18,9 @@ export function NewsletterBlock() {
   }
 
   return (
-    <section aria-labelledby="newsletter-h" className="bg-blush py-10 md:py-16">
-      <div className="container-page">
+    <section aria-labelledby="newsletter-h" className="relative overflow-hidden bg-blush py-10 md:py-16">
+      <Honeycomb />
+      <div className="container-page relative">
         <h2 id="newsletter-h" className="text-4xl md:text-5xl">Lovely things, in your inbox.</h2>
         <p className="mt-4 text-muted">New little treasures, gifting inspiration and a little Adore.</p>
         {done ? (
