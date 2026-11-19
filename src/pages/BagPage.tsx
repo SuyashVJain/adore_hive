@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import { BagLineItem } from '@/components/bag/BagLineItem'
 import { OrderSummary, ShippingHint } from '@/components/bag/OrderSummary'
 import { Breadcrumbs, Button, Field, ProductCard, SectionHeading } from '@/components/ui'
@@ -9,6 +10,7 @@ import { useBag, useBagSummary } from '@/store/bag'
 export function BagPage() {
   useDocumentTitle('Your bag')
   const { lines, count, ...totals } = useBagSummary()
+  const message = (useLocation().state as { message?: string } | null)?.message
   const note = useBag((s) => s.note)
   const setNote = useBag((s) => s.setNote)
   const inBag = new Set(lines.map((l) => l.productId))
@@ -22,6 +24,8 @@ export function BagPage() {
       <div className="py-8 md:py-12">
         <SectionHeading as="h1" align="center" eyebrow="Chosen with a little love" title="Your bag of lovely things." subtitle="A few favourites for you. A little something for someone special." />
       </div>
+
+      {message && lines.length === 0 && <p role="status" className="mb-6 rounded-lg bg-blush p-4 text-center text-sm">{message}</p>}
 
       {lines.length === 0 ? (
         <div className="rounded-lg bg-surface px-6 py-14 text-center">

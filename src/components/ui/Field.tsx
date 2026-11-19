@@ -7,13 +7,15 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   hint?: string
   /** Render a textarea instead of an input */
   multiline?: boolean
+  /** Extra classes for the input element itself (the wrapper takes className) */
+  inputClassName?: string
 }
 
 const box =
   'peer w-full rounded-md border bg-surface px-3.5 pb-1.5 pt-6 text-base text-ink outline-none transition-colors hover:border-ink focus:border-ink focus:ring-1 focus:ring-ink disabled:cursor-not-allowed disabled:bg-page disabled:opacity-60'
 
 /** Floating-label input. The label rests inside the box and lifts when focused or filled. */
-export function Field({ label, error, hint, className = '', id, required, multiline, ...rest }: Props) {
+export function Field({ label, error, hint, className = '', id, required, multiline, inputClassName = '', ...rest }: Props) {
   const auto = useId()
   const fid = id ?? auto
   const msg = error ? `${fid}-err` : hint ? `${fid}-hint` : undefined
@@ -23,7 +25,7 @@ export function Field({ label, error, hint, className = '', id, required, multil
     required,
     'aria-invalid': !!error,
     'aria-describedby': msg,
-    className: `${box} ${multiline ? 'min-h-[132px] resize-y' : 'h-14'} ${error ? 'border-error' : 'border-line-strong'}`,
+    className: `${box} ${multiline ? 'min-h-[132px] resize-y' : 'h-14'} ${error ? 'border-error' : 'border-line-strong'} ${inputClassName}`,
   }
   return (
     <div className={className}>

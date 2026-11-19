@@ -79,6 +79,8 @@ function Row({ title, subtitle, ids, to }: { title: string; subtitle: string; id
       <SectionHeading eyebrow="The Adore edit" title={title} subtitle={subtitle} action={{ label: 'View all', to }} />
       {/* Mobile: snap carousel showing ~1.6 cards. Tablet: 3 columns. Desktop: 4. */}
       <ul
+        tabIndex={0}
+        aria-label={`${title}, scrollable list`}
         className="-mx-5 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((p, i) => (
@@ -141,7 +143,7 @@ function Reviews() {
       <div className="container-page">
         <p className="eyebrow !text-ink mb-3">Your words, our little joy</p>
         <h2 id="rev-h" className="text-[2rem] md:text-5xl">A Little Love From Our Customers.</h2>
-        <ul className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
+        <ul tabIndex={0} aria-label="Customer reviews, scrollable list" className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
           {reviews.map((r) => (
             <li key={r.id} className="w-[84%] shrink-0 snap-start sm:w-[60%] md:w-auto">
               <figure className="h-full rounded-lg bg-surface p-6">
@@ -167,7 +169,7 @@ function Instagram() {
       <p className="eyebrow !text-ink mb-3">The little moments, too</p>
       <h2 id="ig-h" className="text-[2rem] md:text-5xl">Find Your Daily Dose of Adore.</h2>
       <p className="mt-3 text-muted">Styling notes, handmade moments and lovely things in the making.</p>
-      <ul className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
+      <ul tabIndex={0} aria-label="Instagram photos, scrollable list" className="-mx-5 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-5 px-5 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
         {images.instagram.map((src, i) => (
           <li key={src} className="w-[58%] shrink-0 snap-start sm:w-[36%] md:w-auto">
             <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label={`Adore Hive on Instagram, photo ${i + 1} (opens in a new tab)`} className="block overflow-hidden rounded-lg">

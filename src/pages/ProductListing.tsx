@@ -125,6 +125,7 @@ export function ProductListing({ config, after }: Props) {
           <div>
             {results.length ? (
               <>
+                <h2 className="sr-only">Products</h2>
                 <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4">
                   {results.map((p) => <li key={p.id}><ProductCard product={p} /></li>)}
                 </ul>

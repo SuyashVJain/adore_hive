@@ -1,8 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CheckoutLayout, MainLayout } from '@/components/layout/Layouts'
+import { AboutPage } from '@/pages/AboutPage'
+import { AccountPage } from '@/pages/AccountPage'
+import { CheckoutPage } from '@/pages/CheckoutPage'
 import { Contact } from '@/pages/ContactPage'
+import { OrderConfirmation } from '@/pages/OrderConfirmation'
+import { PolicyPage } from '@/pages/policies/PolicyPage'
 import { Home } from '@/pages/Home'
-import { About, Account, Checkout, HamperStudio, LetterStudio, NotFound, Policy } from '@/pages/pages'
+import { HamperStudio, LetterStudio, NotFound } from '@/pages/pages'
 import { BagPage } from '@/pages/BagPage'
 import { ProductPage } from '@/pages/ProductPage'
 import { SearchPage } from '@/pages/SearchPage'
@@ -14,7 +19,7 @@ export default function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route path="about" element={<AboutPage />} />
         <Route path="our-story" element={<Navigate to="/about" replace />} />
         <Route path="shop" element={<Shop />} />
         <Route path="shop/:category" element={<Category />} />
@@ -22,15 +27,16 @@ export default function App() {
         <Route path="hamper-studio" element={<HamperStudio />} />
         <Route path="letter-studio" element={<LetterStudio />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="order-confirmation/:id" element={<OrderConfirmation />} />
         <Route path="contact" element={<Contact />} />
         <Route path="wishlist" element={<WishlistPage />} />
-        <Route path="account" element={<Account />} />
+        <Route path="account" element={<AccountPage />} />
         <Route path="bag" element={<BagPage />} />
-        <Route path="policies/:slug" element={<Policy />} />
+        <Route path="policies/:slug" element={<PolicyPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route element={<CheckoutLayout />}>
-        <Route path="checkout" element={<Checkout />} />
+        <Route path="checkout" element={<CheckoutPage />} />
       </Route>
     </Routes>
   )
