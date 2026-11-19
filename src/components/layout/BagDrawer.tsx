@@ -1,3 +1,4 @@
+import { GiftBoxArt } from '../art/Art'
 import { Link } from 'react-router-dom'
 import { useBagSummary } from '@/store/bag'
 import { useUI } from '@/store/ui'
@@ -22,9 +23,11 @@ export function BagDrawer() {
       </div>
 
       {lines.length === 0 ? (
-        <div className="flex flex-1 flex-col items-start gap-4 px-5 pt-8 sm:px-7">
-          <p className="text-muted">Your bag is empty. Find a little something to adore.</p>
-          <Button to="/shop" onClick={close}>Shop all</Button>
+        <div className="flex flex-1 flex-col items-center px-5 pt-8 text-center sm:px-7">
+          <GiftBoxArt className="h-24 w-24" />
+          <p className="mt-2 font-display text-3xl">Your bag is empty.</p>
+          <p className="mt-2 text-muted">Find a little something to adore.</p>
+          <Button to="/shop" onClick={close} className="mt-6">Shop all</Button>
         </div>
       ) : (
         <>

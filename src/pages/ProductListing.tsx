@@ -1,3 +1,4 @@
+import { EmptyState, MagnifierArt } from '@/components/art/Art'
 import { useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
@@ -151,22 +152,22 @@ export function ProductListing({ config, after }: Props) {
               </>
             ) : (
               config.search && n === 0 ? (
-                <div className="rounded-lg bg-surface px-6 py-14 text-center">
-                  <p className="font-display text-3xl">{eff.q ? `Nothing found for “${eff.q}” yet.` : 'What would you love to find?'}</p>
-                  <p className="mt-2 text-muted">{eff.q ? 'Check the spelling, or try one of these little favourites.' : 'Try one of these little favourites, or use the search icon above.'}</p>
-                  <ul className="mt-5 flex flex-wrap justify-center gap-2">
+                <EmptyState
+                  art={<MagnifierArt />}
+                  title={eff.q ? `Nothing found for “${eff.q}” yet.` : 'What would you love to find?'}
+                  text={eff.q ? 'Check the spelling, or try one of these little favourites.' : 'Try one of these little favourites, or use the search icon above.'}
+                >
+                  <ul className="flex w-full flex-wrap justify-center gap-2">
                     {popularSearches.map((r) => (
-                      <li key={r}><Link to={`/search?q=${encodeURIComponent(r)}`} className="inline-flex min-h-11 items-center rounded-full border border-line-strong bg-surface px-4 text-sm hover:bg-blush">{r}</Link></li>
+                      <li key={r}><Link to={`/search?q=${encodeURIComponent(r)}`} className="inline-flex min-h-11 items-center rounded-full border border-edge bg-surface px-4 text-sm hover:bg-blush">{r}</Link></li>
                     ))}
                   </ul>
-                  <Button to="/shop" variant="outline" className="mt-6">Browse everything</Button>
-                </div>
+                  <Button to="/shop" variant="outline">Browse everything</Button>
+                </EmptyState>
               ) : (
-              <div className="rounded-lg bg-surface px-6 py-14 text-center">
-                <p className="font-display text-3xl">No lovely finds match those filters.</p>
-                <p className="mt-2 text-muted">Try widening your price range or removing a filter.</p>
-                <Button className="mt-6" onClick={() => set(emptyFilters(eff.sort, config.search ? eff.q : undefined))}>Clear filters</Button>
-              </div>
+              <EmptyState art={<MagnifierArt />} title="No lovely finds match those filters." text="Try widening your price range or removing a filter.">
+                <Button onClick={() => set(emptyFilters(eff.sort, config.search ? eff.q : undefined))}>Clear filters</Button>
+              </EmptyState>
               )
             )}
           </div>

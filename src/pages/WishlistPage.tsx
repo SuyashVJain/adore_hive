@@ -1,3 +1,4 @@
+import { EmptyState, HeartArt } from '@/components/art/Art'
 import { useState } from 'react'
 import { Heart } from 'lucide-react'
 import { Breadcrumbs, Button, ProductCard } from '@/components/ui'
@@ -39,11 +40,9 @@ export function WishlistPage() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-lg bg-surface px-6 py-14 text-center">
-          <p className="font-display text-3xl">Nothing saved yet.</p>
-          <p className="mt-2 text-muted">Tap the heart on anything you love and it will wait for you here.</p>
-          <Button to="/shop" className="mt-6">Shop all</Button>
-        </div>
+        <EmptyState art={<HeartArt />} title="Nothing saved yet." text="Tap the heart on anything you love and it will wait for you here.">
+          <Button to="/shop">Shop all</Button>
+        </EmptyState>
       ) : (
         <>
           <h2 className="eyebrow !text-ink border-b border-line pb-4">{items.length} saved little {items.length === 1 ? 'treasure' : 'treasures'}</h2>

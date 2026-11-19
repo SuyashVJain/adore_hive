@@ -10,15 +10,18 @@ interface Props {
   crumbs?: Crumb[]
   products?: Product[]
   cta?: { label: string; to: string }
+  /** Decorative illustration above the heading */
+  art?: ReactNode
   children?: ReactNode
 }
 
 /** Simple page shell: breadcrumbs, centred heading with intro copy, optional call to action and product grid. */
-export function StubPage({ title, eyebrow, subtitle, crumbs, products, cta, children }: Props) {
+export function StubPage({ title, eyebrow, subtitle, crumbs, products, cta, art, children }: Props) {
   return (
     <div className="container-page py-6 md:py-10">
       {crumbs && <Breadcrumbs items={[{ label: 'Home', to: '/' }, ...crumbs]} />}
       <div className="py-12 md:py-16">
+        {art && <div className="mb-4 flex justify-center">{art}</div>}
         <SectionHeading as="h1" align="center" eyebrow={eyebrow} title={title} subtitle={subtitle} />
         {cta && <div className="mt-8 flex justify-center"><Button to={cta.to}>{cta.label}</Button></div>}
       </div>

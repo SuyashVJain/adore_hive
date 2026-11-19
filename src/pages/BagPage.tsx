@@ -1,3 +1,4 @@
+import { EmptyState, GiftBoxArt } from '@/components/art/Art'
 import { useLocation } from 'react-router-dom'
 import { BagLineItem } from '@/components/bag/BagLineItem'
 import { OrderSummary, ShippingHint } from '@/components/bag/OrderSummary'
@@ -28,11 +29,9 @@ export function BagPage() {
       {message && lines.length === 0 && <p role="status" className="mb-6 rounded-lg bg-blush p-4 text-center text-sm">{message}</p>}
 
       {lines.length === 0 ? (
-        <div className="rounded-lg bg-surface px-6 py-14 text-center">
-          <p className="font-display text-3xl">Your bag is empty.</p>
-          <p className="mt-2 text-muted">Find a little something to adore.</p>
-          <Button to="/shop" className="mt-6">Shop all</Button>
-        </div>
+        <EmptyState art={<GiftBoxArt />} title="Your bag is empty." text="Find a little something to adore.">
+          <Button to="/shop">Shop all</Button>
+        </EmptyState>
       ) : (
         <div className="grid gap-10 lg:grid-cols-[1fr_380px] lg:gap-12">
           <div>
