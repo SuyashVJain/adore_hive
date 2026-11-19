@@ -1,6 +1,8 @@
 import { lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CheckoutLayout, MainLayout } from '@/components/layout/Layouts'
+// Shop is a landing page: bundling it with the app avoids a chain of lazy chunk requests before the first product image
+import { Category, Shop as ShopAll } from '@/pages/ShopPages'
 
 // Each page is its own chunk, loaded when the route is first visited
 const named = <T extends Record<string, unknown>, K extends keyof T>(load: () => Promise<T>, key: K) =>
@@ -8,9 +10,6 @@ const named = <T extends Record<string, unknown>, K extends keyof T>(load: () =>
 
 const loadHome = () => import('@/pages/Home')
 const Home = named(loadHome, 'Home')
-const loadShop = () => import('@/pages/ShopPages')
-const ShopAll = named(loadShop, 'Shop')
-const Category = named(loadShop, 'Category')
 const loadProduct = () => import('@/pages/ProductPage')
 const ProductPage = named(loadProduct, 'ProductPage')
 const SearchPage = named(() => import('@/pages/SearchPage'), 'SearchPage')
@@ -31,7 +30,6 @@ const NotFound = named(() => import('@/pages/pages'), 'NotFound')
 // Kick off the chunk for the first route right away, so it downloads alongside the app shell instead of after it
 const first = window.location.pathname
 if (first === '/') void loadHome()
-else if (first.startsWith('/shop')) void loadShop()
 else if (first.startsWith('/product/')) void loadProduct()
 else if (first === '/checkout') void loadCheckout()
 

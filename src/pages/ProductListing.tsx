@@ -1,9 +1,12 @@
 import { EmptyState, MagnifierArt } from '@/components/art/Art'
-import { useState, type ReactNode } from 'react'
+import { Suspense, lazy, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
-import { FilterPanel } from '@/components/listing/FilterPanel'
-import { Breadcrumbs, Button, Chip, Drawer, ProductCard, SectionHeading } from '@/components/ui'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { Button } from '@/components/ui/Button'
+import { Chip } from '@/components/ui/Chip'
+import { ProductCard } from '@/components/ui/ProductCard'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Select } from '@/components/ui/Select'
 import { Value as RadixValue } from '@radix-ui/react-select'
 import type { ListingConfig } from '@/data/listings'
@@ -34,28 +37,9 @@ function activeChips(f: Filters, set: (f: Filters) => void, typeLabel?: string, 
   return chips
 }
 
-function FilterSheet({ open, onClose, value, onApply, config }: { open: boolean; onClose: () => void; value: Filters; onApply: (f: Filters) => void; config: ListingConfig }) {
-  return (
-    <Drawer open={open} onClose={onClose} side="bottom" title="Filters" label="Filters" className="lg:hidden">
-      <SheetBody value={value} onApply={(f) => { onApply(f); onClose() }} config={config} />
-    </Drawer>
-  )
-}
-
-function SheetBody({ value, onApply, config }: { value: Filters; onApply: (f: Filters) => void; config: ListingConfig }) {
-  const [draft, setDraft] = useState(value)
-  return (
-    <>
-      <div className="flex-1 overflow-y-auto px-5 py-4 sm:px-7">
-        <FilterPanel value={draft} onChange={setDraft} showCollections={!config.slug} showColour={config.showColour} />
-      </div>
-      <div className="flex gap-3 border-t border-line bg-page px-5 pb-5 pt-4 sm:px-7">
-        <Button variant="outline" className="flex-1" onClick={() => setDraft({ ...emptyFilters(draft.sort, config.search ? draft.q : undefined), type: draft.type })}>Clear</Button>
-        <Button className="flex-1" onClick={() => onApply(draft)}>Apply</Button>
-      </div>
-    </>
-  )
-}
+// The filter controls (slider, sheet) are not needed for the first paint, so they load right after it
+const FilterPanel = lazy(() => import('@/components/listing/FilterPanel').then((m) => ({ default: m.FilterPanel })))
+const FilterSheet = lazy(() => import('@/components/listing/FilterSheet').then((m) => ({ default: m.FilterSheet })))
 
 export function ProductListing({ config, after }: Props) {
   useSeo(config.search ? config.title : config.title, config.search ? 'Search results.' : config.subtitle, { noindex: !!config.search })
@@ -136,7 +120,7 @@ export function ProductListing({ config, after }: Props) {
         <div className="mt-6 grid gap-8 lg:grid-cols-[250px_1fr] lg:gap-10">
           <aside className="hidden lg:block" aria-label="Filters">
             <p className="eyebrow !text-ink mb-5 border-b border-line pb-4">Refine your little finds</p>
-            <FilterPanel value={eff} onChange={set} showCollections={!config.slug} showColour={config.showColour} />
+            <Suspense fallback={<div className="min-h-[28rem]" aria-hidden="true" />}><FilterPanel value={eff} onChange={set} showCollections={!config.slug} showColour={config.showColour} /></Suspense>
             <button type="button" onClick={() => set({ ...emptyFilters(eff.sort, config.search ? eff.q : undefined), type: eff.type })} className="mt-2 inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:no-underline">Clear filters</button>
           </aside>
 
@@ -145,7 +129,7 @@ export function ProductListing({ config, after }: Props) {
               <>
                 <h2 className="sr-only">Products</h2>
                 <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4">
-                  {results.map((p) => <li key={p.id}><ProductCard product={p} /></li>)}
+                  {results.map((p, i) => <li key={p.id}><ProductCard product={p} eager={i < 4} /></li>)}
                 </ul>
                 <p className="mt-10 text-center text-sm text-muted">You’ve seen all {results.length} little lovely {results.length === 1 ? 'thing' : 'things'} in this edit.</p>
                 {config.slug && <div className="mt-6 flex justify-center lg:justify-start"><Button to="/shop" variant="outline">Explore all collections</Button></div>}
@@ -175,7 +159,7 @@ export function ProductListing({ config, after }: Props) {
         <div className="pb-16" />
       </div>
 
-      <FilterSheet open={sheet} onClose={() => setSheet(false)} value={eff} onApply={set} config={config} />
+      {sheet && <Suspense fallback={null}><FilterSheet open={sheet} onClose={() => setSheet(false)} value={eff} onApply={set} config={config} /></Suspense>}
       {after}
     </>
   )

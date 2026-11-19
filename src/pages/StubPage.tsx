@@ -1,5 +1,8 @@
 import type { ReactNode } from 'react'
-import { Breadcrumbs, Button, ProductCard, SectionHeading } from '@/components/ui'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { Button } from '@/components/ui/Button'
+import { ProductCard } from '@/components/ui/ProductCard'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Crumb } from '@/components/ui/Breadcrumbs'
 import type { Product } from '@/data/products'
 

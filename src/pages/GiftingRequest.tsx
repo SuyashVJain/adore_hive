@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { Check } from 'lucide-react'
-import { Button, Field } from '@/components/ui'
+import { Button } from '@/components/ui/Button'
+import { Field } from '@/components/ui/Field'
 import { SelectField } from '@/components/ui/SelectField'
 import { images } from '@/data/images'
 
