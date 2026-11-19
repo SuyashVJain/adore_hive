@@ -1,6 +1,8 @@
 // Brand colours. Muted and eyebrow text are darkened so they pass WCAG AA on every background.
 /** @type {import('tailwindcss').Config} */
 export default {
+  // Hover styles only apply on devices that can hover, so they never stick after a tap
+  future: { hoverOnlyWhenSupported: true },
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {

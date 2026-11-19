@@ -39,7 +39,12 @@ export function ProductCard({ product, eager, forceLink }: Props) {
   }
 
   return (
-    <article ref={card} className="group relative flex h-full flex-col rounded-lg bg-surface p-2 transition-[box-shadow,transform] duration-300 focus-within:shadow-md hover:shadow-md motion-safe:hover:-translate-y-0.5">
+    // The article is the hover target and never moves. Only the inner card lifts (transform) and its shadow fades in (opacity),
+    // so the pointer can never end up outside the element that triggered the hover.
+    <article ref={card} className="group relative h-full">
+      <div className="relative isolate flex h-full flex-col rounded-lg bg-surface p-2 transition-transform duration-300 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-lg before:opacity-0 before:shadow-md before:transition-opacity before:duration-300 before:content-[''] group-focus-within:before:opacity-100 group-hover:before:opacity-100 motion-safe:group-hover:-translate-y-0.5">
+      {/* Whole-card link. Its label carries the context, so the heading stays just the product name. */}
+      <Link to={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="absolute inset-0 z-[1] rounded-lg" />
       <div className="relative aspect-[222/246] overflow-hidden rounded-md bg-blush">
         <Img
           src={product.image}
@@ -56,7 +61,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
           aria-pressed={wished}
           aria-label={`Save ${product.name} to wishlist`}
           onClick={() => toggle(product.id)}
-          className="absolute right-1.5 top-1.5 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/85 transition-colors hover:bg-white active:bg-blush"
+          className="absolute right-1.5 top-1.5 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/85 hover:bg-white active:bg-blush"
         >
           <Heart className={`h-5 w-5 ${wished ? 'fill-ink' : ''}`} aria-hidden="true" />
         </button>
@@ -64,13 +69,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
 
       <div className="flex flex-1 flex-col px-2 pb-2 pt-3">
         <Badge>{product.badge}</Badge>
-        <h3 className="mt-1 font-product text-lg leading-snug">
-          {/* Stretched link: the whole card opens the product page */}
-          <Link to={`/product/${product.id}`} className="underline-offset-4 after:absolute after:inset-0 after:rounded-lg group-hover:underline">
-            <span className="sr-only">View details: </span>
-            {product.name}
-          </Link>
-        </h3>
+        <h3 className="mt-1 font-product text-lg leading-snug underline-offset-4 group-hover:underline">{product.name}</h3>
         <p className="text-sm text-muted">{categoryLabel(product.category)}</p>
         <p className="mb-4 mt-1 text-base font-medium">{formatINR(product.price)}</p>
         <div className="mt-auto">
@@ -87,6 +86,7 @@ export function ProductCard({ product, eager, forceLink }: Props) {
             <AddButton variant="outline" full onAdd={quickAdd} className="relative z-10 !px-3" aria-label={`Quick add ${product.name} to bag`} idleLabel={<>Quick add <Plus className="h-3.5 w-3.5" aria-hidden="true" /></>} />
           )}
         </div>
+      </div>
       </div>
     </article>
   )
