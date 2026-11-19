@@ -30,13 +30,33 @@ const { routeMetas } = await import('data:text/javascript;base64,' + Buffer.from
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const dist = join(root, 'dist')
-const template = readFileSync(join(dist, 'index.html'), 'utf8').replace(/\s*<link rel="canonical"[^>]*>/g, '')
+const template = readFileSync(join(dist, 'index.html'), 'utf8').replace(/\s*<link rel="canonical"[^>]*>/g, '').replace(/\s*<link rel="modulepreload" href="\/assets\/(?!index-)[^"]*" \/>/g, '')
 
 const setMeta = (html, attr, key, content) => {
   const re = new RegExp(`<meta ${attr}="${key}" content="[^"]*" ?/?>`)
   const tag = `<meta ${attr}="${key}" content="${esc(content)}" />`
   return re.test(html) ? html.replace(re, tag) : html.replace('</head>', `    ${tag}\n  </head>`)
 }
+
+// Route chunks are lazy, so the browser would otherwise find them only after the entry script runs.
+// Preloading the right ones in each pre-rendered page lets them download in parallel with it.
+const manifestPath = join(dist, '.vite', 'manifest.json')
+const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : {}
+const entryFor = (path) => {
+  if (path === '/') return 'src/pages/Home.tsx'
+  if (path.startsWith('/shop')) return 'src/pages/ShopPages.tsx'
+  if (path.startsWith('/product/')) return 'src/pages/ProductPage.tsx'
+  if (path.startsWith('/policies/')) return 'src/pages/policies/PolicyPage.tsx'
+  return { '/about': 'AboutPage', '/contact': 'ContactPage', '/hamper-studio': 'HamperStudio', '/letter-studio': 'LetterStudio', '/gift-finder': 'GiftFinder' }[path] && `src/pages/${{ '/about': 'AboutPage', '/contact': 'ContactPage', '/hamper-studio': 'HamperStudio', '/letter-studio': 'LetterStudio', '/gift-finder': 'GiftFinder' }[path]}.tsx`
+}
+const chunksFor = (key, seen = new Set()) => {
+  const e = manifest[key]
+  if (!e || seen.has(key)) return seen
+  seen.add(key)
+  for (const i of e.imports ?? []) chunksFor(i, seen)
+  return seen
+}
+const entryFile = Object.values(manifest).find((e) => e.isEntry)?.file
 
 let n = 0
 for (const r of routeMetas()) {
@@ -50,7 +70,11 @@ for (const r of routeMetas()) {
   html = setMeta(html, 'property', 'og:url', url)
   html = setMeta(html, 'property', 'og:image', image)
   html = setMeta(html, 'name', 'twitter:image', image)
-  html = html.replace('</head>', `    <link rel="canonical" href="${url}" />\n  </head>`)
+  const key = process.env.NO_PRELOAD ? undefined : entryFor(r.path)
+  const preload = key ? [...chunksFor(key)].map((k) => manifest[k]?.file).filter((f) => f && f !== entryFile).map((f) => `    <link rel="modulepreload" href="/${f}" />
+`).join('') : ''
+  html = html.replace('</head>', `${preload}    <link rel="canonical" href="${url}" />
+  </head>`)
   const file = r.path === '/' ? join(dist, 'index.html') : join(dist, r.path, 'index.html')
   mkdirSync(dirname(file), { recursive: true })
   writeFileSync(file, html)

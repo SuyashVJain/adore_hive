@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), htmlEnv(env)],
     // Expose the public origin to the app too, without requiring a second variable
     define: { 'import.meta.env.VITE_SITE_URL': JSON.stringify(env.SITE_URL || env.VITE_SITE_URL || '') },
+    build: { manifest: true },
     resolve: { alias: { '@': '/src' } },
   }
 })

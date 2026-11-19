@@ -40,6 +40,15 @@ More: [shop](docs/screenshots/shop-desktop.png) · [bag](docs/screenshots/bag-de
 - Route-level code splitting, image skeletons, explicit image sizes, per-route titles, descriptions and Open Graph tags, `robots.txt`, `sitemap.xml` and a `vercel.json` rewrite for deep links.
 - Persisted bag, wishlist, hamper and letter state, with guards against removed products and corrupt values.
 
+**Also in the storefront**
+- Mobile bottom tab bar (Home, Shop, Wishlist, Bag with count, Account) that hides under the keyboard and dialogs and sits above the sticky Add to bag and checkout bars.
+- Sticky Filter, Sort and count bar on mobile listings; second-photo hover swap on cards for mouse users.
+- Rotating announcement bar (pauses on hover and focus, has a pause button, static under reduced motion).
+- Shop by occasion tiles, occasion and recipient tags with an Occasion filter, and a three-step gift finder at `/gift-finder`.
+- Product photo lightbox (zoom, pinch, pan, swipe, arrows, thumbnails) and a recently viewed row.
+- Illustrated empty states, a faint honeycomb pattern and a small bee mark.
+- Per-route titles, descriptions and Open Graph tags are pre-rendered into each page at build time.
+
 ## Tech stack
 
 React 18, TypeScript (strict), Vite, Tailwind CSS, React Router, Zustand (with `persist`), lucide-react. Dev tooling: axe-core and playwright-core for the accessibility sweep, screenshots and checkout Lighthouse run. There is no backend: data lives in typed mock modules.
@@ -110,7 +119,7 @@ Also set `types` (subcategory slugs used by the Shop menu and filters), `colours
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Start the Vite dev server |
-| `npm run build` | Write `robots.txt` (and `sitemap.xml` when indexing is on), type-check (`tsc --noEmit`) and build to `dist/` |
+| `npm run build` | Write `robots.txt` (and `sitemap.xml` when indexing is on), type-check (`tsc --noEmit`), build to `dist/`, then pre-render per-route head tags |
 | `npm run preview` | Serve the production build locally |
 | `npm run a11y` | Load every route and key overlay at 390, 834 and 1440 px and report axe violations (needs the dev server running) |
 | `npm run screenshots` | Regenerate `docs/screenshots/` |
