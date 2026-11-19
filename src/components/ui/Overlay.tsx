@@ -1,0 +1,56 @@
+import { useEffect, useRef, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
+
+const FOCUSABLE =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
+interface Props {
+  onClose: () => void
+  children: ReactNode
+}
+
+/**
+ * Full-viewport layer: dims the whole page (header included), locks scroll, traps focus,
+ * closes on Escape and restores focus on unmount. Mount it only while open.
+ */
+export function Overlay({ onClose, children }: Props) {
+  const root = useRef<HTMLDivElement>(null)
+  const close = useRef(onClose)
+  close.current = onClose
+
+  useEffect(() => {
+    const el = root.current!
+    const prev = document.activeElement as HTMLElement | null
+    // lock scroll without the page jumping when the scrollbar disappears
+    document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+    document.body.style.overflow = 'hidden'
+    const items = () => Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE))
+    ;(el.querySelector<HTMLElement>('[data-autofocus]') ?? items()[0])?.focus()
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return close.current()
+      if (e.key !== 'Tab') return
+      const f = items()
+      if (!f.length) return
+      const first = f[0]
+      const last = f[f.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
+      prev?.focus?.()
+    }
+  }, [])
+
+  return createPortal(
+    <div ref={root} className="fixed inset-0 z-50">
+      <div className="absolute inset-0 animate-fade bg-ink/45" aria-hidden="true" onClick={onClose} />
+      {children}
+    </div>,
+    document.body,
+  )
+}

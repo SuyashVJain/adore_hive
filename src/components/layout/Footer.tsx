@@ -1,0 +1,47 @@
+import { Link } from 'react-router-dom'
+import { Heart } from 'lucide-react'
+import { site } from '@/config/site'
+import { exploreLinks, helpLinks } from '@/data/nav'
+import { ExtLink } from '../ui/ExtLink'
+import { Logo } from './Logo'
+
+const link = 'inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-ink hover:underline underline-offset-4'
+
+function Col({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h2 className="font-label text-xs font-semibold uppercase tracking-[0.14em] text-ink">{title}</h2>
+      <ul className="mt-2">{children}</ul>
+    </div>
+  )
+}
+
+export function Footer() {
+  return (
+    <footer className="bg-blush">
+      <div className="container-page border-t border-ink/10 py-12">
+        <div className="grid gap-10 md:grid-cols-[220px_1fr_1fr_1fr]">
+          <div>
+            <Logo className="-ml-2 h-24" />
+            <p className="mt-1 font-display text-2xl italic">{site.tagline}</p>
+          </div>
+          <Col title="Explore Adore">
+            {exploreLinks.map((l) => <li key={l.to + l.label}><Link to={l.to} className={link}>{l.label}</Link></li>)}
+          </Col>
+          <Col title="Here to help">
+            {helpLinks.map((l) => <li key={l.to}><Link to={l.to} className={link}>{l.label}</Link></li>)}
+          </Col>
+          <Col title="Say hello">
+            <li><a href={`mailto:${site.email}`} className={link}>{site.email}</a></li>
+            <li><a href={`tel:${site.phone.replace(/\s/g, '')}`} className={link}>{site.phone}</a></li>
+            <li><ExtLink href={site.instagramUrl} className={link}>Instagram</ExtLink></li>
+            <li><ExtLink href={site.whatsappUrl} className={link}>WhatsApp</ExtLink></li>
+          </Col>
+        </div>
+        <p className="mt-10 border-t border-ink/10 pt-6 text-center text-xs text-muted">
+          Made with <Heart className="inline h-3 w-3 align-[-1px]" aria-label="love" /> by {site.name}.
+        </p>
+      </div>
+    </footer>
+  )
+}
