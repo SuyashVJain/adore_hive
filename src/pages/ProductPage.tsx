@@ -106,6 +106,7 @@ function Detail({ product }: { product: Product }) {
 
           <div className="mt-8">
             <Accordion
+              headingLevel={2}
               defaultOpen={['details']}
               items={[
                 { id: 'details', title: 'The lovely details', content: <p>{product.details}</p> },

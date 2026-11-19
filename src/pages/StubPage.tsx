@@ -23,10 +23,13 @@ export function StubPage({ title, eyebrow, subtitle, crumbs, products, cta, chil
         {cta && <div className="mt-8 flex justify-center"><Button to={cta.to}>{cta.label}</Button></div>}
       </div>
       {children}
-      {products && (
+      {products && products.length > 0 && (
+        <>
+        <h2 className="sr-only">Products</h2>
         <ul className="grid grid-cols-2 gap-3 pb-16 md:gap-5 lg:grid-cols-4">
           {products.map((p) => <li key={p.id}><ProductCard product={p} /></li>)}
         </ul>
+        </>
       )}
     </div>
   )

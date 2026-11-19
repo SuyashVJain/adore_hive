@@ -11,9 +11,12 @@ interface Props {
   items: AccordionItem[]
   defaultOpen?: string[]
   multiple?: boolean
+  /** Heading level for the item titles; match the surrounding outline */
+  headingLevel?: 2 | 3
 }
 
-export function Accordion({ items, defaultOpen = [], multiple }: Props) {
+export function Accordion({ items, defaultOpen = [], multiple, headingLevel = 3 }: Props) {
+  const H = `h${headingLevel}` as 'h2' | 'h3'
   const [open, setOpen] = useState<string[]>(defaultOpen)
   const base = useId()
   const toggle = (id: string) =>
@@ -25,7 +28,7 @@ export function Accordion({ items, defaultOpen = [], multiple }: Props) {
         const pid = `${base}-${it.id}`
         return (
           <div key={it.id}>
-            <h3 className="font-sans text-base">
+            <H className="font-sans text-base">
               <button
                 type="button"
                 aria-expanded={isOpen}
@@ -36,7 +39,7 @@ export function Accordion({ items, defaultOpen = [], multiple }: Props) {
                 {it.title}
                 <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
-            </h3>
+            </H>
             <div id={pid} role="region" aria-label={it.title} hidden={!isOpen} className="pb-4 text-sm text-muted">
               {it.content}
             </div>
