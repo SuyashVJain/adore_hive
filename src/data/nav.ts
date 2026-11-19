@@ -5,7 +5,6 @@ export const mainNav = [
   { label: 'About Us', to: '/about' },
   { label: 'Shop', to: '/shop', mega: true },
   { label: 'Customize Your Gift', to: '/hamper-studio' },
-  { label: 'Our Story', to: '/our-story' },
   { label: 'Contact Us', to: '/contact' },
 ] as const
 

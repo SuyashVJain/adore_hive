@@ -15,6 +15,15 @@ export const site = {
   whatsappCommunityUrl: 'https://chat.whatsapp.com/HOoNDtyr24g85bGegtSIPq',
   instagramHandle: '@adore.hive',
   instagramUrl: 'https://www.instagram.com/adore.hive',
+  founder: {
+    name: 'Aditi Nigam',
+    role: 'Founder',
+    photo: '/images/founder.webp',
+    // TODO(owner): Aditi's personal note. The About page hides the founder section while this is empty.
+    note: '',
+    // Instagram handle without the @, only if the owner provides it. Never guessed.
+    instagram: '',
+  } as { name: string; role: string; photo: string; note: string; instagram: string },
   /** Optional. While empty, no email row is rendered anywhere. */
   email: '',
 } as const

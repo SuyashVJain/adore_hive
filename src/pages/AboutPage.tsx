@@ -1,5 +1,6 @@
 import { Heart, Sparkles } from 'lucide-react'
-import { Breadcrumbs, Button } from '@/components/ui'
+import { Breadcrumbs, Button, ExtLink } from '@/components/ui'
+import { site } from '@/config/site'
 import { useSeo } from '@/lib/useDocumentTitle'
 
 const beliefs = [
@@ -78,6 +79,19 @@ export function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Founder: only rendered once the owner has supplied her note */}
+      {site.founder.note.trim() && (
+        <section aria-labelledby="founder-h" className="container-page grid items-center gap-8 py-12 md:py-16 lg:grid-cols-[360px_1fr] lg:gap-16">
+          <img src={site.founder.photo} alt={`${site.founder.name}, ${site.founder.role} of ${site.name}`} width={360} height={450} loading="lazy" className="mx-auto aspect-[4/5] w-full max-w-[360px] rounded-xl object-cover" />
+          <div>
+            <p className="eyebrow !text-ink mb-3">{site.founder.role}</p>
+            <h2 id="founder-h" className="text-[2rem] leading-tight md:text-5xl">{site.founder.name}</h2>
+            <div className="mt-4 space-y-3 text-muted">{site.founder.note.trim().split(/\n{2,}/).map((para, i) => <p key={i}>{para}</p>)}</div>
+            {site.founder.instagram && <p className="mt-4 text-sm"><ExtLink href={`https://www.instagram.com/${site.founder.instagram}`}>Instagram @{site.founder.instagram}</ExtLink></p>}
+          </div>
+        </section>
+      )}
 
       {/* Closing call to action */}
       <section aria-labelledby="cta-h" className="container-page py-16 text-center md:py-24">

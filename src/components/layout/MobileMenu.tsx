@@ -54,7 +54,6 @@ export function MobileMenu() {
           </ul>
           <div className="my-3 border-t border-line" />
           <Link to="/hamper-studio" onClick={close} className={big}>Customize Your Gift</Link>
-          <Link to="/our-story" onClick={close} className={big}>Our Story</Link>
           <Link to="/contact" onClick={close} className={big}>Contact Us</Link>
           <div className="my-3 border-t border-line" />
           <div className="flex flex-wrap items-center gap-x-5 text-muted">
