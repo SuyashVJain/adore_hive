@@ -1,5 +1,5 @@
 import { Heart, Sparkles } from 'lucide-react'
-import { Breadcrumbs, Button, ExtLink } from '@/components/ui'
+import { Breadcrumbs, Button } from '@/components/ui'
 import { site } from '@/config/site'
 import { useSeo } from '@/lib/useDocumentTitle'
 
@@ -66,11 +66,23 @@ export function AboutPage() {
         </div>
       </section>
 
+      {/* Founder: photo left, name and role right; stacked on mobile */}
+      {site.founder.name && (
+        <section aria-labelledby="founder-h" className="container-page grid items-center gap-8 pb-12 md:pb-20 lg:grid-cols-[360px_1fr] lg:gap-16">
+          <img src={site.founder.photo} alt={`${site.founder.name}, ${site.founder.role} of ${site.name}`} width={360} height={450} loading="lazy" className="mx-auto aspect-[4/5] w-full max-w-[360px] rounded-xl object-cover" />
+          <div>
+            <p className="eyebrow !text-ink mb-3">{site.founder.role}</p>
+            <h2 id="founder-h" className="text-[2rem] leading-tight md:text-5xl">{site.founder.name}</h2>
+            {site.founder.note && <p className="mt-4 max-w-xl text-muted">{site.founder.note}</p>}
+          </div>
+        </section>
+      )}
+
       {/* Layered: image right with an overlapping text card */}
       <section aria-labelledby="wrap-h" className="container-page">
         <div className="relative lg:grid lg:grid-cols-12 lg:items-center">
-          <img src="/images/about-gifts.webp" alt="A stack of blush gift boxes tied with cream ribbon" width={604} height={452} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:col-span-7 lg:col-start-6 lg:aspect-[604/520]" />
-          <div className="relative mt-4 rounded-xl bg-surface p-6 shadow-sm md:p-10 lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:-mr-12 lg:mt-0">
+          <img src="/images/about-gifts.webp" alt="A stack of blush gift boxes tied with cream ribbon" width={604} height={452} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:aspect-[604/520]" />
+          <div className="relative mt-4 rounded-xl bg-surface p-6 shadow-sm md:p-10 lg:col-span-6 lg:z-10 lg:col-start-1 lg:row-start-1 lg:-mr-12 lg:mt-0">
             <p className="eyebrow !text-ink mb-3">The joy of opening something lovely</p>
             <h2 id="wrap-h" className="text-[2rem] leading-tight md:text-5xl">Wrapped with thought. Finished with you.</h2>
             <p className="mt-4 text-muted">Beautiful packaging is part of the feeling. Blush tones, soft ribbons and carefully chosen details set the scene for the personal touches inside.</p>
@@ -79,19 +91,6 @@ export function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Founder: only rendered once the owner has supplied her note */}
-      {site.founder.note.trim() && (
-        <section aria-labelledby="founder-h" className="container-page grid items-center gap-8 py-12 md:py-16 lg:grid-cols-[360px_1fr] lg:gap-16">
-          <img src={site.founder.photo} alt={`${site.founder.name}, ${site.founder.role} of ${site.name}`} width={360} height={450} loading="lazy" className="mx-auto aspect-[4/5] w-full max-w-[360px] rounded-xl object-cover" />
-          <div>
-            <p className="eyebrow !text-ink mb-3">{site.founder.role}</p>
-            <h2 id="founder-h" className="text-[2rem] leading-tight md:text-5xl">{site.founder.name}</h2>
-            <div className="mt-4 space-y-3 text-muted">{site.founder.note.trim().split(/\n{2,}/).map((para, i) => <p key={i}>{para}</p>)}</div>
-            {site.founder.instagram && <p className="mt-4 text-sm"><ExtLink href={`https://www.instagram.com/${site.founder.instagram}`}>Instagram @{site.founder.instagram}</ExtLink></p>}
-          </div>
-        </section>
-      )}
 
       {/* Closing call to action */}
       <section aria-labelledby="cta-h" className="container-page py-16 text-center md:py-24">

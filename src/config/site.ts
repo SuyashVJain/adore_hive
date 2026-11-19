@@ -19,11 +19,9 @@ export const site = {
     name: 'Aditi Nigam',
     role: 'Founder',
     photo: '/images/founder.webp',
-    // TODO(owner): Aditi's personal note. The About page hides the founder section while this is empty.
-    note: '',
-    // Instagram handle without the @, only if the owner provides it. Never guessed.
-    instagram: '',
-  } as { name: string; role: string; photo: string; note: string; instagram: string },
+    // TODO(owner): replace this with Aditi's own words.
+    note: 'Engineer by degree, entrepreneur by heart. Aditi started Adore Hive in Indore to make pretty things feel within reach: dainty jewellery, hair accessories, handmade pieces and gifts that feel personal, without the luxury price. Every piece is chosen to match your vibe and be worn every day.',
+  },
   /** Optional. While empty, no email row is rendered anywhere. */
   email: '',
 } as const
