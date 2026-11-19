@@ -12,6 +12,7 @@ import { hamperImage, treasureGroups, treasures, type Treasure } from '@/data/ha
 import { formatINR } from '@/lib/format'
 import { hamperContents, hamperToCustomLine, hamperTotals, letterContents, maxStep, stepErrors, summaryText } from '@/lib/hamper'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { meta } from '@/seo/routes'
 import { useBag } from '@/store/bag'
 import { useHamper } from '@/store/hamper'
 import { useToast } from '@/store/toast'
@@ -20,7 +21,7 @@ const eyebrowCls = 'eyebrow !text-ink mb-2'
 const h2Cls = 'text-[2rem] leading-tight md:text-5xl'
 
 export function HamperStudioPage() {
-  useSeo('Custom hamper studio', 'Build a personalized hamper: choose the occasion, packaging and little treasures, then add a handwritten note.')
+  useSeo(meta.hamper.title, meta.hamper.description)
   const [sp, setSp] = useSearchParams()
   const draft = useHamper((s) => s.draft)
   const max = maxStep(draft)

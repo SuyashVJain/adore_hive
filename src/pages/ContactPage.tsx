@@ -5,6 +5,7 @@ import { ContactDetails } from '@/components/ui/ContactDetails'
 import { SelectField } from '@/components/ui/SelectField'
 import { site } from '@/config/site'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { meta } from '@/seo/routes'
 import { isEmail, isPhone } from '@/lib/validate'
 
 const topics = ['Personalized gifting', 'A product question', 'An order I placed', 'Something else']
@@ -12,7 +13,7 @@ const topics = ['Personalized gifting', 'A product question', 'An order I placed
 type Key = 'name' | 'email' | 'phone' | 'message'
 
 export function Contact() {
-  useSeo('Contact us', 'Get in touch with Adore Hive about a gifting idea, a product question or an order.')
+  useSeo(meta.contact.title, meta.contact.description)
   const form = useRef<HTMLFormElement>(null)
   const [v, setV] = useState({ name: '', email: '', phone: '', topic: topics[0], order: '', message: '' })
   const [errors, setErrors] = useState<Partial<Record<Key, string>>>({})

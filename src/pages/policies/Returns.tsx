@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import { REFUND_DAYS, RETURN_DAYS, RETURN_FEE, RETURN_PICKUP_DAYS, RETURN_SELF_SHIP_DAYS } from '@/config/shop'
 import { formatINR } from '@/lib/format'
+import { meta } from '@/seo/routes'
 import { PolicyLayout } from './PolicyLayout'
 
 export function Returns() {
   return (
-    <PolicyLayout title="Return and Exchange Policy" intro="How returns work, and what to expect after you send something back.">
+    <PolicyLayout title={meta.returns.title} intro={meta.returns.description}>
       <section>
         <h2>Returns</h2>
         <p>We accept returns within {RETURN_DAYS} days of delivery. A return fee of {formatINR(RETURN_FEE)} applies.</p>

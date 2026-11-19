@@ -2,6 +2,7 @@ import { Heart, Sparkles } from 'lucide-react'
 import { Breadcrumbs, Button } from '@/components/ui'
 import { site } from '@/config/site'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { meta } from '@/seo/routes'
 
 const beliefs = [
   ['Self-expression', 'A favourite accessory can be a tiny reflection of you. Dress for a feeling, not a rule.'],
@@ -10,7 +11,7 @@ const beliefs = [
 ]
 
 export function AboutPage() {
-  useSeo('About us and our story', 'Adore is the feeling. Hive is the little world around it. Meet the heart behind Adore Hive, a home for jewellery, handmade crochet and thoughtful gifting.')
+  useSeo(meta.about.title, meta.about.description)
   return (
     <div className="pb-16 pt-5 md:pt-6">
       <div className="container-page"><Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'About Us' }]} /></div>

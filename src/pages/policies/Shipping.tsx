@@ -1,11 +1,12 @@
 // TODO: draft wording. Needs review (and legal sign-off) before launch.
 import { FREE_SHIPPING_OVER, SHIPPING_FEE, delivery } from '@/config/shop'
 import { formatINR } from '@/lib/format'
+import { meta } from '@/seo/routes'
 import { PolicyLayout } from './PolicyLayout'
 
 export function Shipping() {
   return (
-    <PolicyLayout title="Shipping Policy" intro="How and when your little treasures reach you.">
+    <PolicyLayout title={meta.shipping.title} intro={meta.shipping.description}>
       <section>
         <h2>Where we deliver</h2>
         <p>We currently deliver across India. Enter your PIN code on a product page to see an estimate for your area.</p>

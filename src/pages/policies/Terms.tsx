@@ -1,10 +1,11 @@
 // TODO: draft wording. Needs review before launch.
 import { Link } from 'react-router-dom'
+import { meta } from '@/seo/routes'
 import { PolicyLayout } from './PolicyLayout'
 
 export function Terms() {
   return (
-    <PolicyLayout title="Terms and Conditions" intro="The simple ground rules for shopping with Adore Hive.">
+    <PolicyLayout title={meta.terms.title} intro={meta.terms.description}>
       <section>
         <h2>Orders</h2>
         <p>When you place an order you are asking to buy the items in your bag. We confirm your order once we have checked your details and the items.</p>

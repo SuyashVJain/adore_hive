@@ -1,9 +1,10 @@
 // TODO: draft wording. Needs review before launch.
+import { meta } from '@/seo/routes'
 import { PolicyLayout } from './PolicyLayout'
 
 export function Privacy() {
   return (
-    <PolicyLayout title="Privacy Policy" intro="What we collect when you shop with us, and what we do with it.">
+    <PolicyLayout title={meta.privacy.title} intro={meta.privacy.description}>
       <section>
         <h2>What we collect</h2>
         <ul>

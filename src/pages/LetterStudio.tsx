@@ -8,6 +8,7 @@ import { images } from '@/data/images'
 import type { CustomLine } from '@/lib/bag'
 import { formatINR } from '@/lib/format'
 import { useSeo } from '@/lib/useDocumentTitle'
+import { meta } from '@/seo/routes'
 import { useBag } from '@/store/bag'
 import { useHamper } from '@/store/hamper'
 import { letterErrors, letterPrice, useLetter, type LetterDraft } from '@/store/letter'
@@ -78,7 +79,7 @@ function toCustomLine(d: LetterDraft): CustomLine {
 }
 
 export function LetterStudioPage() {
-  useSeo('Handwritten letter studio', 'Write a handwritten letter: choose the paper, envelope and finishing touches, and see a live preview of your words.')
+  useSeo(meta.letter.title, meta.letter.description)
   const navigate = useNavigate()
   const d = useLetter((s) => s.draft)
   const patch = useLetter((s) => s.patch)
